@@ -37,13 +37,13 @@ does not include Apache configuration. See the legacy-Docker loopback caveat bel
 
 ## 1. Clone the repository (primary transfer route)
 
-Repository: [QuinnKWolter/cupcake-lab](https://github.com/QuinnKWolter/cupcake-lab).
-Initial deployment release: [v0.1.0](https://github.com/QuinnKWolter/cupcake-lab/releases/tag/v0.1.0).
+Repository: [QuinnKWolter/learncpp-demo-cupcake](https://github.com/QuinnKWolter/learncpp-demo-cupcake).
+Initial deployment release: [v0.1.0](https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/tag/v0.1.0).
 As **qkw3** on the server:
 
 ```bash
 cd /home/qkw3
-git clone https://github.com/QuinnKWolter/cupcake-lab.git /home/qkw3/cupcake-lab
+git clone https://github.com/QuinnKWolter/learncpp-demo-cupcake.git /home/qkw3/cupcake-lab
 cd /home/qkw3/cupcake-lab
 git checkout v0.1.0
 docker version
@@ -110,8 +110,8 @@ Do not leave both selectors active. All other settings remain the same.
 
 ```bash
 cd /home/qkw3/cupcake-lab
-wget https://github.com/QuinnKWolter/cupcake-lab/releases/download/v0.1.0/cupcake-lab-image.tar
-wget https://github.com/QuinnKWolter/cupcake-lab/releases/download/v0.1.0/cupcake-lab-image.tar.sha256
+wget https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.0/cupcake-lab-image.tar
+wget https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.0/cupcake-lab-image.tar.sha256
 sha256sum -c cupcake-lab-image.tar.sha256
 docker load -i cupcake-lab-image.tar
 docker image inspect cupcake-lab:latest --format '{{.Os}}/{{.Architecture}} {{.Id}}'

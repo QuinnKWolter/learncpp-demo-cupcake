@@ -11,7 +11,7 @@ The container includes Python, GCC, dependencies, course content and the viewer.
 As `qkw3` on the server:
 
 ```bash
-git clone https://github.com/QuinnKWolter/cupcake-lab.git /home/qkw3/cupcake-lab
+git clone https://github.com/QuinnKWolter/learncpp-demo-cupcake.git /home/qkw3/cupcake-lab
 cd /home/qkw3/cupcake-lab
 git checkout v0.1.0
 ```
@@ -22,7 +22,7 @@ Expected layout is one repository with `docker-compose.yml`, `Dockerfile`,
 `cupcake-lab__webapp`, bound as `127.0.0.1:20700:5173` for host Apache.
 
 The roughly 397 MB **prebuilt image is not stored in Git**. When available, obtain
-`cupcake-lab-image.tar` and its checksum from [release v0.1.0](https://github.com/QuinnKWolter/cupcake-lab/releases/tag/v0.1.0) or a
+`cupcake-lab-image.tar` and its checksum from [release v0.1.0](https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/tag/v0.1.0) or a
 separate scp transfer, then use the default `image:` mode:
 
 ```bash

@@ -1,0 +1,107 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-10-conversions-free-coding
+title: Conversions and type deduction · write code
+description: Practice conversions and type deduction.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+  topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <iomanip>
+    int main() {
+        int total{}, count{};
+        std::cin >> total >> count;
+        auto average{static_cast<double>(total) / count};
+        std::cout << std::fixed << std::setprecision(2) << average << '\n';
+    }
+statement: |-
+  The supplied code reads total (0–10000) and count (1–100) as integers. Create average with auto using fractional division, so a half or other fraction is not lost. The supplied output line prints average to two decimal places; do not add another output statement.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Use 9 and 2 as a trial input. The requested two-decimal answer needs to retain a half before formatting it.
+- Convert total before dividing by count. auto will then deduce the fractional result type.
+elements:
+- type: editable
+  location:
+    snippet: '    auto average{static_cast<double>(total) / count};'
+  placeholder: '    // Calculate average as a fractional quotient using auto.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      #include <iomanip>
+      int main() {
+          int total{}, count{};
+          std::cin >> total >> count;
+- type: locked
+  location:
+    snippet: |2
+
+          std::cout << std::fixed << std::setprecision(2) << average << '\n';
+      }
+testcases:
+- title: Fraction
+  visible: true
+  stdin:
+  - 9 2
+  stdout: |
+    4.50
+  feedback:
+    on_pass:
+    - A half must survive until two-decimal output formatting.
+    on_fail:
+    - A half must survive until two-decimal output formatting. Use 9 and 2 as a trial input. The requested
+      two-decimal answer needs to retain a half before formatting it.
+- title: Third
+  visible: true
+  stdin:
+  - 10 3
+  stdout: |
+    3.33
+  feedback:
+    on_pass:
+    - A non-terminating decimal is rounded by the supplied formatting.
+    on_fail:
+    - A non-terminating decimal is rounded by the supplied formatting. Use 9 and 2 as a trial input. The requested
+      two-decimal answer needs to retain a half before formatting it.
+- title: Zero
+  visible: true
+  stdin:
+  - 0 7
+  stdout: |
+    0.00
+  feedback:
+    on_pass:
+    - A zero total remains a valid average with positive count.
+    on_fail:
+    - A zero total remains a valid average with positive count. Use 9 and 2 as a trial input. The requested
+      two-decimal answer needs to retain a half before formatting it.
+- title: Single item
+  visible: true
+  stdin:
+  - 9 1
+  stdout: |
+    9.00
+  feedback:
+    on_pass:
+    - A count of one should leave the numeric total unchanged before formatting.
+    on_fail:
+    - A count of one should leave the numeric total unchanged before formatting. Use 9 and 2 as a trial input.
+      The requested two-decimal answer needs to retain a half before formatting it.

@@ -1,0 +1,102 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-macro-visualization
+title: Your first C++ programs · step through
+description: Practice your first c++ programs.
+pedagogy:
+  activity: macro-visualization
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int boxes{2};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The number of boxes changes between versions. Predict the single total printed for the values on your screen.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - boxes
+  - - createVariable
+    - perBox
+  - - createVariable
+    - total
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 3
+  - - _addValue
+    - '2'
+    - 0
+    - int
+  - - _assign
+    - boxes
+  - - showText
+    - Start with two boxes in this walkthrough.
+  - - _setLine
+    - 4
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - perBox
+  - - showText
+    - Each box holds three items; the number of boxes is unchanged.
+  - - _setLine
+    - 5
+  - - _addValue
+    - '6'
+    - 0
+    - int
+  - - _assign
+    - total
+  - - showText
+    - Two equal groups of three contain six items altogether.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '6'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the stored total and then end the line.
+  lines:
+  - '#include <iostream>'
+  - int main() {
+  - '    int boxes{2};'
+  - '    int perBox{3};'
+  - '    int total{boxes * perBox};'
+  - '    std::cout << total << ''\n'';'
+  - '}'

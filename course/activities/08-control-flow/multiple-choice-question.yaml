@@ -1,0 +1,39 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-08-control-flow-multiple-choice-question
+title: Branches and loops · explain why
+description: Practice branches and loops.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+  topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+question: How many times does `for (int i{0}; i < 3; ++i)` execute its body?
+include_choices: 3
+hints:
+- List the i values that satisfy the condition, starting with the declared initial value.
+- The condition is tested before each body execution. Stop listing as soon as i is no longer less than three.
+choices:
+- body: Three times, with i equal to 0, 1, and 2.
+  role: solution
+  explanations:
+  - body: The body runs for those three values. After the update reaches three, the next condition is false.
+- body: Four times, with i equal to 0 through 3.
+  role: distractor
+  explanations:
+  - body: This counts the upper endpoint, but the strict less-than condition does not permit i equal to three.
+- body: Two times, with i equal to 1 and 2.
+  role: distractor
+  explanations:
+  - body: This forgets the declared starting zero. The condition is checked before the first body, and zero
+      passes it.

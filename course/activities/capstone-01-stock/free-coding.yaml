@@ -1,0 +1,177 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-capstone-01-stock-free-coding
+title: 'Capstone: a small stock controller'
+description: 'Practice capstone: a small stock controller.'
+pedagogy:
+  activity: free-coding
+  difficulty: advanced
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - invariants
+  - control-flow
+  - input-validation
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <string>
+    class Inventory {
+        int stock_;
+    public:
+        explicit Inventory(int initial) : stock_{initial} {}
+        bool add(int amount) {
+            if (amount <= 0) { return false; }
+            stock_ += amount;
+            return true;
+        }
+        bool take(int amount) {
+            if (amount <= 0 || amount > stock_) { return false; }
+            stock_ -= amount;
+            return true;
+        }
+        int stock() const { return stock_; }
+    };
+    int main() {
+        int initial{}, commands{};
+        std::cin >> initial >> commands;
+        Inventory inventory{initial};
+        for (int i{0}; i < commands; ++i) {
+            std::string action;
+            int amount{};
+            std::cin >> action >> amount;
+            bool accepted{action == "add" ? inventory.add(amount) : inventory.take(amount)};
+            std::cout << (accepted ? "ok " : "rejected ") << inventory.stock() << '\n';
+        }
+    }
+statement: |-
+  Implement the Inventory methods. Initial stock is nonnegative. `add(amount)` returns true and adds amount only when amount > 0. `take(amount)` returns true and subtracts amount only when 0 < amount <= stock. A rejected request returns false and leaves stock unchanged. Input is initial-stock and command-count, then that many `add n` or `take n` commands. Print `ok stock` or `rejected stock` after each command. Initial stock, command count, and all amounts have magnitude at most 100; command count is nonnegative.
+
+  The two highlighted method/function bodies are yours to complete. Read the preparation notes and examples before editing; the surrounding program is supplied.
+hints:
+- Separate the decision from the update. Reject any invalid amount before touching stock_.
+- For take, ask both “is it positive?” and “is there enough stock?” Exact-stock withdrawal is allowed.
+- After an accepted update, return true. A rejected request must return false with stock_ exactly as it was.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+              if (amount <= 0) { return false; }
+              stock_ += amount;
+              return true;
+  placeholder: '        // Accept a positive add, update stock_, and return whether it succeeded.'
+- type: editable
+  location:
+    snippet: |2-
+              if (amount <= 0 || amount > stock_) { return false; }
+              stock_ -= amount;
+              return true;
+  placeholder: '        // Accept a positive take that stock_ can cover; update only when accepted.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      #include <string>
+      class Inventory {
+          int stock_;
+      public:
+          explicit Inventory(int initial) : stock_{initial} {}
+          bool add(int amount) {
+- type: locked
+  location:
+    snippet: |2
+
+          }
+          bool take(int amount) {
+- type: locked
+  location:
+    snippet: |2
+
+          }
+          int stock() const { return stock_; }
+      };
+      int main() {
+          int initial{}, commands{};
+          std::cin >> initial >> commands;
+          Inventory inventory{initial};
+          for (int i{0}; i < commands; ++i) {
+              std::string action;
+              int amount{};
+              std::cin >> action >> amount;
+              bool accepted{action == "add" ? inventory.add(amount) : inventory.take(amount)};
+              std::cout << (accepted ? "ok " : "rejected ") << inventory.stock() << '\n';
+          }
+      }
+testcases:
+- title: Workflow
+  visible: true
+  stdin:
+  - 5 4
+  - add 3
+  - take 2
+  - take 10
+  - take 6
+  stdout: |
+    ok 8
+    ok 6
+    rejected 6
+    ok 0
+  feedback:
+    on_pass:
+    - A transaction sequence checks accepted changes, overdraft rejection, and an exact-stock take.
+    on_fail:
+    - A transaction sequence checks accepted changes, overdraft rejection, and an exact-stock take. Separate
+      the decision from the update. Reject any invalid amount before touching stock_.
+- title: Rejected amounts
+  visible: true
+  stdin:
+  - 4 3
+  - add 0
+  - take -2
+  - add -3
+  stdout: |
+    rejected 4
+    rejected 4
+    rejected 4
+  feedback:
+    on_pass:
+    - Zero and negative amounts must be rejected without changing the count.
+    on_fail:
+    - Zero and negative amounts must be rejected without changing the count. Separate the decision from the
+      update. Reject any invalid amount before touching stock_.
+- title: Empty inventory
+  visible: true
+  stdin:
+  - 0 3
+  - take 1
+  - add 2
+  - take 2
+  stdout: |
+    rejected 0
+    ok 2
+    ok 0
+  feedback:
+    on_pass:
+    - An empty inventory can accept stock later and then permit an exact take.
+    on_fail:
+    - An empty inventory can accept stock later and then permit an exact take. Separate the decision from the
+      update. Reject any invalid amount before touching stock_.
+- title: No commands
+  visible: true
+  stdin:
+  - 8 0
+  stdout: ''
+  feedback:
+    on_pass:
+    - With no commands, no transaction result lines should be printed.
+    on_fail:
+    - With no commands, no transaction result lines should be printed. Separate the decision from the update.
+      Reject any invalid amount before touching stock_.

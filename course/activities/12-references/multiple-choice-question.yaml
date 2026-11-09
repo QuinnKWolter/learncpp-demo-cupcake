@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-12-references-multiple-choice-question
+title: References, pointers, and optional results · explain why
+description: Practice references, pointers, and optional results.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - overloading
+  - function-templates
+  - constexpr
+  topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+question: Why is returning a pointer to a local automatic integer unsafe?
+include_choices: 3
+hints:
+- Follow the local integer’s lifetime through the end of its function call.
+- Copying an address does not keep the addressed object alive. Ask whether there is still a valid object to
+  use after return.
+choices:
+- body: The local integer’s lifetime ends when its function returns.
+  role: solution
+  explanations:
+  - body: The copied address does not keep an object alive. Using it afterward would access an object whose
+      lifetime has ended.
+- body: Pointers are unable to store local addresses at all.
+  role: distractor
+  explanations:
+  - body: A pointer can hold a local address while that object is alive. The issue is keeping that address
+      after the object dies.
+- body: Returning the pointer automatically makes the local integer live forever.
+  role: distractor
+  explanations:
+  - body: Returning an address transfers information about a location, not ownership or an extension of the
+      local object’s lifetime.

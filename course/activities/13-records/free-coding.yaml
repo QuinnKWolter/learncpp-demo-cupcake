@@ -1,0 +1,104 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-13-records-free-coding
+title: Enums, structs, and aggregate values · write code
+description: Practice enums, structs, and aggregate values.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+  topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Point { int x{}; int y{}; };
+    Point translated(Point p, int dx, int dy) {
+        return Point{p.x + dx, p.y + dy};
+    }
+    int main() {
+        Point p{};
+        int dx{}, dy{};
+        std::cin >> p.x >> p.y >> dx >> dy;
+        Point result{translated(p, dx, dy)};
+        std::cout << result.x << ' ' << result.y << '\n';
+    }
+statement: |-
+  Complete translated(Point p, int dx, int dy) by returning a new Point with x equal to p.x + dx and y equal to p.y + dy. Input contains x, y, dx, and dy, each from −100 to 100. The supplied caller reads these values and prints the returned x and y. Keep the two directions separate.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- 'Keep the two directions separate: x changes by dx, and y changes by dy.'
+- Construct the returned Point in its declared member order. Zero movement should return the original coordinates.
+elements:
+- type: editable
+  location:
+    snippet: '    return Point{p.x + dx, p.y + dy};'
+  placeholder: '    // Return a new Point with x moved by dx and y moved by dy.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      struct Point { int x{}; int y{}; };
+      Point translated(Point p, int dx, int dy) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          Point p{};
+          int dx{}, dy{};
+          std::cin >> p.x >> p.y >> dx >> dy;
+          Point result{translated(p, dx, dy)};
+          std::cout << result.x << ' ' << result.y << '\n';
+      }
+testcases:
+- title: Positive
+  visible: true
+  stdin:
+  - 1 2 3 4
+  stdout: |
+    4 6
+  feedback:
+    on_pass:
+    - Both directions move independently with positive offsets.
+    on_fail:
+    - 'Both directions move independently with positive offsets. Keep the two directions separate: x changes
+      by dx, and y changes by dy.'
+- title: Signed
+  visible: true
+  stdin:
+  - -5 6 2 -9
+  stdout: |
+    -3 -3
+  feedback:
+    on_pass:
+    - Signed movement must affect only its matching coordinate.
+    on_fail:
+    - 'Signed movement must affect only its matching coordinate. Keep the two directions separate: x changes
+      by dx, and y changes by dy.'
+- title: Identity
+  visible: true
+  stdin:
+  - 7 8 0 0
+  stdout: |
+    7 8
+  feedback:
+    on_pass:
+    - Zero movement should return the original coordinates.
+    on_fail:
+    - 'Zero movement should return the original coordinates. Keep the two directions separate: x changes by
+      dx, and y changes by dy.'

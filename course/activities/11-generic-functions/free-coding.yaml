@@ -1,0 +1,99 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-free-coding
+title: Overloads, templates, and constexpr · write code
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    constexpr T smaller(T a, T b) {
+        return a < b ? a : b;
+    }
+    int main() {
+        int a{}, b{};
+        std::cin >> a >> b;
+        std::cout << smaller(a, b) << ' ' << smaller(2.5, 1.5) << '\n';
+    }
+statement: |-
+  Complete the supplied function template `smaller(T a, T b)`. Return the smaller of a and b; do not print from the function. The caller reads two integers from −1000 to 1000 and also calls your function with 2.5 and 1.5. It prints the two results on one line. Keep the result type T so both integer and fractional values are handled.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Use a small ordered pair such as 2 and 7 to decide which value belongs in each branch.
+- Then reverse the pair to check the other branch. Return the original T value so the fixed double example
+  keeps its fractional part.
+elements:
+- type: editable
+  location:
+    snippet: '    return a < b ? a : b;'
+  placeholder: '    // Return the smaller of a and b, preserving its type T.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      template <typename T>
+      constexpr T smaller(T a, T b) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          int a{}, b{};
+          std::cin >> a >> b;
+          std::cout << smaller(a, b) << ' ' << smaller(2.5, 1.5) << '\n';
+      }
+testcases:
+- title: Ascending
+  visible: true
+  stdin:
+  - 3 8
+  stdout: |
+    3 1.5
+  feedback:
+    on_pass:
+    - An increasing pair checks one comparison branch and the fractional template instantiation.
+    on_fail:
+    - An increasing pair checks one comparison branch and the fractional template instantiation. Use a small
+      ordered pair such as 2 and 7 to decide which value belongs in each branch.
+- title: Descending
+  visible: true
+  stdin:
+  - 9 -2
+  stdout: |
+    -2 1.5
+  feedback:
+    on_pass:
+    - A reversed signed pair checks the other branch.
+    on_fail:
+    - A reversed signed pair checks the other branch. Use a small ordered pair such as 2 and 7 to decide which
+      value belongs in each branch.
+- title: Equal
+  visible: true
+  stdin:
+  - 4 4
+  stdout: |
+    4 1.5
+  feedback:
+    on_pass:
+    - Equal arguments should return their common value.
+    on_fail:
+    - Equal arguments should return their common value. Use a small ordered pair such as 2 and 7 to decide
+      which value belongs in each branch.

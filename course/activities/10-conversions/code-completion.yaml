@@ -1,0 +1,67 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-10-conversions-code-completion
+title: Conversions and type deduction · fill gaps
+description: Practice conversions and type deduction.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+  topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        auto whole{9 / 2};
+        auto fraction{static_cast<double>(9) / 2};
+        std::cout << whole << ' ' << fraction << '\n';
+    }
+statement: |-
+  Preserve a fractional quotient when dividing total by count. Converting the result after integer division would be too late. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  4 4.5
+  ```
+hints:
+- Compare “convert, then divide” with “divide, then convert.” In which order can the half still survive?
+- The conversion needs to affect an operand of /. A double destination alone comes too late.
+elements:
+- type: blank
+  location:
+    snippet: static_cast<double>(9) / 2
+  choices:
+  - snippet: static_cast<double>(9) / 2
+    role: solution
+    explanations:
+    - body: The operand conversion changes how division is performed. A conversion around a completed integer
+        quotient would only convert the already truncated answer.
+  - snippet: static_cast<double>(9 / 2)
+    role: distractor
+    explanations:
+    - body: The division inside the cast happens first with two integers. Casting that finished quotient cannot
+        restore its discarded fraction.
+  - snippet: 9 / 2
+    role: distractor
+    explanations:
+    - body: The two literals are integers, so this keeps whole-number division. auto only follows the result;
+        it does not change the arithmetic.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    4 4.5

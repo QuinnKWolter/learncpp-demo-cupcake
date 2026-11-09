@@ -1,0 +1,70 @@
+{
+  "cpp23-v2-01-first-programs-free-coding": [
+    "    std::cout << n * n << '\\n';"
+  ],
+  "cpp23-v2-02-functions-files-free-coding": [
+    "    return width * height;"
+  ],
+  "cpp23-v2-03-debugging-free-coding": [
+    "    int saved{a};\n    a = b;\n    b = saved;"
+  ],
+  "cpp23-v2-04-types-free-coding": [
+    "    double mean{static_cast<double>(a + b) / 2};"
+  ],
+  "cpp23-v2-05-constants-strings-free-coding": [
+    "    std::getline(std::cin, text);\n    std::cout << text.size() << '\\n';"
+  ],
+  "cpp23-v2-06-operators-free-coding": [
+    "    bool accepted{n >= 10 && n <= 20 && n % 2 == 0};"
+  ],
+  "cpp23-v2-07-scope-free-coding": [
+    "        return hours * 60;"
+  ],
+  "cpp23-v2-08-control-flow-free-coding": [
+    "    int total{0};\n    for (int value{2}; value <= n; value += 2) {\n        total += value;\n    }"
+  ],
+  "cpp23-v2-09-validation-free-coding": [
+    "    if (!(std::cin >> score) || score < 0 || score > 100) {\n        std::cout << \"invalid\\n\";\n    } else if (score >= 60) {\n        std::cout << \"pass\\n\";\n    } else {\n        std::cout << \"retry\\n\";\n    }"
+  ],
+  "cpp23-v2-10-conversions-free-coding": [
+    "    auto average{static_cast<double>(total) / count};"
+  ],
+  "cpp23-v2-11-generic-functions-free-coding": [
+    "    return a < b ? a : b;"
+  ],
+  "cpp23-v2-12-references-free-coding": [
+    "    if (value < 0) {\n        value = 0;\n    }"
+  ],
+  "cpp23-v2-13-records-free-coding": [
+    "    return Point{p.x + dx, p.y + dy};"
+  ],
+  "cpp23-v2-14-classes-free-coding": [
+    "        if (amount > 0) {\n            value_ += amount;\n        }"
+  ],
+  "cpp23-v2-15-containers-free-coding": [
+    "    int count{0};\n    for (int value : values) {\n        if (value > 0) { ++count; }\n    }\n    return count;"
+  ],
+  "cpp23-v2-16-callables-memory-free-coding": [
+    "    if (n == 0) { return 0; }\n    return n + sumTo(n - 1);"
+  ],
+  "cpp23-v2-17-ownership-free-coding": [
+    "    return Score{a.points + b.points};"
+  ],
+  "cpp23-v2-18-polymorphism-free-coding": [
+    "        return width_ * height_;"
+  ],
+  "cpp23-v2-19-class-templates-free-coding": [
+    "        return first_ + second_;"
+  ],
+  "cpp23-v2-20-exceptions-streams-free-coding": [
+    "    if ((input >> a >> b) && !(input >> extra)) {\n        std::cout << a + b << '\\n';\n    } else {\n        std::cout << \"invalid\\n\";\n    }"
+  ],
+  "cpp23-v2-capstone-01-stock-free-coding": [
+    "        if (amount <= 0) { return false; }\n        stock_ += amount;\n        return true;",
+    "        if (amount <= 0 || amount > stock_) { return false; }\n        stock_ -= amount;\n        return true;"
+  ],
+  "cpp23-v2-capstone-02-report-free-coding": [
+    "    std::istringstream input{line};\n    Record candidate;\n    std::string extra;\n    if (!(input >> candidate.name >> candidate.score) || candidate.score < 0 || candidate.score > 100 || (input >> extra)) {\n        return false;\n    }\n    result = candidate;\n    return true;",
+    "    int total{0};\n    const Record* best{nullptr};\n    for (const Record& record : records) {\n        total += record.score;\n        if (best == nullptr || record.score > best->score) { best = &record; }\n    }\n    double average{records.empty() ? 0.0 : static_cast<double>(total) / records.size()};\n    std::cout << \"count \" << records.size() << '\\n';\n    std::cout << \"average \" << std::fixed << std::setprecision(1) << average << '\\n';\n    if (best) { std::cout << \"best \" << best->name << ' ' << best->score << '\\n'; }\n    else { std::cout << \"best none\\n\"; }"
+  ]
+}

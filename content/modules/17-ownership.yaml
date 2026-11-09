@@ -1,0 +1,210 @@
+slug: 17-ownership
+title: Value operators, ownership, and relationships
+chapters: 21–23
+readings:
+- title: Operator overloading
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-operator-overloading/
+- title: Unique ownership
+  url: https://www.learncpp.com/cpp-tutorial/stdunique_ptr/
+- title: Composition
+  url: https://www.learncpp.com/cpp-tutorial/composition/
+topics:
+- operator-overloading
+- unique-ptr
+- move-semantics
+- composition
+- ownership
+objectives:
+- Track exclusive ownership after a unique_ptr move.
+- Use an operator function for a value record.
+- Return a new value without mutating either operand.
+lesson: |-
+  ### Give an object one clear owner
+  Some objects are created dynamically and need an owner that will release them when they are no longer needed. `std::unique_ptr<int>` is a library type that owns one integer exclusively. `<memory>` supplies it and its creation helper.
+
+  ```cpp
+  auto original{std::make_unique<int>(7)};
+  auto owner{std::move(original)};
+  ```
+
+  `make_unique<int>(7)` creates an integer holding seven and returns its unique owner. The second line transfers ownership into owner. `<utility>` supplies `std::move`; it permits this transfer rather than making a forbidden copy of unique ownership. After moving this unique_ptr, original is empty (`nullptr`). `*owner` reads the still-live owned integer.
+
+  Only one owner releases this integer. You do not write delete yourself. This is resource management tied to object lifetime, often called RAII: when the owner is destroyed, it releases what it owns. A moved unique_ptr becomes empty, but do not generalize that exact post-move state to every other C++ type.
+
+  Step through draws ownership labels, not raw memory addresses. The puzzle orders creating, moving, and observing the owner. Predict output varies the stored integer; moving its owner does not change that integer's value. Explain why asks which object is responsible for it after the transfer.
+
+  ### Give a value type a familiar operation
+  The coding task is about a separate but related design choice: Score is a small value record. `operator+` is a function with a special name that makes `a + b` work for two Scores. Its two const-reference parameters let it read the original records without changing them. Return a **new** Score containing the sum of their points.
+
+  The supplied output prints the result followed by both originals. That checks not only addition but also the promise that the operands survive unchanged. Do not assign the sum back into a or b.
+
+  ### Owning parts and borrowing access
+  Composition means a whole object owns its parts and manages their lifetime. Other relationships can refer to independently owned objects. Shared ownership has different costs and rules; it should describe an actual shared lifetime need. The wider readings introduce those designs, while these activities keep the ownership story deliberately simple and explicit.
+example: |
+  #include <iostream>
+  #include <memory>
+  #include <utility>
+  int main() {
+      auto original{std::make_unique<int>(7)};
+      auto owner{std::move(original)};
+      std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+  }
+explanations:
+- - std::make_unique<int>(7)
+  - Create an integer holding seven and one library object responsible for its lifetime.
+- - std::move(original)
+  - Permit the unique ownership to transfer. The destination takes responsibility and original becomes empty.
+- - '*owner'
+  - Read the integer through the destination that still owns it.
+- - original == nullptr
+  - Check the source owner’s empty state without trying to dereference it.
+blank: std::move(original)
+wrong:
+- - original
+  - unique_ptr cannot be copied into another unique owner. The code needs an explicit ownership transfer, not
+    two separate objects both claiming exclusive ownership.
+- - std::make_unique<int>(0)
+  - This creates a different integer containing zero. The original would still own its seven, so no ownership
+    was transferred.
+question: After moving one std::unique_ptr into another, which pointer owns the original object?
+choices:
+- - The destination unique_ptr owns the original object.
+  - Ownership transfers to the destination. For unique_ptr the moved-from source becomes empty, so only one
+    owner remains.
+- - Both pointers independently own the same original object.
+  - That would contradict unique ownership. A move changes which object is responsible rather than duplicating
+    responsibility.
+- - Neither owns it because transferring ownership immediately deletes the integer.
+  - The integer stays alive during this transfer. The destination takes responsibility for releasing it later.
+task: Complete the supplied `operator+` function for Score. Return a new Score whose points equal a.points
+  + b.points, without changing a or b. The caller reads two point values from 0 to 1000, adds the Scores, and
+  prints the total followed by both original values. Use the named points members; output is already supplied.
+solution: |
+  #include <iostream>
+  struct Score { int points{}; };
+  Score operator+(const Score& a, const Score& b) {
+      return Score{a.points + b.points};
+  }
+  int main() {
+      Score a{}, b{};
+      std::cin >> a.points >> b.points;
+      Score total{a + b};
+      std::cout << total.points << ' ' << a.points << ' ' << b.points << '\n';
+  }
+editable: '    return Score{a.points + b.points};'
+cases:
+- - Normal
+  - |
+    7 8
+  - |
+    15 7 8
+- - Zero
+  - |
+    0 0
+  - |
+    0 0 0
+- - Different
+  - |
+    12 3
+  - |
+    15 12 3
+- - Large operands stay unchanged
+  - |
+    1000 1000
+  - |
+    2000 1000 1000
+region_prompts:
+- Return a new Score containing the sum; keep both input records unchanged.
+hints_by_type:
+  code-completion:
+  - unique_ptr represents one owner. Ask whether the second line should copy ownership or transfer it.
+  - The original object should survive, but its responsible owner should change. Creating a different integer
+    does not achieve that.
+  multiple-choice-question:
+  - Follow the ownership transfer, not just the address or stored number.
+  - After a unique_ptr move, the source is empty and the destination is responsible for the original object.
+  free-coding:
+  - The function should produce a new value while leaving both inputs alone. Read their points members and
+    combine those numbers.
+  - Use Score{...} to create the returned record. Do not update either const-reference operand; the caller
+    prints them to check this promise.
+  parsons-puzzles:
+  - An owner must exist before its ownership can be transferred.
+  - Read through the destination after the transfer. The source unique_ptr is empty at that point.
+  parameterized-code-tracing:
+  - 'Keep two facts separate: which pointer owns the object, and what integer the object holds.'
+  - Moving this owner changes responsibility, not the stored integer. The original == nullptr question therefore
+    has its own Boolean answer.
+completion_explanation: std::move permits transfer of exclusive ownership. Copying would try to give the same
+  object two unique owners; creating a new zero-valued object would not transfer the original.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    #include <memory>
+    #include <utility>
+    int main() {
+        auto original{std::make_unique<int>(7)};
+        auto owner{std::move(original)};
+        std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+    }
+  blocks:
+  - snippet: '    auto original{std::make_unique<int>(7)};'
+    explanation: Create the integer and give it one exclusive owner.
+  - snippet: '    auto owner{std::move(original)};'
+    explanation: Transfer that existing ownership to the destination.
+  - snippet: '    std::cout << *owner << '' '' << std::boolalpha << (original == nullptr) << ''\n'';'
+    explanation: Observe the destination value and the source’s empty state after the move.
+  goal: Create one owned integer, transfer its unique_ptr, then print the value and whether the source is empty.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    #include <memory>
+    #include <utility>
+    int main() {
+        auto original{std::make_unique<int>(7)};
+        auto owner{std::move(original)};
+        std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+    }
+  token: '7'
+  values:
+  - 7
+  - 0
+  - -2
+  goal: The owned integer changes. Predict its value after ownership transfer and the source-empty Boolean
+    result.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: auto original{std::make_unique<int>(7)};
+    note: Create an integer holding seven. original is its only owner.
+    state:
+      owned integer: 7
+      original: owns the integer
+  - snippet: auto owner{std::move(original)};
+    note: Transfer responsibility without changing or deleting that integer.
+    state:
+      owner: owns the integer
+      original: empty
+  - snippet: std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+    note: Read the integer through owner and separately report that original is empty.
+    state:
+      output: 7 true
+  output: |
+    7 true
+  expected:
+  - |
+    7 true
+  - |
+    0 true
+  - |
+    -2 true
+case_purposes:
+- The total is new, while both original operands must retain their values.
+- Two zero values remain valid value objects.
+- Unequal operands help catch a function that accidentally reuses only one member.
+- Large values must be added without mutating either original.
+
+completion_goal: "Transfer the owned integer from first to second, so second owns it and first is empty afterward."

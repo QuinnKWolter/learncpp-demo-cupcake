@@ -1,0 +1,98 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-free-coding
+title: Debug by tracing, then testing · write code
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int a{}, b{};
+        std::cin >> a >> b;
+        int saved{a};
+        a = b;
+        b = saved;
+        std::cout << a << ' ' << b << '\n';
+    }
+statement: |-
+  The supplied code reads two whole numbers a and b, each from −1000 to 1000. In the marked block, swap their values using a temporary integer. The supplied output line then prints a followed by b. Preserve both original values; do not change the input or output lines.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Write down what must survive before your first assignment. Store the old a value in a separate integer.
+- Use that saved original value for the final assignment, after a has received b. The supplied output line
+  shows whether both originals survived.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          int saved{a};
+          a = b;
+          b = saved;
+  placeholder: '    // Swap a and b, preserving the original a in a temporary integer.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int main() {
+          int a{}, b{};
+          std::cin >> a >> b;
+- type: locked
+  location:
+    snippet: |2
+
+          std::cout << a << ' ' << b << '\n';
+      }
+testcases:
+- title: Unequal
+  visible: true
+  stdin:
+  - 2 9
+  stdout: |
+    9 2
+  feedback:
+    on_pass:
+    - Different inputs show whether both original values survived.
+    on_fail:
+    - Different inputs show whether both original values survived. Write down what must survive before your
+      first assignment. Store the old a value in a separate integer.
+- title: Equal
+  visible: true
+  stdin:
+  - 5 5
+  stdout: |
+    5 5
+  feedback:
+    on_pass:
+    - Equal inputs should still be accepted, even though they cannot expose every swap bug.
+    on_fail:
+    - Equal inputs should still be accepted, even though they cannot expose every swap bug. Write down what
+      must survive before your first assignment. Store the old a value in a separate integer.
+- title: Signed
+  visible: true
+  stdin:
+  - -7 3
+  stdout: |
+    3 -7
+  feedback:
+    on_pass:
+    - A negative value checks that swapping preserves signs as well as positions.
+    on_fail:
+    - A negative value checks that swapping preserves signs as well as positions. Write down what must survive
+      before your first assignment. Store the old a value in a separate integer.

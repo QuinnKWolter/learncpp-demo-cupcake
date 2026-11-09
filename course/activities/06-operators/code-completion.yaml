@@ -1,0 +1,130 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-06-operators-code-completion
+title: Operators, conditions, and bit flags · fill gaps
+description: Practice operators, conditions, and bit flags.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+  topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int age{16};
+        std::cin >> age;
+        bool eligible{age >= 12 && age <= 17};
+        std::cout << std::boolalpha << eligible << '\n';
+    }
+statement: |-
+  Print true only when age is at least 12 and at most 17. Both endpoints belong to this range. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Input:
+  ```text
+  16
+  ```
+  Output:
+  ```text
+  true
+  ```
+  The same rule must also handle the range endpoints and other inputs checked by the tests.
+hints:
+- Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+  it?
+- The range has two requirements, not two alternative ways to qualify. Choose an operator that requires both.
+elements:
+- type: blank
+  location:
+    snippet: age >= 12 && age <= 17
+  choices:
+  - snippet: age >= 12 && age <= 17
+    role: solution
+    explanations:
+    - body: AND requires both ends of the range to hold. OR would let an out-of-range value pass merely because
+        it satisfies the other bound.
+  - snippet: age >= 12 || age <= 17
+    role: distractor
+    explanations:
+    - body: OR needs only one side. An age below twelve still meets the upper bound, and an age above seventeen
+        still meets the lower bound, so neither is rejected.
+  - snippet: age > 12 && age < 17
+    role: distractor
+    explanations:
+    - body: Strict comparisons leave out twelve and seventeen, even though the requested group includes both
+        endpoints.
+testcases:
+- title: Inside
+  visible: true
+  stdin:
+  - '16'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+      it?
+- title: Lower
+  visible: true
+  stdin:
+  - '12'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+      it?
+- title: Upper
+  visible: true
+  stdin:
+  - '17'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+      it?
+- title: Below
+  visible: true
+  stdin:
+  - '11'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+      it?
+- title: Above
+  visible: true
+  stdin:
+  - '18'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+      it?

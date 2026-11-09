@@ -1,0 +1,71 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-code-completion
+title: Dynamic lifetime, recursion, and lambdas · fill gaps
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+statement: |-
+  Make addBonus retain a copy of bonus when the lambda is created. Later changes to the original should not affect that saved copy. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  7
+  ```
+hints:
+- Look at when the lambda is created and when bonus changes. Should its saved bonus follow that later change?
+- A value capture stores a copy at creation time. A reference capture follows the original instead. Choose
+  the one that preserves the original bonus.
+elements:
+- type: blank
+  location:
+    snippet: '[bonus]'
+  choices:
+  - snippet: '[bonus]'
+    role: solution
+    explanations:
+    - body: A value capture keeps the earlier bonus. Reference capture would make the same body observe the
+        later assignment instead.
+  - snippet: '[&bonus]'
+    role: distractor
+    explanations:
+    - body: A reference capture would keep referring to the original bonus. The later assignment to nine would
+        then affect the call, unlike the saved-copy behavior requested.
+  - snippet: '[]'
+    role: distractor
+    explanations:
+    - body: With an empty capture list, the body cannot use this surrounding local bonus. The function needs
+        to retain the value it depends on.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    7

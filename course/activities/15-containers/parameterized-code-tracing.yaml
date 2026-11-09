@@ -1,0 +1,58 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-parameterized-code-tracing
+title: Vectors, arrays, iterators, and algorithms · predict output
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <vector>
+    int main() {
+        std::vector<int> values{2, -1, 0};
+        int count{0};
+        for (int value : values) {
+            if (value > 0) { ++count; }
+        }
+        std::cout << count << '\n';
+    }
+statement: |-
+  The first vector element changes. Count strictly positive elements; do not add their values or count zero.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Visit the displayed values in order, adding one to count only for a strictly positive value.
+- Keep zero separate from positive values. The final output is the count, not the sum of the positive values.
+elements:
+- type: parameter
+  location:
+    snippet: '2'
+  values:
+  - 2
+  - -2
+  - 0
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    1

@@ -1,0 +1,79 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-worked-example
+title: Functions, declarations, and files · worked example
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include "geometry.hpp"
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+includes:
+  geometry.hpp: |
+    // A declaration announces this function before main calls it.
+    // Its definition (the calculation) is visible in main.cpp.
+    #ifndef CUPCAKE_GEOMETRY_HPP
+    #define CUPCAKE_GEOMETRY_HPP
+    int rectanglePerimeter(int width, int height);
+    #endif
+statement: |-
+  Read the small program and predict its result. Click the underlined pieces of code to see what each one contributes. Then compare your prediction with the sample run.
+
+  ### The supplied header
+  `geometry.hpp` announces `int rectanglePerimeter(int width, int height);` before the call. The complete definition is visible below `main`. The include guard keeps the announcement from being repeated. This file is supplied with the activity; you do not need to create it.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    16
+  console: |
+    16
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: '#include "geometry.hpp"'
+  explanations:
+  - body: This supplied header announces rectanglePerimeter before main calls it. Open the supporting file
+      to see the short declaration.
+- type: explanation
+  location:
+    snippet: rectanglePerimeter(width, height)
+  explanations:
+  - body: Pass the two values to the named calculation. This expression becomes the number that the function
+      returns.
+- type: explanation
+  location:
+    snippet: int rectanglePerimeter(int width, int height) {
+  explanations:
+  - body: This is the definition. For each call, width and height receive that call’s two arguments.
+- type: explanation
+  location:
+    snippet: return 2 * (width + height);
+  explanations:
+  - body: First add one width and one height, then double that sum to count all four sides. Send that answer
+      back to main; main prints it.

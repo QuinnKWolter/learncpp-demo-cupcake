@@ -1,0 +1,171 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-20-exceptions-streams-free-coding
+title: Exceptions and stream-based I/O · write code
+description: Practice exceptions and stream-based i/o.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - exceptions
+  - stack-unwinding
+  - streams
+  - parsing
+  - file-io
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <sstream>
+    #include <string>
+    int main() {
+        std::string line;
+        std::getline(std::cin, line);
+        std::istringstream input{line};
+        int a{}, b{};
+        std::string extra;
+        if ((input >> a >> b) && !(input >> extra)) {
+            std::cout << a + b << '\n';
+        } else {
+            std::cout << "invalid\n";
+        }
+    }
+statement: |-
+  The supplied code reads one line and creates an istringstream named input. In the marked block, accept exactly two integers with no extra non-whitespace token. Print their sum when valid, or invalid otherwise. Integer values lie between −1000 and 1000. Missing fields, words in place of a required integer, and trailing tokens should be rejected; surrounding whitespace is allowed.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- First try to read both required integers. A successful first read alone is not enough.
+- Then look for one extra non-whitespace token. Accept only when the required reads succeeded and that extra
+  read did not.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          if ((input >> a >> b) && !(input >> extra)) {
+              std::cout << a + b << '\n';
+          } else {
+              std::cout << "invalid\n";
+          }
+  placeholder: '    // Accept exactly two integers with no extra token; print their sum or invalid.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      #include <sstream>
+      #include <string>
+      int main() {
+          std::string line;
+          std::getline(std::cin, line);
+          std::istringstream input{line};
+          int a{}, b{};
+          std::string extra;
+- type: locked
+  location:
+    snippet: |2
+
+      }
+testcases:
+- title: Valid
+  visible: true
+  stdin:
+  - 3 7
+  stdout: |
+    10
+  feedback:
+    on_pass:
+    - Exactly two readable integer fields are a valid record.
+    on_fail:
+    - Exactly two readable integer fields are a valid record. First try to read both required integers. A successful
+      first read alone is not enough.
+- title: Whitespace
+  visible: true
+  stdin:
+  - '  -2 8  '
+  stdout: |
+    6
+  feedback:
+    on_pass:
+    - Surrounding whitespace is allowed and a negative value still parses.
+    on_fail:
+    - Surrounding whitespace is allowed and a negative value still parses. First try to read both required
+      integers. A successful first read alone is not enough.
+- title: Missing
+  visible: true
+  stdin:
+  - '5'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - One field is not a complete two-field record.
+    on_fail:
+    - One field is not a complete two-field record. First try to read both required integers. A successful
+      first read alone is not enough.
+- title: Extra
+  visible: true
+  stdin:
+  - 1 2 3
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A third integer is an unwanted extra token.
+    on_fail:
+    - A third integer is an unwanted extra token. First try to read both required integers. A successful first
+      read alone is not enough.
+- title: Bad token
+  visible: true
+  stdin:
+  - abc 4
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A word in a required integer position must be rejected.
+    on_fail:
+    - A word in a required integer position must be rejected. First try to read both required integers. A successful
+      first read alone is not enough.
+- title: Partial token
+  visible: true
+  stdin:
+  - 1 2x
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A readable integer prefix followed by letters is not a complete clean record.
+    on_fail:
+    - A readable integer prefix followed by letters is not a complete clean record. First try to read both
+      required integers. A successful first read alone is not enough.
+- title: Empty line
+  visible: true
+  stdin:
+  - ''
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - An empty line contains neither required field.
+    on_fail:
+    - An empty line contains neither required field. First try to read both required integers. A successful
+      first read alone is not enough.
+- title: Two negative values
+  visible: true
+  stdin:
+  - -3 -7
+  stdout: |
+    -10
+  feedback:
+    on_pass:
+    - Two signed integers still use ordinary addition.
+    on_fail:
+    - Two signed integers still use ordinary addition. First try to read both required integers. A successful
+      first read alone is not enough.

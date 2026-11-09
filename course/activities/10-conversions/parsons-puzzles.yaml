@@ -1,0 +1,74 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-10-conversions-parsons-puzzles
+title: Conversions and type deduction · arrange code
+description: Practice conversions and type deduction.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+  topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        auto whole{9 / 2};
+        auto fraction{static_cast<double>(9) / 2};
+        std::cout << whole << ' ' << fraction << '\n';
+    }
+statement: |-
+  Calculate both quotient forms, then print the whole-number result followed by the fractional result.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- The input values must be ready before you calculate the quotient.
+- Keep the conversion next to the numerator in the calculation, then print the completed result.
+elements:
+- type: block
+  location:
+    snippet: '    auto whole{9 / 2};'
+  choices:
+  - snippet: '    auto whole{9 / 2};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create the whole-number quotient. This and the fractional quotient can be calculated in either
+        order.
+  group: independent-quotients
+- type: block
+  location:
+    snippet: '    auto fraction{static_cast<double>(9) / 2};'
+  choices:
+  - snippet: '    auto fraction{static_cast<double>(9) / 2};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create the fractional quotient with a converted operand; it does not depend on whole.
+  group: independent-quotients
+- type: block
+  location:
+    snippet: '    std::cout << whole << '' '' << fraction << ''\n'';'
+  choices:
+  - snippet: '    std::cout << whole << '' '' << fraction << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Both quotients must exist before this comparison can be printed.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    4 4.5

@@ -1,0 +1,73 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-05-constants-strings-parsons-puzzles
+title: Constants and text with clear lifetimes · arrange code
+description: Practice constants and text with clear lifetimes.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+  topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        const std::string word{"cupcake"};
+        bool found{word.contains("cake")};
+        std::cout << std::boolalpha << found << '\n';
+    }
+statement: |-
+  Create the word cupcake, ask whether it contains cake, and print the Boolean answer as a word.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Create the text before asking a question about its characters.
+- The printed result comes from the text operation, so the question must be evaluated before its result is
+  sent to output.
+elements:
+- type: block
+  location:
+    snippet: '    const std::string word{"cupcake"};'
+  choices:
+  - snippet: '    const std::string word{"cupcake"};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create the owning text before searching it.
+- type: block
+  location:
+    snippet: '    bool found{word.contains("cake")};'
+  choices:
+  - snippet: '    bool found{word.contains("cake")};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Ask the C++23 contains question and store its true/false answer.
+- type: block
+  location:
+    snippet: '    std::cout << std::boolalpha << found << ''\n'';'
+  choices:
+  - snippet: '    std::cout << std::boolalpha << found << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Display the stored answer as a word, not a numeric flag.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    true

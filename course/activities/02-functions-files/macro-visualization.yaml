@@ -1,0 +1,130 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-macro-visualization
+title: Functions, declarations, and files · step through
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: macro-visualization
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The width changes. Follow the call into the visible perimeter function and predict its returned result on the one output line.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - width
+  - - createVariable
+    - height
+  - - createVariable
+    - parameter width
+  - - createVariable
+    - parameter height
+  - - createVariable
+    - returned value
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 6
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - width
+  - - showText
+    - Prepare the caller’s width, three.
+  - - _setLine
+    - 7
+  - - _addValue
+    - '5'
+    - 0
+    - int
+  - - _assign
+    - height
+  - - showText
+    - Prepare the caller’s height, five.
+  - - _setLine
+    - 8
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - parameter width
+  - - _addValue
+    - '5'
+    - 0
+    - int
+  - - _assign
+    - parameter height
+  - - showText
+    - Supply those two values to the function parameters.
+  - - _setLine
+    - 3
+  - - _addValue
+    - '16'
+    - 0
+    - int
+  - - _assign
+    - returned value
+  - - showText
+    - Add three and five, then double that sum. The result returns to main.
+  - - _setLine
+    - 8
+  - - _addValue
+    - '16'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - The output expression receives the returned sixteen and prints it once.
+  lines:
+  - '#include <iostream>'
+  - int rectanglePerimeter(int width, int height) {
+  - '    return 2 * (width + height);'
+  - '}'
+  - int main() {
+  - '    int width{3};'
+  - '    int height{5};'
+  - '    std::cout << rectanglePerimeter(width, height) << ''\n'';'
+  - '}'

@@ -1,0 +1,73 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-parsons-puzzles
+title: Overloads, templates, and constexpr · arrange code
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) { return a < b ? b : a; }
+    int main() {
+        int a{3}, b{8};
+        auto result{larger(a, b)};
+        std::cout << result << '\n';
+    }
+statement: |-
+  Prepare the pair 3 and 8, call the supplied larger template, and print its returned value.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- The values must exist before a call can receive them, and a result must be calculated before it can be printed.
+- The template definition is already supplied. You are ordering one caller’s steps, not arranging template
+  syntax.
+elements:
+- type: block
+  location:
+    snippet: '    int a{3}, b{8};'
+  choices:
+  - snippet: '    int a{3}, b{8};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Prepare the argument values before calling the template.
+- type: block
+  location:
+    snippet: '    auto result{larger(a, b)};'
+  choices:
+  - snippet: '    auto result{larger(a, b)};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Deduce T as int for this call and keep its returned larger value.
+- type: block
+  location:
+    snippet: '    std::cout << result << ''\n'';'
+  choices:
+  - snippet: '    std::cout << result << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Display the returned result; the template itself does not print.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    8

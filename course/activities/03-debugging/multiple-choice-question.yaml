@@ -1,0 +1,38 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-multiple-choice-question
+title: Debug by tracing, then testing · explain why
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+question: A supposed swap prints the same value twice. Which input is most useful for exposing the bug?
+include_choices: 3
+hints:
+- A useful test must make it possible to tell the two original values apart.
+- Imagine swapping two identical labels. Would the final display reveal whether either label really moved?
+choices:
+- body: Two distinct values, such as 2 and 9.
+  role: solution
+  explanations:
+  - body: The displayed result can show whether both different originals survived in opposite positions.
+- body: Two equal values, such as 5 and 5.
+  role: distractor
+  explanations:
+  - body: A broken swap that copies one side twice can still display the expected pair when both originals
+      are equal.
+- body: Every pair is equally useful for exposing a lost original.
+  role: distractor
+  explanations:
+  - body: Equal inputs can hide this bug. Choose distinguishable values when testing whether both originals
+      were preserved.

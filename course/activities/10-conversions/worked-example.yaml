@@ -1,0 +1,56 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-10-conversions-worked-example
+title: Conversions and type deduction · worked example
+description: Practice conversions and type deduction.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+  topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        auto whole{9 / 2};
+        auto fraction{static_cast<double>(9) / 2};
+        std::cout << whole << ' ' << fraction << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    4 4.5
+  console: |
+    4 4.5
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: auto whole{9 / 2};
+  explanations:
+  - body: The initializer computes an integer quotient. auto therefore makes whole an int.
+- type: explanation
+  location:
+    snippet: static_cast<double>(9) / 2
+  explanations:
+  - body: Convert the numerator first, so the division can keep its fractional part.
+- type: explanation
+  location:
+    snippet: auto fraction
+  explanations:
+  - body: Because its initializer is a double expression, this variable is also a double.

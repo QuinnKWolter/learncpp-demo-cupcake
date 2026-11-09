@@ -1,0 +1,119 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-macro-visualization
+title: Choose the right arithmetic type · step through
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: macro-visualization
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int sum{15};
+        int count{4};
+        int whole{sum / count};
+        double average{static_cast<double>(sum) / count};
+        std::cout << whole << ' ' << average << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The total changes. Predict the integer quotient followed by the fractional quotient, in that order.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - sum
+  - - createVariable
+    - count
+  - - createVariable
+    - whole
+  - - createVariable
+    - average
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 3
+  - - _addValue
+    - '15'
+    - 0
+    - int
+  - - _assign
+    - sum
+  - - showText
+    - The total for this walkthrough is fifteen.
+  - - _setLine
+    - 4
+  - - _addValue
+    - '4'
+    - 0
+    - int
+  - - _assign
+    - count
+  - - showText
+    - Share that total among four items.
+  - - _setLine
+    - 5
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - whole
+  - - showText
+    - Two integers produce a whole-number quotient, dropping the fraction.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '3.75'
+    - 0
+    - std::string
+  - - _assign
+    - average
+  - - showText
+    - Convert before dividing to retain the fractional part.
+  - - _setLine
+    - 7
+  - - _addValue
+    - 3 3.75
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the whole-number result first and the fractional result second.
+  lines:
+  - '#include <iostream>'
+  - int main() {
+  - '    int sum{15};'
+  - '    int count{4};'
+  - '    int whole{sum / count};'
+  - '    double average{static_cast<double>(sum) / count};'
+  - '    std::cout << whole << '' '' << average << ''\n'';'
+  - '}'

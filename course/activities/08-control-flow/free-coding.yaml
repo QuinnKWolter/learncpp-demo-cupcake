@@ -1,0 +1,138 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-08-control-flow-free-coding
+title: Branches and loops · write code
+description: Practice branches and loops.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+  topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int n{};
+        std::cin >> n;
+        int total{0};
+        for (int value{2}; value <= n; value += 2) {
+            total += value;
+        }
+        std::cout << total << '\n';
+    }
+statement: |-
+  The supplied code reads a limit n from 0 to 1000. In the marked block, use a loop to calculate total: the sum of the positive even numbers no larger than n. For n = 7, the contributions are 2, 4, and 6. The existing output line prints total once after your block.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Start with a running total of zero. What is the first positive even number you could add?
+- Advance the candidate by two each time and include n when it is even. Keep printing outside the loop so there
+  is only one output line.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          int total{0};
+          for (int value{2}; value <= n; value += 2) {
+              total += value;
+          }
+  placeholder: '    // Use a loop to add the positive even values up to n into total.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int main() {
+          int n{};
+          std::cin >> n;
+- type: locked
+  location:
+    snippet: |2
+
+          std::cout << total << '\n';
+      }
+testcases:
+- title: Even
+  visible: true
+  stdin:
+  - '6'
+  stdout: |
+    12
+  feedback:
+    on_pass:
+    - An even limit includes the limit as a contribution.
+    on_fail:
+    - An even limit includes the limit as a contribution. Start with a running total of zero. What is the first
+      positive even number you could add?
+- title: Odd
+  visible: true
+  stdin:
+  - '7'
+  stdout: |
+    12
+  feedback:
+    on_pass:
+    - An odd limit stops at the preceding even number.
+    on_fail:
+    - An odd limit stops at the preceding even number. Start with a running total of zero. What is the first
+      positive even number you could add?
+- title: Empty
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - Zero allows no positive even contribution.
+    on_fail:
+    - Zero allows no positive even contribution. Start with a running total of zero. What is the first positive
+      even number you could add?
+- title: One
+  visible: true
+  stdin:
+  - '1'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - A limit of one also allows no positive even contribution.
+    on_fail:
+    - A limit of one also allows no positive even contribution. Start with a running total of zero. What is
+      the first positive even number you could add?
+- title: Large
+  visible: true
+  stdin:
+  - '1000'
+  stdout: |
+    250500
+  feedback:
+    on_pass:
+    - The upper input bound checks that the entire loop range is included.
+    on_fail:
+    - The upper input bound checks that the entire loop range is included. Start with a running total of zero.
+      What is the first positive even number you could add?
+- title: First even contribution
+  visible: true
+  stdin:
+  - '2'
+  stdout: |
+    2
+  feedback:
+    on_pass:
+    - The first positive even value should contribute exactly once.
+    on_fail:
+    - The first positive even value should contribute exactly once. Start with a running total of zero. What
+      is the first positive even number you could add?

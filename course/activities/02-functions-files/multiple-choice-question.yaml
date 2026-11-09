@@ -1,0 +1,39 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-multiple-choice-question
+title: Functions, declarations, and files · explain why
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+question: A function returns an integer but does not print anything. What does `return 8;` do?
+include_choices: 3
+hints:
+- 'Separate two actions: returning a value to another part of the program and displaying text on the screen.'
+- The caller decides what to do with the returned number. Look for std::cout when deciding what actually gets
+  printed.
+choices:
+- body: It gives 8 back to the caller and ends this function call.
+  role: solution
+  explanations:
+  - body: The caller can use that returned number in an expression, including a later output statement.
+- body: It prints 8 on the screen immediately.
+  role: distractor
+  explanations:
+  - body: Returning and printing are separate actions. A std::cout operation would be needed to display the
+      returned number.
+- body: It ends every waiting function call, even if this is not main.
+  role: distractor
+  explanations:
+  - body: A return leaves this call and resumes its caller; it does not end the entire chain of callers.

@@ -1,0 +1,206 @@
+slug: 11-generic-functions
+title: Overloads, templates, and constexpr
+chapters: 11, F
+readings:
+- title: Function templates
+  url: https://www.learncpp.com/cpp-tutorial/function-templates/
+- title: Constexpr functions
+  url: https://www.learncpp.com/cpp-tutorial/constexpr-functions/
+topics:
+- overloading
+- function-templates
+- constexpr
+objectives:
+- Use one function template for integers and doubles.
+- Follow a conditional result choice.
+- Distinguish permitted compile-time and runtime evaluation.
+lesson: |-
+  ### One calculation, more than one numeric type
+  Suppose we want the larger of two values. We could write one function for integers and another for doubles. Functions can share a name when their parameter lists differ; these are overloads. A **function template** lets us write one pattern for both cases instead.
+
+  ```cpp
+  template <typename T>
+  constexpr T larger(T a, T b) {
+      return a < b ? b : a;
+  }
+  ```
+
+  Read T as “the type chosen for this call.” For `larger(3, 8)`, the compiler uses int. For `larger(2.5, 1.5)`, it uses double. Both arguments in these activities have the same type, so there is no ambiguous mixed-type call to resolve.
+
+  ### Read the choice expression
+  The conditional expression `condition ? whenTrue : whenFalse` chooses one of two values. Here, if a is less than b, return b; otherwise return a. Only one result is returned. This is a shorter way to write an if/else decision, not a new arithmetic operation.
+
+  ### What constexpr promises
+  A `constexpr` variable needs a value available while the program is being built. A `constexpr` function is allowed to calculate such a value when its inputs and use permit it. It can also run later with values read during execution. The example uses a compile-time call for best; the coding task uses runtime input. Explain why asks why those uses are both possible. C++23 has additional compile-time tools, but they do not change this distinction.
+
+  ### Transfer the idea to a smaller-value function
+  Write code supplies the template header and asks you to return the smaller of a and b. Keep the return type T and return one of the original values, rather than converting everything to int. The caller tests an integer pair and a fixed double pair, so a solution that quietly drops fractions will be exposed.
+
+  Step through and Predict output follow a single larger-value call. Arrange code orders preparation, a call, and its output. When reasoning about any template here, first name the chosen type, then apply the ordinary comparison rule you already know.
+example: |
+  #include <iostream>
+  template <typename T>
+  constexpr T larger(T a, T b) {
+      return a < b ? b : a;
+  }
+  int main() {
+      constexpr int best{larger(3, 8)};
+      std::cout << best << ' ' << larger(2.5, 1.5) << '\n';
+  }
+explanations:
+- - template <typename T>
+  - This function is a pattern. The call chooses the type represented by T.
+- - 'a < b ? b : a'
+  - If a is smaller, choose b; otherwise choose a. This returns the larger value without changing either argument.
+- - constexpr int best{larger(3, 8)};
+  - This variable requires its initial value during the build, so this call is evaluated then.
+- - larger(2.5, 1.5)
+  - This call uses double for T. The function pattern also works without throwing away fractional information.
+blank: 'a < b ? b : a'
+wrong:
+- - 'a < b ? a : b'
+  - These result branches select the smaller value. Use the same comparison with the opposite result positions
+    to implement the requested larger value.
+- - a + b
+  - Adding the arguments combines them into a different number. This function must choose and return one of
+    the existing arguments.
+question: Must every call of a constexpr function run during compilation?
+choices:
+- - No; a constexpr function may also be called with runtime values.
+  - constexpr permits constant evaluation when the call and its context support it; it does not require every
+    call to happen during a build.
+- - Yes; constexpr forces every call to run before the program starts.
+  - A normal call can receive a value read from input, which is unavailable during compilation.
+- - No runtime call is allowed because the compiler only accepts literal arguments.
+  - The function can accept runtime arguments too. A context that specifically requires a constant expression
+    has the extra restriction.
+task: Complete the supplied function template `smaller(T a, T b)`. Return the smaller of a and b; do not print
+  from the function. The caller reads two integers from −1000 to 1000 and also calls your function with 2.5
+  and 1.5. It prints the two results on one line. Keep the result type T so both integer and fractional values
+  are handled.
+solution: |
+  #include <iostream>
+  template <typename T>
+  constexpr T smaller(T a, T b) {
+      return a < b ? a : b;
+  }
+  int main() {
+      int a{}, b{};
+      std::cin >> a >> b;
+      std::cout << smaller(a, b) << ' ' << smaller(2.5, 1.5) << '\n';
+  }
+editable: '    return a < b ? a : b;'
+cases:
+- - Ascending
+  - |
+    3 8
+  - |
+    3 1.5
+- - Descending
+  - |
+    9 -2
+  - |
+    -2 1.5
+- - Equal
+  - |
+    4 4
+  - |
+    4 1.5
+region_prompts:
+- Return the smaller of a and b, preserving its type T.
+hints_by_type:
+  code-completion:
+  - 'Read the expression as an if/else: when a < b, which variable is larger?'
+  - The true and false positions have different jobs. Test them with a small pair in increasing order, then
+    with the order reversed.
+  multiple-choice-question:
+  - Compare a fixed literal used during a build with a value that arrives from std::cin during execution.
+  - constexpr permits compile-time calculation when possible; an ordinary runtime call can still use the same
+    function.
+  free-coding:
+  - Use a small ordered pair such as 2 and 7 to decide which value belongs in each branch.
+  - Then reverse the pair to check the other branch. Return the original T value so the fixed double example
+    keeps its fractional part.
+  parsons-puzzles:
+  - The values must exist before a call can receive them, and a result must be calculated before it can be
+    printed.
+  - The template definition is already supplied. You are ordering one caller’s steps, not arranging template
+    syntax.
+  parameterized-code-tracing:
+  - Give a and b the displayed argument values, then evaluate a < b once.
+  - Only the selected branch becomes the returned value; the two values are not added together.
+completion_explanation: When a < b, b is the larger value. Reversing the two result positions would correctly
+  implement a smaller-value function, but not this larger-value function.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) { return a < b ? b : a; }
+    int main() {
+        int a{3}, b{8};
+        auto result{larger(a, b)};
+        std::cout << result << '\n';
+    }
+  blocks:
+  - snippet: '    int a{3}, b{8};'
+    explanation: Prepare the argument values before calling the template.
+  - snippet: '    auto result{larger(a, b)};'
+    explanation: Deduce T as int for this call and keep its returned larger value.
+  - snippet: '    std::cout << result << ''\n'';'
+    explanation: Display the returned result; the template itself does not print.
+  goal: Prepare the pair 3 and 8, call the supplied larger template, and print its returned value.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) { return a < b ? b : a; }
+    int main() {
+        int a{3};
+        int b{8};
+        std::cout << larger(a, b) << '\n';
+    }
+  token: '3'
+  values:
+  - 3
+  - 12
+  - 8
+  goal: The first argument changes. Choose the larger returned value, including the equal-values case.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int a{3};
+    note: Prepare the first argument as an int.
+    state:
+      a: 3
+  - snippet: int b{8};
+    note: Prepare the second int argument; T will be int for this call.
+    state:
+      b: 8
+      chosen T: int
+  - snippet: 'return a < b ? b : a;'
+    note: Three is less than eight, so choose b from the true branch.
+    state:
+      comparison: 'true'
+      returned value: 8
+  - snippet: std::cout << larger(a, b) << '\n';
+    note: The caller prints the returned larger value once.
+    state:
+      output: '8'
+  output: |
+    8
+  expected:
+  - |
+    8
+  - |
+    12
+  - |
+    8
+case_purposes:
+- An increasing pair checks one comparison branch and the fractional template instantiation.
+- A reversed signed pair checks the other branch.
+- Equal arguments should return their common value.
+
+completion_goal: "Make the supplied larger template return the larger of its two arguments, using their chosen type."

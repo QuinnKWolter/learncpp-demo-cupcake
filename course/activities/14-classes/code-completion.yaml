@@ -1,0 +1,74 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-14-classes-code-completion
+title: Classes protect their invariants · fill gaps
+description: Practice classes protect their invariants.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void increment() { ++value_; }
+        int value() const { return value_; }
+    };
+    int main() {
+        Counter counter{3};
+        counter.increment();
+        std::cout << counter.value() << '\n';
+    }
+statement: |-
+  Let Counter increase by one through its public increment method while keeping its stored member private. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  4
+  ```
+hints:
+- An increment means one step upward from the current count, not a new starting value.
+- Use an operation that changes the stored value by one while preserving all earlier increments.
+elements:
+- type: blank
+  location:
+    snippet: ++value_;
+  choices:
+  - snippet: ++value_;
+    role: solution
+    explanations:
+    - body: Increment increases the existing count by one. Resetting it would discard its history; decrement
+        would move it in the opposite direction.
+  - snippet: value_ = 0;
+    role: distractor
+    explanations:
+    - body: Resetting to zero discards the count that was already stored. An increment should build on that
+        value.
+  - snippet: --value_;
+    role: distractor
+    explanations:
+    - body: This moves one step downward, whereas increment means one step upward from the existing value.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    4

@@ -1,0 +1,39 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-multiple-choice-question
+title: Input validation and meaningful tests · explain why
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+question: Why should a program validate external input instead of relying only on `assert`?
+include_choices: 3
+hints:
+- User input can be wrong during normal use. Its error handling must still work in a release build.
+- Assertions can be turned off. Use regular validation to decide what message a user should receive.
+choices:
+- body: Input validation must still work when assertions are disabled.
+  role: solution
+  explanations:
+  - body: Assertions check developer assumptions and may be absent in a release build. Normal invalid input
+      needs ordinary program logic.
+- body: An assertion that passed during development must remain active in every release build.
+  role: distractor
+  explanations:
+  - body: Build settings can disable assertions. Passing an earlier test does not guarantee later input handling.
+- body: Initializing score to zero means a failed read is already a valid input.
+  role: distractor
+  explanations:
+  - body: A fallback initial value does not mean the user supplied that value. Check whether the read succeeded
+      before accepting it.

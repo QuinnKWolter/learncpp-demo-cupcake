@@ -1,0 +1,81 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-code-completion
+title: Functions, declarations, and files · fill gaps
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include "geometry.hpp"
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+includes:
+  geometry.hpp: |
+    // A declaration announces this function before main calls it.
+    // Its definition (the calculation) is visible in main.cpp.
+    #ifndef CUPCAKE_GEOMETRY_HPP
+    #define CUPCAKE_GEOMETRY_HPP
+    int rectanglePerimeter(int width, int height);
+    #endif
+statement: |-
+  Make rectanglePerimeter return the distance around all four sides of the rectangle. The supplied main prints that returned number. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  16
+  ```
+
+  ### The supplied header
+  `geometry.hpp` announces `int rectanglePerimeter(int width, int height);` before the call. The complete definition is visible below `main`. The include guard keeps the announcement from being repeated. This file is supplied with the activity; you do not need to create it.
+hints:
+- Locate the function body below main. The missing expression must calculate distance around all four sides.
+- A rectangle has two sides of each dimension. Add one width and one height, then account for the second pair.
+elements:
+- type: blank
+  location:
+    snippet: 2 * (width + height)
+  choices:
+  - snippet: 2 * (width + height)
+    role: solution
+    explanations:
+    - body: The perimeter counts both pairs of sides. Multiplying width by height calculates area instead;
+        adding only once counts only half the boundary.
+  - snippet: width * height
+    role: distractor
+    explanations:
+    - body: This calculates area, the inside of the rectangle. The distance around it includes two widths and
+        two heights.
+  - snippet: width + height
+    role: distractor
+    explanations:
+    - body: This counts only one width and one height. The opposite two sides are still part of the boundary.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    16

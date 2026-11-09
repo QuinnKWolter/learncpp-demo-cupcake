@@ -1,0 +1,80 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-14-classes-parsons-puzzles
+title: Classes protect their invariants · arrange code
+description: Practice classes protect their invariants.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void increment() { ++value_; }
+        int value() const { return value_; }
+    };
+    int main() {
+        Counter counter{3};
+        counter.increment();
+        std::cout << counter.value() << '\n';
+    }
+statement: |-
+  Create a Counter starting at three, increment it once, and print its new value through the public observer.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Create a Counter before calling a member function on it.
+- Reading the count before increment would show the old value. Put the observer after the update when the task
+  asks for the final count.
+elements:
+- type: block
+  location:
+    snippet: '    Counter counter{3};'
+  choices:
+  - snippet: '    Counter counter{3};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Construct the object and give its member the starting value.
+- type: block
+  location:
+    snippet: '    counter.increment();'
+  choices:
+  - snippet: '    counter.increment();'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Use the public update on the object that now exists.
+- type: block
+  location:
+    snippet: '    std::cout << counter.value() << ''\n'';'
+  choices:
+  - snippet: '    std::cout << counter.value() << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Observe the count after the update rather than printing the original count.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    4

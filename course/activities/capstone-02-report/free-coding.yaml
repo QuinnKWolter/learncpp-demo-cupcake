@@ -1,0 +1,301 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-capstone-02-report-free-coding
+title: 'Capstone: validated score reports'
+description: 'Practice capstone: validated score reports.'
+pedagogy:
+  activity: free-coding
+  difficulty: advanced
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - structs
+  - vector
+  - streams
+  - validation
+  - algorithms
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iomanip>
+    #include <iostream>
+    #include <limits>
+    #include <sstream>
+    #include <string>
+    #include <vector>
+    struct Record { std::string name; int score{}; };
+    bool parseRecord(const std::string& line, Record& result) {
+        std::istringstream input{line};
+        Record candidate;
+        std::string extra;
+        if (!(input >> candidate.name >> candidate.score) || candidate.score < 0 || candidate.score > 100 || (input >> extra)) {
+            return false;
+        }
+        result = candidate;
+        return true;
+    }
+    void printReport(const std::vector<Record>& records) {
+        int total{0};
+        const Record* best{nullptr};
+        for (const Record& record : records) {
+            total += record.score;
+            if (best == nullptr || record.score > best->score) { best = &record; }
+        }
+        double average{records.empty() ? 0.0 : static_cast<double>(total) / records.size()};
+        std::cout << "count " << records.size() << '\n';
+        std::cout << "average " << std::fixed << std::setprecision(1) << average << '\n';
+        if (best) { std::cout << "best " << best->name << ' ' << best->score << '\n'; }
+        else { std::cout << "best none\n"; }
+    }
+    int main() {
+        int count{};
+        std::cin >> count;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::vector<Record> records;
+        for (int i{0}; i < count; ++i) {
+            std::string line;
+            std::getline(std::cin, line);
+            Record record;
+            if (!parseRecord(line, record)) { std::cout << "invalid\n"; return 0; }
+            records.push_back(record);
+        }
+        printReport(records);
+    }
+statement: |-
+  Implement `bool parseRecord(const std::string& line, Record& result)` and `void printReport(const std::vector<Record>& records)`. A valid line contains exactly a single-word name and one integer score in [0,100], with no extra token. parseRecord returns false for any invalid line and assigns result only for a valid line. main reads a nonnegative line count followed by those lines (at most 100). If any line is invalid, main prints `invalid` and stops. Otherwise print `count N`, `average A` with one decimal place, and `best NAME SCORE` on separate lines. For an empty collection print `count 0`, `average 0.0`, and `best none`. For a tie, select the FIRST record with the highest score. Names contain only ASCII letters; test inputs obey the line-count contract.
+
+  The two highlighted method/function bodies are yours to complete. Read the preparation notes and examples before editing; the surrounding program is supplied.
+hints:
+- Keep parsing and reporting separate. Validate into a temporary record before changing result.
+- 'Two successful fields are not enough: a range violation or one leftover token must reject the line.'
+- In the report, handle the empty vector before division and update best only for a strictly larger score.
+  That protects zero records and first-in-order ties.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          std::istringstream input{line};
+          Record candidate;
+          std::string extra;
+          if (!(input >> candidate.name >> candidate.score) || candidate.score < 0 || candidate.score > 100 || (input >> extra)) {
+              return false;
+          }
+          result = candidate;
+          return true;
+  placeholder: '    // Parse and validate one full record; assign result only on success.'
+- type: editable
+  location:
+    snippet: |2-
+          int total{0};
+          const Record* best{nullptr};
+          for (const Record& record : records) {
+              total += record.score;
+              if (best == nullptr || record.score > best->score) { best = &record; }
+          }
+          double average{records.empty() ? 0.0 : static_cast<double>(total) / records.size()};
+          std::cout << "count " << records.size() << '\n';
+          std::cout << "average " << std::fixed << std::setprecision(1) << average << '\n';
+          if (best) { std::cout << "best " << best->name << ' ' << best->score << '\n'; }
+          else { std::cout << "best none\n"; }
+  placeholder: '    // Print count, fractional average, and the first highest-scoring record.'
+- type: locked
+  location:
+    snippet: |
+      #include <iomanip>
+      #include <iostream>
+      #include <limits>
+      #include <sstream>
+      #include <string>
+      #include <vector>
+      struct Record { std::string name; int score{}; };
+      bool parseRecord(const std::string& line, Record& result) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      void printReport(const std::vector<Record>& records) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          int count{};
+          std::cin >> count;
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+          std::vector<Record> records;
+          for (int i{0}; i < count; ++i) {
+              std::string line;
+              std::getline(std::cin, line);
+              Record record;
+              if (!parseRecord(line, record)) { std::cout << "invalid\n"; return 0; }
+              records.push_back(record);
+          }
+          printReport(records);
+      }
+testcases:
+- title: Normal
+  visible: true
+  stdin:
+  - '3'
+  - Ada 80
+  - Bjarne 95
+  - Grace 95
+  stdout: |
+    count 3
+    average 90.0
+    best Bjarne 95
+  feedback:
+    on_pass:
+    - The first highest-scoring name should survive a tie.
+    on_fail:
+    - The first highest-scoring name should survive a tie. Keep parsing and reporting separate. Validate into
+      a temporary record before changing result.
+- title: Empty
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    count 0
+    average 0.0
+    best none
+  feedback:
+    on_pass:
+    - An empty report must avoid division by zero and use best none.
+    on_fail:
+    - An empty report must avoid division by zero and use best none. Keep parsing and reporting separate. Validate
+      into a temporary record before changing result.
+- title: Boundaries
+  visible: true
+  stdin:
+  - '2'
+  - Ada 0
+  - Grace 100
+  stdout: |
+    count 2
+    average 50.0
+    best Grace 100
+  feedback:
+    on_pass:
+    - Both score endpoints are valid and should affect the average.
+    on_fail:
+    - Both score endpoints are valid and should affect the average. Keep parsing and reporting separate. Validate
+      into a temporary record before changing result.
+- title: Extra token
+  visible: true
+  stdin:
+  - '1'
+  - Ada 90 extra
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - An extra token makes the complete record invalid.
+    on_fail:
+    - An extra token makes the complete record invalid. Keep parsing and reporting separate. Validate into
+      a temporary record before changing result.
+- title: Out of range
+  visible: true
+  stdin:
+  - '1'
+  - Ada 101
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A score above one hundred is invalid even if it parses.
+    on_fail:
+    - A score above one hundred is invalid even if it parses. Keep parsing and reporting separate. Validate
+      into a temporary record before changing result.
+- title: Missing score
+  visible: true
+  stdin:
+  - '1'
+  - Ada
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A missing score must reject the line.
+    on_fail:
+    - A missing score must reject the line. Keep parsing and reporting separate. Validate into a temporary
+      record before changing result.
+- title: Partial integer
+  visible: true
+  stdin:
+  - '1'
+  - Ada 90x
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A leftover letter after a numeric prefix must reject the line.
+    on_fail:
+    - A leftover letter after a numeric prefix must reject the line. Keep parsing and reporting separate. Validate
+      into a temporary record before changing result.
+- title: Negative
+  visible: true
+  stdin:
+  - '1'
+  - Ada -1
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A negative score is outside the range.
+    on_fail:
+    - A negative score is outside the range. Keep parsing and reporting separate. Validate into a temporary
+      record before changing result.
+- title: Fractional average
+  visible: true
+  stdin:
+  - '2'
+  - Ada 10
+  - Grace 11
+  stdout: |
+    count 2
+    average 10.5
+    best Grace 11
+  feedback:
+    on_pass:
+    - The average needs its fractional half.
+    on_fail:
+    - The average needs its fractional half. Keep parsing and reporting separate. Validate into a temporary
+      record before changing result.
+- title: Zero scores still have a best record
+  visible: true
+  stdin:
+  - '2'
+  - Ada 0
+  - Grace 0
+  stdout: |
+    count 2
+    average 0.0
+    best Ada 0
+  feedback:
+    on_pass:
+    - Zero scores are valid; the first zero can still be the best record.
+    on_fail:
+    - Zero scores are valid; the first zero can still be the best record. Keep parsing and reporting separate.
+      Validate into a temporary record before changing result.
+- title: Whitespace around valid fields
+  visible: true
+  stdin:
+  - '1'
+  - '  Ada 80   '
+  stdout: |
+    count 1
+    average 80.0
+    best Ada 80
+  feedback:
+    on_pass:
+    - Whitespace around complete fields is allowed.
+    on_fail:
+    - Whitespace around complete fields is allowed. Keep parsing and reporting separate. Validate into a temporary
+      record before changing result.

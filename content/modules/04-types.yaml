@@ -1,0 +1,198 @@
+slug: 04-types
+title: Choose the right arithmetic type
+chapters: '4'
+readings:
+- title: Integers
+  url: https://www.learncpp.com/cpp-tutorial/signed-integers/
+- title: Floating point
+  url: https://www.learncpp.com/cpp-tutorial/floating-point-numbers/
+topics:
+- integers
+- floating-point
+- integer-division
+- type-conversion
+objectives:
+- Distinguish whole-number and fractional division.
+- Convert an operand before division.
+- Calculate and format a two-score average.
+lesson: |-
+  ### Whole numbers and fractional numbers
+  An `int` is useful for counts such as a number of students. A `double` can represent a fractional measurement such as an average. The types of the numbers being divided determine how division happens.
+
+  With two integers, `/` performs whole-number division. For positive 15 and 4, the result is 3: the fractional part is discarded. Giving that already computed result to a double afterward produces 3.0, not 3.75.
+
+  ### Convert before the division
+  ```cpp
+  double average{static_cast<double>(sum) / count};
+  ```
+
+  `static_cast<double>(sum)` means “use a double version of sum in this expression.” It does not change sum itself. Now one operand is a double, so the division can produce a fractional result. The example prints the integer division and the fractional division side by side so you can compare them.
+
+  Step through and Predict output use a small quotient. Arrange code asks you to put the inputs before the calculation and the calculation before its output. Fill gaps asks where the conversion belongs. Explain why checks a common misunderstanding: a double on the left does not travel backward and change an integer calculation on the right.
+
+  ### Your coding task: an average of two scores
+  Add the two input scores and divide by two. Convert before dividing so an odd total can produce a half point. The surrounding output code is supplied: `std::fixed` together with `std::setprecision(1)` asks for exactly one digit after the decimal point, such as 7.5 or 0.0. `<iomanip>` provides the precision setting. You do not need to change these display settings.
+
+  ### Useful limits
+  Floating-point numbers store approximations; many decimal fractions are not exact internally. We compare the formatted text requested by the task. Counts and scores are kept small so the integer sums fit safely. Dividing by zero is invalid, and the examples always use a positive count. Later modules discuss detecting invalid input rather than assuming it is valid.
+example: |
+  #include <iostream>
+  int main() {
+      int sum{15}, count{4};
+      double average{static_cast<double>(sum) / count};
+      std::cout << sum / count << ' ' << average << '\n';
+  }
+explanations:
+- - int sum{15}, count{4};
+  - Both starting values are integers. Their types matter to the division.
+- - static_cast<double>(sum)
+  - For this calculation, use a double version of sum. The original sum is still an int.
+- - sum / count
+  - This second expression still has two int operands, so it drops the fractional part before printing.
+blank: static_cast<double>(sum)
+wrong:
+- - sum
+  - Without a double operand, both inputs to division stay integers. Their fractional remainder is dropped
+    before average receives anything.
+- - static_cast<int>(sum)
+  - sum is already an int. Converting it to the same type does not make the division fractional.
+question: What value does `double x{7 / 2};` initialize x with?
+choices:
+- - '3.0'
+  - The integer operands divide first, producing three; that result then becomes a double.
+- - '3.5'
+  - This assumes the destination type changes an earlier operation. Both operands were still integers when
+    division happened.
+- - The declaration is rejected because an integer result can never initialize a double.
+  - The constant integer result three can be represented exactly as a double, so this declaration is allowed.
+task: The supplied code reads two integer scores a and b from 0 to 100. In the marked declaration, calculate
+  their arithmetic mean as a double. Keep a possible half point. The output line already formats mean with
+  exactly one decimal place; leave that formatting in place.
+solution: |
+  #include <iostream>
+  #include <iomanip>
+  int main() {
+      int a{}, b{};
+      std::cin >> a >> b;
+      double mean{static_cast<double>(a + b) / 2};
+      std::cout << std::fixed << std::setprecision(1) << mean << '\n';
+  }
+editable: '    double mean{static_cast<double>(a + b) / 2};'
+cases:
+- - Fraction
+  - |
+    7 8
+  - |
+    7.5
+- - Zero
+  - |
+    0 0
+  - |
+    0.0
+- - Boundaries
+  - |
+    0 100
+  - |
+    50.0
+- - Odd total near the upper bound
+  - |
+    100 1
+  - |
+    50.5
+region_prompts:
+- Calculate mean without losing a possible half point.
+hints_by_type:
+  code-completion:
+  - Look at the operand types immediately before division. Are both still integers?
+  - The conversion must happen before the fractional part is lost. Converting a finished integer quotient cannot
+    bring it back.
+  multiple-choice-question:
+  - Evaluate the expression inside the braces first, using the types of 7 and 2.
+  - Only after that expression finishes is its result used to initialize the double. Which information has
+    already been discarded?
+  free-coding:
+  - Try scores 7 and 8 by hand. The total is odd, so an integer division would lose half a point.
+  - Convert the total to double before dividing by two. Leave the supplied one-decimal-place output code as
+    it is.
+  parsons-puzzles:
+  - The total and count must exist before they can be used in the quotient.
+  - Make the fractional calculation before printing it; a display setting alone cannot fix integer division.
+  parameterized-code-tracing:
+  - First work out which division uses two integers. Then find the division with a double operand.
+  - Track both results separately and preserve the space between them in the output.
+completion_explanation: The conversion supplies a double operand before division. Without it, the calculation
+  discards the fraction; the destination variable cannot recover it.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int sum{15}, count{4};
+        double average{static_cast<double>(sum) / count};
+        std::cout << sum / count << ' ' << average << '\n';
+    }
+  blocks:
+  - snippet: '    int sum{15}, count{4};'
+    explanation: Create the two integer inputs that the following division needs.
+  - snippet: '    double average{static_cast<double>(sum) / count};'
+    explanation: Convert before division to keep the fractional part.
+  - snippet: '    std::cout << sum / count << '' '' << average << ''\n'';'
+    explanation: Compare the integer quotient with the already calculated fractional average.
+  goal: Print the integer quotient and fractional quotient for a total of 15 shared among 4 items.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int sum{15};
+        int count{4};
+        int whole{sum / count};
+        double average{static_cast<double>(sum) / count};
+        std::cout << whole << ' ' << average << '\n';
+    }
+  token: '15'
+  values:
+  - 15
+  - 16
+  - 3
+  goal: The total changes. Predict the integer quotient followed by the fractional quotient, in that order.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int sum{15};
+    note: The total for this walkthrough is fifteen.
+    state:
+      sum: 15
+  - snippet: int count{4};
+    note: Share that total among four items.
+    state:
+      count: 4
+  - snippet: int whole{sum / count};
+    note: Two integers produce a whole-number quotient, dropping the fraction.
+    state:
+      whole: 3
+  - snippet: double average{static_cast<double>(sum) / count};
+    note: Convert before dividing to retain the fractional part.
+    state:
+      average: '3.75'
+  - snippet: std::cout << whole << ' ' << average << '\n';
+    note: Print the whole-number result first and the fractional result second.
+    state:
+      output: 3 3.75
+  output: |
+    3 3.75
+  expected:
+  - |
+    3 3.75
+  - |
+    4 4
+  - |
+    0 0.75
+case_purposes:
+- An odd total needs a half point, exposing integer division.
+- Two zero scores check the additive starting boundary.
+- The score endpoints still have a valid fractional calculation.
+- An odd total near the upper score bound must keep its half point.
+
+completion_goal: "Print a whole-number quotient followed by a fractional quotient for 15 divided by 4. Keep the fractional part in the second calculation."

@@ -1,0 +1,63 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-code-completion
+title: Your first C++ programs · fill gaps
+description: Practice your first c++ programs.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int boxes{4};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+statement: |-
+  Count all items in four boxes with three items in each, then print the total. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  12
+  ```
+hints:
+- Ask what “four groups of three” means. Which operation combines equal-sized groups?
+- Addition would count the two labels once each. Think about counting every item inside every box.
+elements:
+- type: blank
+  location:
+    snippet: boxes * perBox
+  choices:
+  - snippet: boxes * perBox
+    role: solution
+    explanations:
+    - body: Multiplication counts every item in every box. Adding the quantities would count boxes and items-per-box
+        as though they were the same kind of thing.
+  - snippet: boxes + perBox
+    role: distractor
+    explanations:
+    - body: Adding four and three counts the two labels once each. The goal is four equal groups, each containing
+        three items.
+  - snippet: boxes / perBox
+    role: distractor
+    explanations:
+    - body: Division asks how many groups fit into something; it does not count all items in the supplied groups.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    12

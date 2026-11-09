@@ -1,0 +1,65 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-08-control-flow-worked-example
+title: Branches and loops · worked example
+description: Practice branches and loops.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+  topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int limit{4};
+        int total{0};
+        for (int i{1}; i <= limit; ++i) {
+            total += i;
+        }
+        std::cout << total << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    10
+  console: |
+    10
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: int total{0};
+  explanations:
+  - body: Before any values are added, the sum is zero. This line runs once, outside the loop.
+- type: explanation
+  location:
+    snippet: for (int i{1}; i <= limit; ++i) {
+  explanations:
+  - body: Begin at one, include limit, and advance by one after each visit.
+- type: explanation
+  location:
+    snippet: total += i;
+  explanations:
+  - body: Add the current i to everything collected so far; do not reset the total.
+- type: explanation
+  location:
+    snippet: std::cout << total << '\n';
+  explanations:
+  - body: Print once, after all loop visits have finished.

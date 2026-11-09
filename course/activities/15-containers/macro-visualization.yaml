@@ -1,0 +1,171 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-macro-visualization
+title: Vectors, arrays, iterators, and algorithms · step through
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: macro-visualization
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <vector>
+    int main() {
+        std::vector<int> values{2, -1, 0};
+        int count{0};
+        for (int value : values) {
+            if (value > 0) { ++count; }
+        }
+        std::cout << count << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The first vector element changes. Count strictly positive elements; do not add their values or count zero.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - values
+  - - createVariable
+    - count
+  - - createVariable
+    - value
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 4
+  - - _addValue
+    - 2, -1, 0
+    - 0
+    - std::string
+  - - _assign
+    - values
+  - - showText
+    - Create the three existing elements in visit order.
+  - - _setLine
+    - 5
+  - - _addValue
+    - '0'
+    - 0
+    - int
+  - - _assign
+    - count
+  - - showText
+    - No qualifying element has been seen yet.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '2'
+    - 0
+    - int
+  - - _assign
+    - value
+  - - showText
+    - Visit the first element, two.
+  - - _setLine
+    - 7
+  - - _addValue
+    - '1'
+    - 0
+    - int
+  - - _assign
+    - count
+  - - showText
+    - Two is positive, so count one qualifying element.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '-1'
+    - 0
+    - int
+  - - _assign
+    - value
+  - - showText
+    - Visit the next element, negative one.
+  - - _setLine
+    - 7
+  - - _addValue
+    - '1'
+    - 0
+    - int
+  - - _assign
+    - count
+  - - showText
+    - A negative value does not qualify; leave count unchanged.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '0'
+    - 0
+    - int
+  - - _assign
+    - value
+  - - showText
+    - Visit the final element, zero.
+  - - _setLine
+    - 7
+  - - _addValue
+    - '1'
+    - 0
+    - int
+  - - _assign
+    - count
+  - - showText
+    - 'The comparison is strict: zero is not positive.'
+  - - _setLine
+    - 9
+  - - _addValue
+    - out of scope
+    - 0
+    - std::string
+  - - _assign
+    - value
+  - - _addValue
+    - '1'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - After all visits, print the number of qualifying elements.
+  lines:
+  - '#include <iostream>'
+  - '#include <vector>'
+  - int main() {
+  - '    std::vector<int> values{2, -1, 0};'
+  - '    int count{0};'
+  - '    for (int value : values) {'
+  - '        if (value > 0) { ++count; }'
+  - '    }'
+  - '    std::cout << count << ''\n'';'
+  - '}'

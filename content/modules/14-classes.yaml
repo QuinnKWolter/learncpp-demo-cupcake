@@ -1,0 +1,234 @@
+slug: 14-classes
+title: Classes protect their invariants
+chapters: 14–15
+readings:
+- title: Encapsulation
+  url: https://www.learncpp.com/cpp-tutorial/the-benefits-of-data-hiding-encapsulation/
+- title: Constructors
+  url: https://www.learncpp.com/cpp-tutorial/constructor-member-initializer-lists/
+- title: Destructors
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-destructors/
+topics:
+- classes
+- constructors
+- const-members
+- invariants
+- destructors
+objectives:
+- Connect construction, controlled updates, and observation.
+- Keep a class rule intact for rejected requests.
+- Call a const observer on a shared object.
+lesson: |-
+  ### Let an object protect its own rules
+  A class combines stored information with operations that use it. In Counter, the integer `value_` is private: outside code must use the public operations rather than changing it directly. The trailing underscore is simply a naming choice to distinguish stored members from parameters.
+
+  An **invariant** is a rule that should keep holding for a valid object. The Counter in the coding task starts nonnegative and accepts only positive additions. Its add operation protects that rule instead of relying on every caller to remember it.
+
+  ### Read the class from the inside out
+  ```cpp
+  explicit Counter(int start) : value_{start} {}
+  void increment() { ++value_; }
+  int value() const { return value_; }
+  ```
+
+  The constructor has the class name and prepares a new Counter. The part `: value_{start}` initializes the stored member from start before the body runs. `explicit` prevents an integer from being silently turned into a Counter in other contexts; here construction is written out clearly as `Counter counter{3};`.
+
+  `increment()` is a member function: `counter.increment()` acts on counter. It returns no number because its result is the changed object. `value()` returns the stored count. The const after its parentheses promises it will not change this object's ordinary stored members, so it can be used when the object is being observed through a const reference.
+
+  ### Your coding task: control a requested addition
+  The supplied add method receives amount. Add it only when it is greater than zero; ignore zero and negative requests. Do not reset the stored value or print from the method. main calls the method, then prints through the observer. The const reference named observed in main is another way to read the same object, not a second counter.
+
+  The example and Step through show a valid update. Fill gaps and Arrange code connect creating an object, using its operation, and reading the new value. Predict output changes the requested update, so check its rule before changing your state table.
+
+  When an object reaches the end of its lifetime, its destructor runs. Our Counter owns no outside resource and needs no custom destructor. Later modules use library ownership types to release resources automatically. For now, concentrate on the public rule and the one private value that enforces it.
+example: |
+  #include <iostream>
+  class Counter {
+      int value_{};
+  public:
+      explicit Counter(int start) : value_{start} {}
+      void increment() { ++value_; }
+      int value() const { return value_; }
+  };
+  int main() {
+      Counter counter{3};
+      counter.increment();
+      std::cout << counter.value() << '\n';
+  }
+explanations:
+- - int value_{};
+  - The stored count is private. The underscore is just a helpful naming convention.
+- - 'explicit Counter(int start) : value_{start} {}'
+  - Construct a new counter by initializing its member from start; the body has no extra work.
+- - void increment() { ++value_; }
+  - An action on this object increases its stored count by one.
+- - int value() const { return value_; }
+  - Read the count without changing it. const describes the observer’s behavior on the object.
+blank: ++value_;
+wrong:
+- - value_ = 0;
+  - Resetting to zero discards the count that was already stored. An increment should build on that value.
+- - --value_;
+  - This moves one step downward, whereas increment means one step upward from the existing value.
+question: Why make a counter data member private?
+choices:
+- - So public operations can preserve the class’s rules for valid state.
+  - Outside callers request changes through methods that can check them before changing the stored count.
+- - So even Counter’s own methods are unable to change the stored value.
+  - Private restricts outside access; the class’s own methods still have the access needed to enforce their
+    rules.
+- - Because private means the stored value is automatically const.
+  - Access control and constness are separate ideas. A private member can still change through a permitted
+    class operation.
+task: Complete the marked Counter::add body. Add amount to the stored value_ only when amount is positive;
+  ignore zero and negative requests. Input is a starting count from 0 to 1000 and an amount from −1000 to 1000.
+  The caller constructs the object, requests the update, and prints through the const observer.
+solution: |
+  #include <iostream>
+  class Counter {
+      int value_{};
+  public:
+      explicit Counter(int start) : value_{start} {}
+      void add(int amount) {
+          if (amount > 0) {
+              value_ += amount;
+          }
+      }
+      int value() const { return value_; }
+  };
+  int main() {
+      int start{}, amount{};
+      std::cin >> start >> amount;
+      Counter counter{start};
+      counter.add(amount);
+      const Counter& observed{counter};
+      std::cout << observed.value() << '\n';
+  }
+editable: |2-
+          if (amount > 0) {
+              value_ += amount;
+          }
+cases:
+- - Positive
+  - |
+    10 5
+  - |
+    15
+- - Negative
+  - |
+    10 -5
+  - |
+    10
+- - Zero
+  - |
+    0 0
+  - |
+    0
+- - Largest allowed positive addition
+  - |
+    0 1000
+  - |
+    1000
+region_prompts:
+- Accept a positive amount and update value_; leave it unchanged otherwise.
+hints_by_type:
+  code-completion:
+  - An increment means one step upward from the current count, not a new starting value.
+  - Use an operation that changes the stored value by one while preserving all earlier increments.
+  multiple-choice-question:
+  - If a caller could assign any value directly, could the class enforce its accepted-update rule?
+  - Private storage makes callers request an operation. The method can check the request before changing that
+    storage.
+  free-coding:
+  - Decide whether the requested amount is allowed before changing value_.
+  - A rejected zero or negative amount should leave the stored value exactly as it was. Update only in the
+    positive branch.
+  parsons-puzzles:
+  - Create a Counter before calling a member function on it.
+  - Reading the count before increment would show the old value. Put the observer after the update when the
+    task asks for the final count.
+  parameterized-code-tracing:
+  - Keep one row for the object’s stored value. Check the add method’s condition before updating it.
+  - The observer returns what is currently stored; it does not add again or reset anything.
+completion_explanation: Increment increases the existing count by one. Resetting it would discard its history;
+  decrement would move it in the opposite direction.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void increment() { ++value_; }
+        int value() const { return value_; }
+    };
+    int main() {
+        Counter counter{3};
+        counter.increment();
+        std::cout << counter.value() << '\n';
+    }
+  blocks:
+  - snippet: '    Counter counter{3};'
+    explanation: Construct the object and give its member the starting value.
+  - snippet: '    counter.increment();'
+    explanation: Use the public update on the object that now exists.
+  - snippet: '    std::cout << counter.value() << ''\n'';'
+    explanation: Observe the count after the update rather than printing the original count.
+  goal: Create a Counter starting at three, increment it once, and print its new value through the public observer.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void add(int amount) { if (amount > 0) { value_ += amount; } }
+        int value() const { return value_; }
+    };
+    int main() {
+        Counter counter{3};
+        counter.add(2);
+        std::cout << counter.value() << '\n';
+    }
+  token: '2'
+  values:
+  - 2
+  - 0
+  - -2
+  goal: The requested addition changes. Apply the method’s positive-only rule before predicting the observer’s
+    result.
+  stdin: ''
+  context: counter.add(2);
+  walkthrough:
+  - snippet: Counter counter{3};
+    note: The constructor stores the initial count of three.
+    state:
+      stored count: 3
+  - snippet: counter.add(2);
+    note: The request is positive, so the method accepts it and adds two.
+    state:
+      requested amount: 2
+      stored count: 5
+  - snippet: std::cout << counter.value() << '\n';
+    note: The const observer returns the final count without changing it.
+    state:
+      output: '5'
+  output: |
+    5
+  expected:
+  - |
+    5
+  - |
+    3
+  - |
+    3
+case_purposes:
+- A positive request increases the stored count once.
+- A rejected negative request must preserve the old value.
+- A zero request should not introduce any change.
+- A large accepted request still follows the same guarded update.
+
+completion_goal: "Let Counter increase by one through its public increment method while keeping its stored member private."

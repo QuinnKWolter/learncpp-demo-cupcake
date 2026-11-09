@@ -1,0 +1,51 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-05-constants-strings-parameterized-code-tracing
+title: Constants and text with clear lifetimes · predict output
+description: Practice constants and text with clear lifetimes.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+  topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        const std::string word{"cat"};
+        std::cout << word.size() << '\n';
+    }
+statement: |-
+  The stored text changes. Count its ASCII characters, including any spaces, and predict the printed length.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Use the text shown in your version of the program. Count its letters and spaces, not its quote marks.
+- The ending newline is an output instruction, not another character inside the stored word.
+elements:
+- type: parameter
+  location:
+    snippet: '"cat"'
+  values:
+  - '"cat"'
+  - '"ice cream"'
+  - '""'
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    3

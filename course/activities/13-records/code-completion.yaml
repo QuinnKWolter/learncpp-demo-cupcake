@@ -1,0 +1,75 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-13-records-code-completion
+title: Enums, structs, and aggregate values · fill gaps
+description: Practice enums, structs, and aggregate values.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+  topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    enum class Status { waiting, ready };
+    struct Parcel {
+        int weight{};
+        Status status{Status::waiting};
+    };
+    int main() {
+        Parcel parcel{4, Status::ready};
+        if (parcel.status == Status::ready) {
+            std::cout << parcel.weight << '\n';
+        }
+    }
+statement: |-
+  Print the parcel's weight only when its stored status is ready. Check the named status rather than inferring readiness from the weight. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  4
+  ```
+hints:
+- Look at the status used when parcel is created. Which named status should the condition recognize?
+- Weight and status answer different questions. The decision asks whether this parcel is ready, not whether
+  it weighs zero.
+elements:
+- type: blank
+  location:
+    snippet: parcel.status == Status::ready
+  choices:
+  - snippet: parcel.status == Status::ready
+    role: solution
+    explanations:
+    - body: The condition checks the parcel’s named status. Its numeric weight does not tell us whether it
+        is ready.
+  - snippet: parcel.status == Status::waiting
+    role: distractor
+    explanations:
+    - body: The record was explicitly initialized as ready. Checking waiting chooses the opposite state, so
+        the intended output path is skipped.
+  - snippet: parcel.weight == 0
+    role: distractor
+    explanations:
+    - body: Weight and readiness are independent facts in the record. This compares a weight with zero rather
+        than checking its status.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    4

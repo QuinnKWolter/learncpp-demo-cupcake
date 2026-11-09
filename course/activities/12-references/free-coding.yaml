@@ -1,0 +1,117 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-12-references-free-coding
+title: References, pointers, and optional results · write code
+description: Practice references, pointers, and optional results.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - overloading
+  - function-templates
+  - constexpr
+  topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    void clampToZero(int& value) {
+        if (value < 0) {
+            value = 0;
+        }
+    }
+    int main() {
+        int value{};
+        std::cin >> value;
+        clampToZero(value);
+        std::cout << value << '\n';
+    }
+statement: |-
+  Complete the action `clampToZero(int& value)`. Set a negative value to zero, and leave zero or a positive value unchanged. Input is one integer from −1000 to 1000. The caller passes its integer by reference and prints it after your function returns. Change only the marked body; the function returns no separate result.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- 'There are two cases: a negative value must change; zero or a positive value must stay as it is.'
+- Use an if condition and assign through the supplied reference only in the negative case. The caller will
+  observe that same integer.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          if (value < 0) {
+              value = 0;
+          }
+  placeholder: '    // Change value to zero only if it is negative.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      void clampToZero(int& value) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          int value{};
+          std::cin >> value;
+          clampToZero(value);
+          std::cout << value << '\n';
+      }
+testcases:
+- title: Negative
+  visible: true
+  stdin:
+  - '-7'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - A negative input must be changed to zero.
+    on_fail:
+    - 'A negative input must be changed to zero. There are two cases: a negative value must change; zero or
+      a positive value must stay as it is.'
+- title: Zero
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - Zero is already valid and should remain unchanged.
+    on_fail:
+    - 'Zero is already valid and should remain unchanged. There are two cases: a negative value must change;
+      zero or a positive value must stay as it is.'
+- title: Positive
+  visible: true
+  stdin:
+  - '8'
+  stdout: |
+    8
+  feedback:
+    on_pass:
+    - A positive input must not be reset.
+    on_fail:
+    - 'A positive input must not be reset. There are two cases: a negative value must change; zero or a positive
+      value must stay as it is.'
+- title: Largest allowed positive input
+  visible: true
+  stdin:
+  - '1000'
+  stdout: |
+    1000
+  feedback:
+    on_pass:
+    - A larger positive input should also remain exactly as supplied.
+    on_fail:
+    - 'A larger positive input should also remain exactly as supplied. There are two cases: a negative value
+      must change; zero or a positive value must stay as it is.'

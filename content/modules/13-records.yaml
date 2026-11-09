@@ -1,0 +1,203 @@
+slug: 13-records
+title: Enums, structs, and aggregate values
+chapters: '13'
+readings:
+- title: Scoped enums
+  url: https://www.learncpp.com/cpp-tutorial/scoped-enumerations-enum-classes/
+- title: Structs
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-structs-members-and-member-selection/
+topics:
+- structs
+- enum-classes
+- aggregates
+- members
+objectives:
+- Create and read named record members.
+- Use scoped enum values.
+- Return a translated Point in the correct member order.
+lesson: |-
+  ### Keep related facts together
+  A **struct** groups named pieces of information into one record. The example's Parcel has a weight and a status. `int weight{};` gives weight a zero default. `Status status{Status::waiting};` gives status a waiting default. A semicolon also follows the closing brace of a struct definition.
+
+  `Parcel parcel{4, Status::ready};` supplies values in member declaration order: first weight, then status. The dot in `parcel.weight` selects a named member of that object. This avoids confusing two unrelated numbers just because they happen to be next to each other.
+
+  ### Name a choice with an enum class
+  ```cpp
+  enum class Status { waiting, ready };
+  ```
+
+  This defines two named Status values. `Status::ready` means “the ready value from Status.” The `::` is the same scope separator used for namespaces earlier. `Status.ready` would instead try to select a member of an object; Status is a type, not an object. Enumerators are values, so no function-call parentheses are needed.
+
+  The example initializes a ready parcel and prints its weight only when its status matches that named value. The visualization and prediction show the choice; the code puzzle orders record construction, a decision, and output.
+
+  ### Make a new record without changing the old one
+  The coding task supplies `struct Point { int x{}; int y{}; };`. A point's x is its horizontal coordinate and y is its vertical coordinate. `dx` and `dy` are movements in those two directions. To move (1,2) by (3,4), return the new point (4,6).
+
+  The function receives a Point value and returns another Point. `return Point{..., ...};` creates the result in the same x-then-y order as the declaration. Add dx only to x and dy only to y. The supplied input and output code already reads and prints the members, so you do not need an extra display function.
+
+  Check no movement as well as positive and negative movement. A negative movement means subtracting in that direction; ordinary addition with a negative value already handles it. Class templates appear in the later sequence; you do not need template syntax to use these records.
+example: |
+  #include <iostream>
+  enum class Status { waiting, ready };
+  struct Parcel {
+      int weight{};
+      Status status{Status::waiting};
+  };
+  int main() {
+      Parcel parcel{4, Status::ready};
+      if (parcel.status == Status::ready) {
+          std::cout << parcel.weight << '\n';
+      }
+  }
+explanations:
+- - enum class Status { waiting, ready };
+  - Give the two allowed states meaningful names, kept inside Status’s scope.
+- - Parcel parcel{4, Status::ready};
+  - 'Initialize the record in declaration order: weight four, then ready status.'
+- - parcel.status == Status::ready
+  - Compare this record’s stored choice with the ready value.
+- - parcel.weight
+  - Read the weight member from this particular parcel.
+blank: parcel.status == Status::ready
+wrong:
+- - parcel.status == Status::waiting
+  - The record was explicitly initialized as ready. Checking waiting chooses the opposite state, so the intended
+    output path is skipped.
+- - parcel.weight == 0
+  - Weight and readiness are independent facts in the record. This compares a weight with zero rather than
+    checking its status.
+question: Which expression names the ready enumerator of `enum class Status { waiting, ready };`?
+choices:
+- - Status::ready
+  - Use the scope separator to name the ready value belonging to the enum type Status.
+- - Status.ready
+  - Dot selects a member of an object. Status is a type scope, so this is the wrong kind of selection.
+- - ready()
+  - The parentheses would make a function call. Here ready is a named value, not a function to run.
+task: Complete translated(Point p, int dx, int dy) by returning a new Point with x equal to p.x + dx and y
+  equal to p.y + dy. Input contains x, y, dx, and dy, each from −100 to 100. The supplied caller reads these
+  values and prints the returned x and y. Keep the two directions separate.
+solution: |
+  #include <iostream>
+  struct Point { int x{}; int y{}; };
+  Point translated(Point p, int dx, int dy) {
+      return Point{p.x + dx, p.y + dy};
+  }
+  int main() {
+      Point p{};
+      int dx{}, dy{};
+      std::cin >> p.x >> p.y >> dx >> dy;
+      Point result{translated(p, dx, dy)};
+      std::cout << result.x << ' ' << result.y << '\n';
+  }
+editable: '    return Point{p.x + dx, p.y + dy};'
+cases:
+- - Positive
+  - |
+    1 2 3 4
+  - |
+    4 6
+- - Signed
+  - |
+    -5 6 2 -9
+  - |
+    -3 -3
+- - Identity
+  - |
+    7 8 0 0
+  - |
+    7 8
+region_prompts:
+- Return a new Point with x moved by dx and y moved by dy.
+hints_by_type:
+  code-completion:
+  - Look at the status used when parcel is created. Which named status should the condition recognize?
+  - Weight and status answer different questions. The decision asks whether this parcel is ready, not whether
+    it weighs zero.
+  multiple-choice-question:
+  - Status names a type that owns the enumerator names, rather than an object with data members.
+  - Use the same scope-separator idea as units::toMinutes. No call is needed to obtain a named enum value.
+  free-coding:
+  - 'Keep the two directions separate: x changes by dx, and y changes by dy.'
+  - Construct the returned Point in its declared member order. Zero movement should return the original coordinates.
+  parsons-puzzles:
+  - The record needs to exist before the program can inspect its members.
+  - A test of status chooses whether to print the weight. Keep the print in the intended branch.
+  parameterized-code-tracing:
+  - Match the two initializers to the members in declaration order.
+  - Select the status branch first. Only then decide which weight, if any, reaches the output statement.
+completion_explanation: The condition checks the parcel’s named status. Its numeric weight does not tell us
+  whether it is ready.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    enum class Status { waiting, ready };
+    struct Parcel { int weight{}; Status status{Status::waiting}; };
+    int main() {
+        Parcel parcel{4, Status::ready};
+        parcel.weight += 2;
+        if (parcel.status == Status::ready) {
+            std::cout << parcel.weight << '\n';
+        }
+    }
+  blocks:
+  - snippet: '    Parcel parcel{4, Status::ready};'
+    explanation: Create both named record members in their declaration order.
+  - snippet: '    parcel.weight += 2;'
+    explanation: Update the weight member of the existing record before displaying it.
+  - snippet: |2-
+          if (parcel.status == Status::ready) {
+              std::cout << parcel.weight << '\n';
+          }
+    explanation: Check the scoped status value and print the updated weight for a ready parcel.
+  goal: Create a ready parcel of weight 4, add 2 to its weight, and print the updated weight only when ready.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    struct Point { int x{}; int y{}; };
+    int main() {
+        Point start{4, 2};
+        Point moved{start.x + 3, start.y - 1};
+        std::cout << moved.x << ' ' << moved.y << '\n';
+    }
+  token: '4'
+  values:
+  - 4
+  - 0
+  - -2
+  goal: The initial x coordinate changes. Predict the moved x and moved y, in declaration order.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: Point start{4, 2};
+    note: 'Match the initializers to the named members: x first, y second.'
+    state:
+      start.x: 4
+      start.y: 2
+  - snippet: Point moved{start.x + 3, start.y - 1};
+    note: 'Create a new point: add three horizontally and subtract one vertically. start is unchanged.'
+    state:
+      moved.x: 7
+      moved.y: 1
+  - snippet: std::cout << moved.x << ' ' << moved.y << '\n';
+    note: Print the new point’s members in x-then-y order.
+    state:
+      output: 7 1
+  output: |
+    7 1
+  expected:
+  - |
+    7 1
+  - |
+    3 1
+  - |
+    1 1
+case_purposes:
+- Both directions move independently with positive offsets.
+- Signed movement must affect only its matching coordinate.
+- Zero movement should return the original coordinates.
+
+completion_goal: "Print the parcel's weight only when its stored status is ready. Check the named status rather than inferring readiness from the weight."

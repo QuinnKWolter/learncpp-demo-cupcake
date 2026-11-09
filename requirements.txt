@@ -1,0 +1,2 @@
+# Use the same fully pinned dependency set locally and in Docker.
+-r requirements.lock

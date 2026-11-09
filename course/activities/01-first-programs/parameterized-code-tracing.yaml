@@ -1,0 +1,48 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-parameterized-code-tracing
+title: Your first C++ programs · predict output
+description: Practice your first c++ programs.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int boxes{2};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+statement: |-
+  The number of boxes changes between versions. Predict the single total printed for the values on your screen.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Write down the displayed boxes value and the fixed perBox value before doing arithmetic.
+- There is only one output statement. Multiply the two current values and write that one number.
+elements:
+- type: parameter
+  location:
+    snippet: '2'
+  values:
+  - 2
+  - 4
+  - 7
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    6

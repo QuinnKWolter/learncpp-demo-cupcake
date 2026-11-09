@@ -1,0 +1,111 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-17-ownership-macro-visualization
+title: Value operators, ownership, and relationships · step through
+description: Practice value operators, ownership, and relationships.
+pedagogy:
+  activity: macro-visualization
+  difficulty: intermediate
+  prereq_topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+  topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <memory>
+    #include <utility>
+    int main() {
+        auto original{std::make_unique<int>(7)};
+        auto owner{std::move(original)};
+        std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The owned integer changes. Predict its value after ownership transfer and the source-empty Boolean result.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - owned integer
+  - - createVariable
+    - original
+  - - createVariable
+    - owner
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 5
+  - - _addValue
+    - '7'
+    - 0
+    - int
+  - - _assign
+    - owned integer
+  - - _addValue
+    - owns the integer
+    - 0
+    - std::string
+  - - _assign
+    - original
+  - - showText
+    - Create an integer holding seven. original is its only owner.
+  - - _setLine
+    - 6
+  - - _addValue
+    - owns the integer
+    - 0
+    - std::string
+  - - _assign
+    - owner
+  - - _addValue
+    - empty
+    - 0
+    - std::string
+  - - _assign
+    - original
+  - - showText
+    - Transfer responsibility without changing or deleting that integer.
+  - - _setLine
+    - 7
+  - - _addValue
+    - 7 true
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Read the integer through owner and separately report that original is empty.
+  lines:
+  - '#include <iostream>'
+  - '#include <memory>'
+  - '#include <utility>'
+  - int main() {
+  - '    auto original{std::make_unique<int>(7)};'
+  - '    auto owner{std::move(original)};'
+  - '    std::cout << *owner << '' '' << std::boolalpha << (original == nullptr) << ''\n'';'
+  - '}'

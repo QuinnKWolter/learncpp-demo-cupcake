@@ -1,0 +1,73 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-12-references-code-completion
+title: References, pointers, and optional results · fill gaps
+description: Practice references, pointers, and optional results.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - overloading
+  - function-templates
+  - constexpr
+  topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    void addBonus(int& score) {
+        score += 5;
+    }
+    int main() {
+        int score{10};
+        addBonus(score);
+        int* pointer{&score};
+        if (pointer != nullptr) {
+            std::cout << *pointer << '\n';
+        }
+    }
+statement: |-
+  Make addBonus change the caller's score by five through its parameter; main then reads the changed score through a valid pointer. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  15
+  ```
+hints:
+- Ask whether addBonus should change a private copy or the caller’s actual score.
+- The body adds to score. A const reference would prevent that; a by-value parameter would change only a copy.
+elements:
+- type: blank
+  location:
+    snippet: int& score
+  choices:
+  - snippet: int& score
+    role: solution
+    explanations:
+    - body: The reference lets the function update the caller’s score. A value parameter would update only
+        a copy; a const reference would prohibit this update.
+  - snippet: int score
+    role: distractor
+    explanations:
+    - body: A value parameter would be a separate copy. Updating that copy would leave the caller’s original
+        score unchanged.
+  - snippet: const int& score
+    role: distractor
+    explanations:
+    - body: A const reference permits reading the caller’s score but prohibits this update. The function is
+        specifically meant to change that score.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    15

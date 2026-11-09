@@ -1,0 +1,107 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-05-constants-strings-free-coding
+title: Constants and text with clear lifetimes · write code
+description: Practice constants and text with clear lifetimes.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+  topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        std::string text;
+        std::getline(std::cin, text);
+        std::cout << text.size() << '\n';
+    }
+statement: |-
+  Read the complete input line into the supplied std::string text using std::getline. Then print its character count and a newline. Spaces count; the line-ending newline does not. Inputs have at most 200 ASCII characters, and an empty line is allowed.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Read the entire line before measuring it. An input like Ada Lovelace contains a space that should count.
+- getline leaves the ending newline out of the string. Its size therefore already matches the requested character
+  count.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          std::getline(std::cin, text);
+          std::cout << text.size() << '\n';
+  placeholder: '    // Read the whole input line, then print its character count.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      #include <string>
+      int main() {
+          std::string text;
+- type: locked
+  location:
+    snippet: |2
+
+      }
+testcases:
+- title: Spaces
+  visible: true
+  stdin:
+  - Ada Lovelace
+  stdout: |
+    12
+  feedback:
+    on_pass:
+    - A space inside a name must be read and counted.
+    on_fail:
+    - A space inside a name must be read and counted. Read the entire line before measuring it. An input like
+      Ada Lovelace contains a space that should count.
+- title: Empty
+  visible: true
+  stdin:
+  - ''
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - An empty line is a real input with zero characters.
+    on_fail:
+    - An empty line is a real input with zero characters. Read the entire line before measuring it. An input
+      like Ada Lovelace contains a space that should count.
+- title: Word
+  visible: true
+  stdin:
+  - C++
+  stdout: |
+    3
+  feedback:
+    on_pass:
+    - Punctuation inside an ASCII word counts as characters too.
+    on_fail:
+    - Punctuation inside an ASCII word counts as characters too. Read the entire line before measuring it.
+      An input like Ada Lovelace contains a space that should count.
+- title: Spaces are stored characters
+  visible: true
+  stdin:
+  - '   '
+  stdout: |
+    3
+  feedback:
+    on_pass:
+    - A whitespace-only line must not be trimmed before measuring.
+    on_fail:
+    - A whitespace-only line must not be trimmed before measuring. Read the entire line before measuring it.
+      An input like Ada Lovelace contains a space that should count.

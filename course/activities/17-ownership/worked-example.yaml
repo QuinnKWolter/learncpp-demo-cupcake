@@ -1,0 +1,65 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-17-ownership-worked-example
+title: Value operators, ownership, and relationships · worked example
+description: Practice value operators, ownership, and relationships.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+  topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <memory>
+    #include <utility>
+    int main() {
+        auto original{std::make_unique<int>(7)};
+        auto owner{std::move(original)};
+        std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    7 true
+  console: |
+    7 true
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: std::make_unique<int>(7)
+  explanations:
+  - body: Create an integer holding seven and one library object responsible for its lifetime.
+- type: explanation
+  location:
+    snippet: std::move(original)
+  explanations:
+  - body: Permit the unique ownership to transfer. The destination takes responsibility and original becomes
+      empty.
+- type: explanation
+  location:
+    snippet: '*owner'
+  explanations:
+  - body: Read the integer through the destination that still owns it.
+- type: explanation
+  location:
+    snippet: original == nullptr
+  explanations:
+  - body: Check the source owner’s empty state without trying to dereference it.

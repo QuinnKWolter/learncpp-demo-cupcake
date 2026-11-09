@@ -1,0 +1,89 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-parsons-puzzles
+title: Functions, declarations, and files · arrange code
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include "geometry.hpp"
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+includes:
+  geometry.hpp: |
+    // A declaration announces this function before main calls it.
+    // Its definition (the calculation) is visible in main.cpp.
+    #ifndef CUPCAKE_GEOMETRY_HPP
+    #define CUPCAKE_GEOMETRY_HPP
+    int rectanglePerimeter(int width, int height);
+    #endif
+statement: |-
+  Prepare width 3 and height 5, then call rectanglePerimeter and print its answer. The declaration in geometry.hpp and the definition below main are supplied.
+
+  Move whole blocks into the highlighted slots. The surrounding program is supplied. Blocks that prepare independent values can be placed in either order; blocks that use those values must follow their declarations.
+
+  ### The supplied header
+  `geometry.hpp` announces `int rectanglePerimeter(int width, int height);` before the call. The complete definition is visible below `main`. The include guard keeps the announcement from being repeated. This file is supplied with the activity; you do not need to create it.
+hints:
+- A call can only use values already created. Look for the dimension declarations before the call.
+- After the call returns, its result can be printed. The function declaration and definition are already supplied
+  around the movable part.
+elements:
+- type: block
+  location:
+    snippet: '    int width{3};'
+  choices:
+  - snippet: '    int width{3};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Supply the rectangle width before passing it to the function.
+  group: dimensions
+- type: block
+  location:
+    snippet: '    int height{5};'
+  choices:
+  - snippet: '    int height{5};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Supply the rectangle height. The two dimension declarations can be in either order.
+  group: dimensions
+- type: block
+  location:
+    snippet: '    std::cout << rectanglePerimeter(width, height) << ''\n'';'
+  choices:
+  - snippet: '    std::cout << rectanglePerimeter(width, height) << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Call the visible perimeter definition with both dimensions and print its returned answer.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    16

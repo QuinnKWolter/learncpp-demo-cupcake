@@ -1,0 +1,52 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-12-references-parameterized-code-tracing
+title: References, pointers, and optional results · predict output
+description: Practice references, pointers, and optional results.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - overloading
+  - function-templates
+  - constexpr
+  topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{10};
+        int& alias{score};
+        alias += 5;
+        std::cout << score << '\n';
+    }
+statement: |-
+  The original score changes. Follow the update through its alias and predict the value printed through the original name.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Draw one box for the integer and connect both the original name and its reference to it.
+- An assignment through the alias changes that one box. Read the original name from the updated box when printing.
+elements:
+- type: parameter
+  location:
+    snippet: '10'
+  values:
+  - 10
+  - 0
+  - -3
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    15

@@ -1,0 +1,60 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-14-classes-parameterized-code-tracing
+title: Classes protect their invariants · predict output
+description: Practice classes protect their invariants.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void add(int amount) { if (amount > 0) { value_ += amount; } }
+        int value() const { return value_; }
+    };
+    int main() {
+        Counter counter{3};
+        counter.add(2);
+        std::cout << counter.value() << '\n';
+    }
+statement: |-
+  The requested addition changes. Apply the method’s positive-only rule before predicting the observer’s result.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Keep one row for the object’s stored value. Check the add method’s condition before updating it.
+- The observer returns what is currently stored; it does not add again or reset anything.
+elements:
+- type: parameter
+  location:
+    snippet: '2'
+    context: counter.add(2);
+  values:
+  - 2
+  - 0
+  - -2
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    5

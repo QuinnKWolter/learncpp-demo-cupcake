@@ -1,0 +1,82 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-13-records-parsons-puzzles
+title: Enums, structs, and aggregate values · arrange code
+description: Practice enums, structs, and aggregate values.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+  topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    enum class Status { waiting, ready };
+    struct Parcel { int weight{}; Status status{Status::waiting}; };
+    int main() {
+        Parcel parcel{4, Status::ready};
+        parcel.weight += 2;
+        if (parcel.status == Status::ready) {
+            std::cout << parcel.weight << '\n';
+        }
+    }
+statement: |-
+  Create a ready parcel of weight 4, add 2 to its weight, and print the updated weight only when ready.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- The record needs to exist before the program can inspect its members.
+- A test of status chooses whether to print the weight. Keep the print in the intended branch.
+elements:
+- type: block
+  location:
+    snippet: '    Parcel parcel{4, Status::ready};'
+  choices:
+  - snippet: '    Parcel parcel{4, Status::ready};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create both named record members in their declaration order.
+- type: block
+  location:
+    snippet: '    parcel.weight += 2;'
+  choices:
+  - snippet: '    parcel.weight += 2;'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Update the weight member of the existing record before displaying it.
+- type: block
+  location:
+    snippet: |2-
+          if (parcel.status == Status::ready) {
+              std::cout << parcel.weight << '\n';
+          }
+  choices:
+  - snippet: |2-
+          if (parcel.status == Status::ready) {
+              std::cout << parcel.weight << '\n';
+          }
+    role: solution
+    indent: 4
+    explanations:
+    - body: Check the scoped status value and print the updated weight for a ready parcel.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    6

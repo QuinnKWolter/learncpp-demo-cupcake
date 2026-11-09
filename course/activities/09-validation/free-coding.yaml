@@ -1,0 +1,152 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-free-coding
+title: Input validation and meaningful tests · write code
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{};
+        if (!(std::cin >> score) || score < 0 || score > 100) {
+            std::cout << "invalid\n";
+        } else if (score >= 60) {
+            std::cout << "pass\n";
+        } else {
+            std::cout << "retry\n";
+        }
+    }
+statement: |-
+  Write the marked decision block to read and classify one score. Print pass for an integer from 60 through 100, retry for an integer from 0 through 59, and invalid for a failed read or an integer outside 0–100. Input is one integer token or one nonnumeric word. Print exactly one result line.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- 'Sort the situations into three groups before writing code: invalid input, valid passing score, valid retry
+  score.'
+- Handle a failed read or bad range first. Only then test whether the valid score reaches 60; the final else
+  covers the remaining valid scores.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          if (!(std::cin >> score) || score < 0 || score > 100) {
+              std::cout << "invalid\n";
+          } else if (score >= 60) {
+              std::cout << "pass\n";
+          } else {
+              std::cout << "retry\n";
+          }
+  placeholder: '    // Read and validate score, then print exactly one of pass, retry, or invalid.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int main() {
+          int score{};
+- type: locked
+  location:
+    snippet: |2
+
+      }
+testcases:
+- title: Threshold
+  visible: true
+  stdin:
+  - '60'
+  stdout: |
+    pass
+  feedback:
+    on_pass:
+    - Sixty is the first passing score, not a retry.
+    on_fail:
+    - 'Sixty is the first passing score, not a retry. Sort the situations into three groups before writing
+      code: invalid input, valid passing score, valid retry score.'
+- title: Below
+  visible: true
+  stdin:
+  - '59'
+  stdout: |
+    retry
+  feedback:
+    on_pass:
+    - Fifty-nine is the neighboring retry boundary.
+    on_fail:
+    - 'Fifty-nine is the neighboring retry boundary. Sort the situations into three groups before writing code:
+      invalid input, valid passing score, valid retry score.'
+- title: Upper
+  visible: true
+  stdin:
+  - '100'
+  stdout: |
+    pass
+  feedback:
+    on_pass:
+    - One hundred remains a valid passing score.
+    on_fail:
+    - 'One hundred remains a valid passing score. Sort the situations into three groups before writing code:
+      invalid input, valid passing score, valid retry score.'
+- title: Out of range
+  visible: true
+  stdin:
+  - '101'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A readable integer above the range is still invalid.
+    on_fail:
+    - 'A readable integer above the range is still invalid. Sort the situations into three groups before writing
+      code: invalid input, valid passing score, valid retry score.'
+- title: Text
+  visible: true
+  stdin:
+  - oops
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A nonnumeric word must not silently become the initialized zero.
+    on_fail:
+    - 'A nonnumeric word must not silently become the initialized zero. Sort the situations into three groups
+      before writing code: invalid input, valid passing score, valid retry score.'
+- title: Zero
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    retry
+  feedback:
+    on_pass:
+    - Zero is the first valid retry score.
+    on_fail:
+    - 'Zero is the first valid retry score. Sort the situations into three groups before writing code: invalid
+      input, valid passing score, valid retry score.'
+- title: Negative score
+  visible: true
+  stdin:
+  - '-1'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - A negative integer is outside the valid score range.
+    on_fail:
+    - 'A negative integer is outside the valid score range. Sort the situations into three groups before writing
+      code: invalid input, valid passing score, valid retry score.'

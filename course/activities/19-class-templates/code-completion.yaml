@@ -1,0 +1,75 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-19-class-templates-code-completion
+title: Class templates and specialization · fill gaps
+description: Practice class templates and specialization.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+  topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    class Box {
+        T value_;
+    public:
+        explicit Box(T value) : value_{value} {}
+        T value() const { return value_; }
+    };
+    int main() {
+        Box<int> integer{8};
+        Box<double> fraction{2.5};
+        std::cout << integer.value() << ' ' << fraction.value() << '\n';
+    }
+statement: |-
+  Make the Box observer return the value stored in that object, keeping its chosen type and leaving the member unchanged. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  8 2.5
+  ```
+hints:
+- 'Read the observer’s name literally: it should give back the value already stored in this box.'
+- Creating a fresh T{} would return a default value, and adding the member to itself would double it. Neither
+  is an observation of the original value.
+elements:
+- type: blank
+  location:
+    snippet: return value_;
+  choices:
+  - snippet: return value_;
+    role: solution
+    explanations:
+    - body: Returning the existing member preserves exactly what was stored. A default-constructed T or a doubled
+        member would answer a different question.
+  - snippet: return T{};
+    role: distractor
+    explanations:
+    - body: T{} creates a fresh default value, such as zero for int. It forgets the value that the constructor
+        stored in this box.
+  - snippet: return value_ + value_;
+    role: distractor
+    explanations:
+    - body: This doubles the member rather than observing it. Reading value() should not silently apply a second
+        calculation.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    8 2.5

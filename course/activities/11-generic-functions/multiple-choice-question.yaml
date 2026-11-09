@@ -1,0 +1,39 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-multiple-choice-question
+title: Overloads, templates, and constexpr · explain why
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+question: Must every call of a constexpr function run during compilation?
+include_choices: 3
+hints:
+- Compare a fixed literal used during a build with a value that arrives from std::cin during execution.
+- constexpr permits compile-time calculation when possible; an ordinary runtime call can still use the same
+  function.
+choices:
+- body: No; a constexpr function may also be called with runtime values.
+  role: solution
+  explanations:
+  - body: constexpr permits constant evaluation when the call and its context support it; it does not require
+      every call to happen during a build.
+- body: Yes; constexpr forces every call to run before the program starts.
+  role: distractor
+  explanations:
+  - body: A normal call can receive a value read from input, which is unavailable during compilation.
+- body: No runtime call is allowed because the compiler only accepts literal arguments.
+  role: distractor
+  explanations:
+  - body: The function can accept runtime arguments too. A context that specifically requires a constant expression
+      has the extra restriction.

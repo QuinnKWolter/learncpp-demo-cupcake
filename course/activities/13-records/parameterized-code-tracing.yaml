@@ -1,0 +1,53 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-13-records-parameterized-code-tracing
+title: Enums, structs, and aggregate values · predict output
+description: Practice enums, structs, and aggregate values.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+  topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Point { int x{}; int y{}; };
+    int main() {
+        Point start{4, 2};
+        Point moved{start.x + 3, start.y - 1};
+        std::cout << moved.x << ' ' << moved.y << '\n';
+    }
+statement: |-
+  The initial x coordinate changes. Predict the moved x and moved y, in declaration order.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Match the two initializers to the members in declaration order.
+- Select the status branch first. Only then decide which weight, if any, reaches the output statement.
+elements:
+- type: parameter
+  location:
+    snippet: '4'
+  values:
+  - 4
+  - 0
+  - -2
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    7 1

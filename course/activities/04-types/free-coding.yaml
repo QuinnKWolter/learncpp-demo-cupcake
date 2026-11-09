@@ -1,0 +1,107 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-free-coding
+title: Choose the right arithmetic type · write code
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <iomanip>
+    int main() {
+        int a{}, b{};
+        std::cin >> a >> b;
+        double mean{static_cast<double>(a + b) / 2};
+        std::cout << std::fixed << std::setprecision(1) << mean << '\n';
+    }
+statement: |-
+  The supplied code reads two integer scores a and b from 0 to 100. In the marked declaration, calculate their arithmetic mean as a double. Keep a possible half point. The output line already formats mean with exactly one decimal place; leave that formatting in place.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Try scores 7 and 8 by hand. The total is odd, so an integer division would lose half a point.
+- Convert the total to double before dividing by two. Leave the supplied one-decimal-place output code as it
+  is.
+elements:
+- type: editable
+  location:
+    snippet: '    double mean{static_cast<double>(a + b) / 2};'
+  placeholder: '    // Calculate mean without losing a possible half point.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      #include <iomanip>
+      int main() {
+          int a{}, b{};
+          std::cin >> a >> b;
+- type: locked
+  location:
+    snippet: |2
+
+          std::cout << std::fixed << std::setprecision(1) << mean << '\n';
+      }
+testcases:
+- title: Fraction
+  visible: true
+  stdin:
+  - 7 8
+  stdout: |
+    7.5
+  feedback:
+    on_pass:
+    - An odd total needs a half point, exposing integer division.
+    on_fail:
+    - An odd total needs a half point, exposing integer division. Try scores 7 and 8 by hand. The total is
+      odd, so an integer division would lose half a point.
+- title: Zero
+  visible: true
+  stdin:
+  - 0 0
+  stdout: |
+    0.0
+  feedback:
+    on_pass:
+    - Two zero scores check the additive starting boundary.
+    on_fail:
+    - Two zero scores check the additive starting boundary. Try scores 7 and 8 by hand. The total is odd, so
+      an integer division would lose half a point.
+- title: Boundaries
+  visible: true
+  stdin:
+  - 0 100
+  stdout: |
+    50.0
+  feedback:
+    on_pass:
+    - The score endpoints still have a valid fractional calculation.
+    on_fail:
+    - The score endpoints still have a valid fractional calculation. Try scores 7 and 8 by hand. The total
+      is odd, so an integer division would lose half a point.
+- title: Odd total near the upper bound
+  visible: true
+  stdin:
+  - 100 1
+  stdout: |
+    50.5
+  feedback:
+    on_pass:
+    - An odd total near the upper score bound must keep its half point.
+    on_fail:
+    - An odd total near the upper score bound must keep its half point. Try scores 7 and 8 by hand. The total
+      is odd, so an integer division would lose half a point.

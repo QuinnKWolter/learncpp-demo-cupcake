@@ -1,0 +1,57 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-19-class-templates-parameterized-code-tracing
+title: Class templates and specialization · predict output
+description: Practice class templates and specialization.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+  topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    class Box {
+        T value_;
+    public:
+        explicit Box(T value) : value_{value} {}
+        T value() const { return value_; }
+    };
+    int main() {
+        Box<int> box{8};
+        std::cout << box.value() << '\n';
+    }
+statement: |-
+  The constructor argument changes. Follow storage in Box<int> and its unchanged value returned by the observer.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Replace T with the concrete type named in the program, then record the value supplied to that box’s constructor.
+- The observer does not modify the member; use the same stored number when predicting the print.
+elements:
+- type: parameter
+  location:
+    snippet: '8'
+  values:
+  - 8
+  - 0
+  - -3
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    8

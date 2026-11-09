@@ -1,0 +1,58 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-07-scope-parameterized-code-tracing
+title: Scope, duration, and linkage · predict output
+description: Practice scope, duration, and linkage.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+  topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int nextTicket() {
+        static int ticket{0};
+        return ++ticket;
+    }
+    int main() {
+        int first{nextTicket()};
+        int second{nextTicket()};
+        std::cout << first << ' ' << second << '\n';
+    }
+statement: |-
+  The static counter’s starting value changes. Predict the first and second tickets, remembering the counter between calls.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- After a call returns, keep the ticket value in your table rather than resetting it to zero.
+- Prefix ++ changes the stored value before returning it. Apply that once for each displayed call.
+elements:
+- type: parameter
+  location:
+    snippet: '0'
+    context: static int ticket{0};
+  values:
+  - 0
+  - 5
+  - 9
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    1 2

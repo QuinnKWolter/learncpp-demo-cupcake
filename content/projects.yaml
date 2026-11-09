@@ -1,0 +1,322 @@
+- slug: capstone-01-stock
+  title: 'Capstone: a small stock controller'
+  after: 14
+  chapters: 1–15
+  topics:
+  - classes
+  - invariants
+  - control-flow
+  - input-validation
+  objectives:
+  - Preserve a class invariant across a sequence of commands.
+  - Reject invalid transactions without changing stock.
+  task: Implement the Inventory methods. Initial stock is nonnegative. `add(amount)` returns true and adds
+    amount only when amount > 0. `take(amount)` returns true and subtracts amount only when 0 < amount <= stock.
+    A rejected request returns false and leaves stock unchanged. Input is initial-stock and command-count,
+    then that many `add n` or `take n` commands. Print `ok stock` or `rejected stock` after each command. Initial
+    stock, command count, and all amounts have magnitude at most 100; command count is nonnegative.
+  solution: |
+    #include <iostream>
+    #include <string>
+    class Inventory {
+        int stock_;
+    public:
+        explicit Inventory(int initial) : stock_{initial} {}
+        bool add(int amount) {
+            if (amount <= 0) { return false; }
+            stock_ += amount;
+            return true;
+        }
+        bool take(int amount) {
+            if (amount <= 0 || amount > stock_) { return false; }
+            stock_ -= amount;
+            return true;
+        }
+        int stock() const { return stock_; }
+    };
+    int main() {
+        int initial{}, commands{};
+        std::cin >> initial >> commands;
+        Inventory inventory{initial};
+        for (int i{0}; i < commands; ++i) {
+            std::string action;
+            int amount{};
+            std::cin >> action >> amount;
+            bool accepted{action == "add" ? inventory.add(amount) : inventory.take(amount)};
+            std::cout << (accepted ? "ok " : "rejected ") << inventory.stock() << '\n';
+        }
+    }
+  editable: |2-
+            if (amount <= 0) { return false; }
+            stock_ += amount;
+            return true;
+  second_editable: |2-
+            if (amount <= 0 || amount > stock_) { return false; }
+            stock_ -= amount;
+            return true;
+  cases:
+  - - Workflow
+    - |
+      5 4
+      add 3
+      take 2
+      take 10
+      take 6
+    - |
+      ok 8
+      ok 6
+      rejected 6
+      ok 0
+  - - Rejected amounts
+    - |
+      4 3
+      add 0
+      take -2
+      add -3
+    - |
+      rejected 4
+      rejected 4
+      rejected 4
+  - - Empty inventory
+    - |
+      0 3
+      take 1
+      add 2
+      take 2
+    - |
+      rejected 0
+      ok 2
+      ok 0
+  - - No commands
+    - |
+      8 0
+    - ''
+  hint: Check every rejection condition before changing stock. Then update it once and report success.
+  lesson: |-
+    ### A small inventory with one clear rule
+    An inventory stores a nonnegative number of items. Its class already has a constructor and a stock observer. You write two public actions. Each action first decides whether a request is allowed, then either changes the stock once or rejects the request without changing anything.
+
+    `add(amount)` accepts only a positive amount. `take(amount)` also requires that the stock can cover the full amount. For both actions, return true when accepted and false when rejected. This return value is separate from the stored stock: main prints both the decision and the new stock after each command.
+
+    ### Read the supplied caller
+    Input begins with initial stock and the number of commands. Each later command is add or take followed by its amount. The loop reads one command at a time. Its conditional expression chooses the matching method. The output uses the returned bool to select ok or rejected, then reads the current stock through the observer. You do not need to change this caller.
+
+    ### Work in two passes
+    Complete add first and test a positive, zero, and negative amount. Then complete take and test a small permitted withdrawal, an exact-stock withdrawal, an overdraft, and a zero/negative request. Keep your rejection checks before the update so a failed request cannot change the state.
+
+    The two highlighted editor regions are independent method bodies. The read-only surrounding code supplies the names and input/output. In a no-commands case no transaction result is printed; an empty output is correct.
+  hints:
+  - Separate the decision from the update. Reject any invalid amount before touching stock_.
+  - For take, ask both “is it positive?” and “is there enough stock?” Exact-stock withdrawal is allowed.
+  - After an accepted update, return true. A rejected request must return false with stock_ exactly as it was.
+  region_prompts:
+  - Accept a positive add, update stock_, and return whether it succeeded.
+  - Accept a positive take that stock_ can cover; update only when accepted.
+  case_purposes:
+  - A transaction sequence checks accepted changes, overdraft rejection, and an exact-stock take.
+  - Zero and negative amounts must be rejected without changing the count.
+  - An empty inventory can accept stock later and then permit an exact take.
+  - With no commands, no transaction result lines should be printed.
+- slug: capstone-02-report
+  title: 'Capstone: validated score reports'
+  after: 20
+  chapters: 1–28
+  topics:
+  - structs
+  - vector
+  - streams
+  - validation
+  - algorithms
+  objectives:
+  - Validate a complete input record.
+  - Combine a vector of records into a deterministic report.
+  task: Implement `bool parseRecord(const std::string& line, Record& result)` and `void printReport(const std::vector<Record>&
+    records)`. A valid line contains exactly a single-word name and one integer score in [0,100], with no extra
+    token. parseRecord returns false for any invalid line and assigns result only for a valid line. main reads
+    a nonnegative line count followed by those lines (at most 100). If any line is invalid, main prints `invalid`
+    and stops. Otherwise print `count N`, `average A` with one decimal place, and `best NAME SCORE` on separate
+    lines. For an empty collection print `count 0`, `average 0.0`, and `best none`. For a tie, select the FIRST
+    record with the highest score. Names contain only ASCII letters; test inputs obey the line-count contract.
+  solution: |
+    #include <iomanip>
+    #include <iostream>
+    #include <limits>
+    #include <sstream>
+    #include <string>
+    #include <vector>
+    struct Record { std::string name; int score{}; };
+    bool parseRecord(const std::string& line, Record& result) {
+        std::istringstream input{line};
+        Record candidate;
+        std::string extra;
+        if (!(input >> candidate.name >> candidate.score) || candidate.score < 0 || candidate.score > 100 || (input >> extra)) {
+            return false;
+        }
+        result = candidate;
+        return true;
+    }
+    void printReport(const std::vector<Record>& records) {
+        int total{0};
+        const Record* best{nullptr};
+        for (const Record& record : records) {
+            total += record.score;
+            if (best == nullptr || record.score > best->score) { best = &record; }
+        }
+        double average{records.empty() ? 0.0 : static_cast<double>(total) / records.size()};
+        std::cout << "count " << records.size() << '\n';
+        std::cout << "average " << std::fixed << std::setprecision(1) << average << '\n';
+        if (best) { std::cout << "best " << best->name << ' ' << best->score << '\n'; }
+        else { std::cout << "best none\n"; }
+    }
+    int main() {
+        int count{};
+        std::cin >> count;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::vector<Record> records;
+        for (int i{0}; i < count; ++i) {
+            std::string line;
+            std::getline(std::cin, line);
+            Record record;
+            if (!parseRecord(line, record)) { std::cout << "invalid\n"; return 0; }
+            records.push_back(record);
+        }
+        printReport(records);
+    }
+  editable: |2-
+        std::istringstream input{line};
+        Record candidate;
+        std::string extra;
+        if (!(input >> candidate.name >> candidate.score) || candidate.score < 0 || candidate.score > 100 || (input >> extra)) {
+            return false;
+        }
+        result = candidate;
+        return true;
+  second_editable: |2-
+        int total{0};
+        const Record* best{nullptr};
+        for (const Record& record : records) {
+            total += record.score;
+            if (best == nullptr || record.score > best->score) { best = &record; }
+        }
+        double average{records.empty() ? 0.0 : static_cast<double>(total) / records.size()};
+        std::cout << "count " << records.size() << '\n';
+        std::cout << "average " << std::fixed << std::setprecision(1) << average << '\n';
+        if (best) { std::cout << "best " << best->name << ' ' << best->score << '\n'; }
+        else { std::cout << "best none\n"; }
+  cases:
+  - - Normal
+    - |
+      3
+      Ada 80
+      Bjarne 95
+      Grace 95
+    - |
+      count 3
+      average 90.0
+      best Bjarne 95
+  - - Empty
+    - |
+      0
+    - |
+      count 0
+      average 0.0
+      best none
+  - - Boundaries
+    - |
+      2
+      Ada 0
+      Grace 100
+    - |
+      count 2
+      average 50.0
+      best Grace 100
+  - - Extra token
+    - |
+      1
+      Ada 90 extra
+    - |
+      invalid
+  - - Out of range
+    - |
+      1
+      Ada 101
+    - |
+      invalid
+  - - Missing score
+    - |
+      1
+      Ada
+    - |
+      invalid
+  - - Partial integer
+    - |
+      1
+      Ada 90x
+    - |
+      invalid
+  - - Negative
+    - |
+      1
+      Ada -1
+    - |
+      invalid
+  - - Fractional average
+    - |
+      2
+      Ada 10
+      Grace 11
+    - |
+      count 2
+      average 10.5
+      best Grace 11
+  - - Zero scores still have a best record
+    - |
+      2
+      Ada 0
+      Grace 0
+    - |
+      count 2
+      average 0.0
+      best Ada 0
+  - - Whitespace around valid fields
+    - "1\n  Ada 80   \n"
+    - |
+      count 1
+      average 80.0
+      best Ada 80
+  hint: Parse into a temporary record; reject incomplete, out-of-range, or trailing data. For the best score,
+    update only on a strict improvement so the first tie survives.
+  lesson: |-
+    ### Turn complete text records into a useful report
+    Each record is one name and one score. Record is a supplied struct with those two named members. The input starts with a line count, followed by that many complete record lines. Names are single words. main already reads the line count, discards the newline left by that numeric read, and obtains each following line with getline. You do not need a file on disk.
+
+    ### First marked region: parse one line
+    Build an istringstream from the supplied line. Read into a temporary Record named candidate so a failed parse cannot partly change the caller’s result. Require a name and an integer score, reject scores outside 0–100, and reject an extra non-whitespace token. Only after all checks succeed should you assign result and return true. Otherwise return false; main prints invalid and stops.
+
+    ### Second marked region: summarize valid records
+    printReport receives a const reference to the vector that main has built. Count is its size. Add all scores and divide by the count using a double calculation; for an empty vector use 0.0 instead of dividing by zero. fixed and setprecision(1) give the requested one-decimal display.
+
+    Use a pointer named best to refer to a record already in that vector. Start it at nullptr. As you visit each const Record&, replace best only when no best exists yet or the current score is strictly higher. A strict comparison preserves the first record in a tie. Because the vector is not changed while reporting, these references stay valid.
+
+    ### Explain the edge cases before coding
+    For no records, print count 0, average 0.0, and best none on separate lines. For a tie, keep the first highest-scoring name. A readable score followed by an extra character is not a complete valid record. The test examples below connect each of these rules with concrete input and output. Edit the two marked regions; the surrounding input loop and output contract are supplied.
+  hints:
+  - Keep parsing and reporting separate. Validate into a temporary record before changing result.
+  - 'Two successful fields are not enough: a range violation or one leftover token must reject the line.'
+  - In the report, handle the empty vector before division and update best only for a strictly larger score.
+    That protects zero records and first-in-order ties.
+  region_prompts:
+  - Parse and validate one full record; assign result only on success.
+  - Print count, fractional average, and the first highest-scoring record.
+  case_purposes:
+  - The first highest-scoring name should survive a tie.
+  - An empty report must avoid division by zero and use best none.
+  - Both score endpoints are valid and should affect the average.
+  - An extra token makes the complete record invalid.
+  - A score above one hundred is invalid even if it parses.
+  - A missing score must reject the line.
+  - A leftover letter after a numeric prefix must reject the line.
+  - A negative score is outside the range.
+  - The average needs its fractional half.
+  - Zero scores are valid; the first zero can still be the best record.
+  - Whitespace around complete fields is allowed.

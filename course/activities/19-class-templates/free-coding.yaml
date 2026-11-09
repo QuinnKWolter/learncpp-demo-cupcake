@@ -1,0 +1,114 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-19-class-templates-free-coding
+title: Class templates and specialization · write code
+description: Practice class templates and specialization.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+  topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    class Pair {
+        T first_, second_;
+    public:
+        Pair(T a, T b) : first_{a}, second_{b} {}
+        T sum() const {
+            return first_ + second_;
+        }
+    };
+    int main() {
+        int a{}, b{};
+        std::cin >> a >> b;
+        const Pair<int> integers{a, b};
+        const Pair<double> fractions{1.25, 2.5};
+        std::cout << integers.sum() << ' ' << fractions.sum() << '\n';
+    }
+statement: |-
+  Complete the supplied `Pair<T>::sum() const` observer by returning first_ + second_. The caller reads two integers from −1000 to 1000 and also tests a Pair<double> containing 1.25 and 2.5. It prints both sums. Keep the result type T and leave both members unchanged.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- The constructor has already stored the two T values. The observer only needs to combine them.
+- Add first_ and second_ directly and return that result. Preserve T so the fractional pair can return a fractional
+  sum.
+elements:
+- type: editable
+  location:
+    snippet: '        return first_ + second_;'
+  placeholder: '        // Return the sum of the two stored T members without changing them.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      template <typename T>
+      class Pair {
+          T first_, second_;
+      public:
+          Pair(T a, T b) : first_{a}, second_{b} {}
+          T sum() const {
+- type: locked
+  location:
+    snippet: |2
+
+          }
+      };
+      int main() {
+          int a{}, b{};
+          std::cin >> a >> b;
+          const Pair<int> integers{a, b};
+          const Pair<double> fractions{1.25, 2.5};
+          std::cout << integers.sum() << ' ' << fractions.sum() << '\n';
+      }
+testcases:
+- title: Positive
+  visible: true
+  stdin:
+  - 3 7
+  stdout: |
+    10 3.75
+  feedback:
+    on_pass:
+    - The integer sum and the double sum must both use the same template pattern.
+    on_fail:
+    - The integer sum and the double sum must both use the same template pattern. The constructor has already
+      stored the two T values. The observer only needs to combine them.
+- title: Signed
+  visible: true
+  stdin:
+  - -5 2
+  stdout: |
+    -3 3.75
+  feedback:
+    on_pass:
+    - Signed integer operands must keep their sign while the double result keeps its fraction.
+    on_fail:
+    - Signed integer operands must keep their sign while the double result keeps its fraction. The constructor
+      has already stored the two T values. The observer only needs to combine them.
+- title: Zero
+  visible: true
+  stdin:
+  - 0 0
+  stdout: |
+    0 3.75
+  feedback:
+    on_pass:
+    - A zero integer sum must not affect the independent fractional pair.
+    on_fail:
+    - A zero integer sum must not affect the independent fractional pair. The constructor has already stored
+      the two T values. The observer only needs to combine them.

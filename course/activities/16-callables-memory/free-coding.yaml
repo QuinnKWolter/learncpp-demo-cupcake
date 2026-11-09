@@ -1,0 +1,116 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-free-coding
+title: Dynamic lifetime, recursion, and lambdas · write code
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int sumTo(int n) {
+        if (n == 0) { return 0; }
+        return n + sumTo(n - 1);
+    }
+    int main() {
+        int n{};
+        std::cin >> n;
+        std::cout << sumTo(n) << '\n';
+    }
+statement: |-
+  Complete `sumTo(int n)` using recursion (a call to the same function with a smaller input). Return the sum of whole numbers from 1 through n. For n = 0, return zero without another call. Input is n from 0 to 100. The supplied main prints the returned sum once.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- First decide what the sum should be when there is nothing to add. That case should return without calling
+  sumTo again.
+- For a positive n, combine n with the sum for the smaller input n − 1. Eventually that smaller input reaches
+  your stopping case.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          if (n == 0) { return 0; }
+          return n + sumTo(n - 1);
+  placeholder: '    // Handle the zero case, then return n plus the smaller sum.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int sumTo(int n) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          int n{};
+          std::cin >> n;
+          std::cout << sumTo(n) << '\n';
+      }
+testcases:
+- title: Base
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - Zero is the direct stopping case; no recursive call is needed.
+    on_fail:
+    - Zero is the direct stopping case; no recursive call is needed. First decide what the sum should be when
+      there is nothing to add. That case should return without calling sumTo again.
+- title: One
+  visible: true
+  stdin:
+  - '1'
+  stdout: |
+    1
+  feedback:
+    on_pass:
+    - One reaches the stopping case after one smaller request.
+    on_fail:
+    - One reaches the stopping case after one smaller request. First decide what the sum should be when there
+      is nothing to add. That case should return without calling sumTo again.
+- title: Several
+  visible: true
+  stdin:
+  - '5'
+  stdout: |
+    15
+  feedback:
+    on_pass:
+    - Several levels check the return path as well as descent.
+    on_fail:
+    - Several levels check the return path as well as descent. First decide what the sum should be when there
+      is nothing to add. That case should return without calling sumTo again.
+- title: Limit
+  visible: true
+  stdin:
+  - '100'
+  stdout: |
+    5050
+  feedback:
+    on_pass:
+    - The upper input bound checks progress and the full resulting sum.
+    on_fail:
+    - The upper input bound checks progress and the full resulting sum. First decide what the sum should be
+      when there is nothing to add. That case should return without calling sumTo again.

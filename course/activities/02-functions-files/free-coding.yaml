@@ -1,0 +1,110 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-free-coding
+title: Functions, declarations, and files · write code
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int rectangleArea(int width, int height) {
+        return width * height;
+    }
+    int main() {
+        int width{}, height{};
+        std::cin >> width >> height;
+        std::cout << rectangleArea(width, height) << '\n';
+    }
+statement: |-
+  A rectangle’s area is width × height. Complete `rectangleArea(int width, int height)` by returning that area. The supplied code reads two whole numbers from 1 to 1000 and prints the returned result. Edit only the marked function body; it should return a number, not print it.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- This task asks for area, not the perimeter in the example. Draw a rectangle with 3 rows of 5 squares.
+- Return one multiplication using the two parameter names. The supplied caller reads the dimensions and prints
+  the returned value.
+elements:
+- type: editable
+  location:
+    snippet: '    return width * height;'
+  placeholder: '    // Return the area using the width and height parameters.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int rectangleArea(int width, int height) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          int width{}, height{};
+          std::cin >> width >> height;
+          std::cout << rectangleArea(width, height) << '\n';
+      }
+testcases:
+- title: Rectangle
+  visible: true
+  stdin:
+  - 3 5
+  stdout: |
+    15
+  feedback:
+    on_pass:
+    - Different dimensions distinguish area from adding side lengths.
+    on_fail:
+    - Different dimensions distinguish area from adding side lengths. This task asks for area, not the perimeter
+      in the example. Draw a rectangle with 3 rows of 5 squares.
+- title: Square
+  visible: true
+  stdin:
+  - 4 4
+  stdout: |
+    16
+  feedback:
+    on_pass:
+    - A square still uses multiplication, not a special-case formula.
+    on_fail:
+    - A square still uses multiplication, not a special-case formula. This task asks for area, not the perimeter
+      in the example. Draw a rectangle with 3 rows of 5 squares.
+- title: Thin rectangle
+  visible: true
+  stdin:
+  - 1 9
+  stdout: |
+    9
+  feedback:
+    on_pass:
+    - A dimension of one should leave the other as the area.
+    on_fail:
+    - A dimension of one should leave the other as the area. This task asks for area, not the perimeter in
+      the example. Draw a rectangle with 3 rows of 5 squares.
+- title: Larger dimensions
+  visible: true
+  stdin:
+  - 1000 2
+  stdout: |
+    2000
+  feedback:
+    on_pass:
+    - Larger dimensions help reject a hard-coded answer based on a small example.
+    on_fail:
+    - Larger dimensions help reject a hard-coded answer based on a small example. This task asks for area,
+      not the perimeter in the example. Draw a rectangle with 3 rows of 5 squares.

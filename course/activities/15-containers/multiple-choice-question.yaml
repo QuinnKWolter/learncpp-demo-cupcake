@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-multiple-choice-question
+title: Vectors, arrays, iterators, and algorithms · explain why
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+question: After `std::vector<int> values; values.reserve(10);`, what is values.size()?
+include_choices: 3
+hints:
+- Distinguish making room from creating items. Which operation changes capacity without changing size?
+- After reserve, ask how many integers have actually been inserted or created. Empty reserved storage is not
+  a list of elements yet.
+choices:
+- body: '0'
+  role: solution
+  explanations:
+  - body: reserve makes space available but does not construct list elements.
+- body: '10'
+  role: distractor
+  explanations:
+  - body: This confuses capacity with size. resize(10), not reserve(10), would create ten elements.
+- body: The call is an error because an empty vector cannot reserve storage.
+  role: distractor
+  explanations:
+  - body: Preparing capacity before inserting items is a normal use of reserve, even when the size is zero.

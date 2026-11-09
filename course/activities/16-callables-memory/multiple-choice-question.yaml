@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-multiple-choice-question
+title: Dynamic lifetime, recursion, and lambdas · explain why
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+question: What makes a recursive sum through n stop correctly when n reaches zero?
+include_choices: 3
+hints:
+- The zero case must be reached without first making yet another recursive call.
+- Changing n toward zero is necessary, but at zero the function must return an answer directly. Check the order
+  of those two decisions.
+choices:
+- body: Return the zero-case answer before making another recursive call.
+  role: solution
+  explanations:
+  - body: At zero there is no smaller sum to request. Returning directly lets the waiting calls finish.
+- body: Make the recursive call first, then check whether n is zero.
+  role: distractor
+  explanations:
+  - body: At zero that call happens before the check, so the intended stopping condition cannot stop it in
+      time.
+- body: Keep calling the same function with the same n until it stops by itself.
+  role: distractor
+  explanations:
+  - body: Repeating an unchanged problem does not move toward a stopping case.

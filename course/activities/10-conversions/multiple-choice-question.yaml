@@ -1,0 +1,38 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-10-conversions-multiple-choice-question
+title: Conversions and type deduction · explain why
+description: Practice conversions and type deduction.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+  topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+question: What type does `auto count{6};` deduce?
+include_choices: 3
+hints:
+- Look only at the initializer 6, not at how the variable might be used later.
+- auto uses the type of that expression. A plain whole-number literal here has type int.
+choices:
+- body: int
+  role: solution
+  explanations:
+  - body: The initializer is the whole-number literal six, whose type here is int. That fixes count’s type.
+- body: double
+  role: distractor
+  explanations:
+  - body: auto follows the initializer’s actual type, not a possible later use with fractional numbers.
+- body: A flexible type that can later become double.
+  role: distractor
+  explanations:
+  - body: C++ deduces one fixed type at this declaration. auto does not make a variable dynamically change
+      its type later.

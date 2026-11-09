@@ -1,0 +1,34 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-multiple-choice-question
+title: Your first C++ programs · explain why
+description: Practice your first c++ programs.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+question: What is the best description of `int n{};` inside a function?
+include_choices: 3
+hints:
+- Compare `int n{};` with a declaration that gives n an explicit starting number.
+- 'Empty braces have a specific meaning for an integer: they provide a starting value even without input.'
+choices:
+- body: It starts n at zero.
+  role: solution
+  explanations:
+  - body: Empty braces supply the integer’s starting zero. No input operation is needed.
+- body: It leaves n without a starting value.
+  role: distractor
+  explanations:
+  - body: This confuses empty braces with leaving initialization out entirely. The braces make the integer
+      start at zero.
+- body: It waits for the user to enter n.
+  role: distractor
+  explanations:
+  - body: A declaration creates the variable. Reading a later input is a separate std::cin operation.

@@ -1,0 +1,233 @@
+slug: 07-scope
+title: Scope, duration, and linkage
+chapters: '7'
+readings:
+- title: Namespaces
+  url: https://www.learncpp.com/cpp-tutorial/user-defined-namespaces-and-the-scope-resolution-operator/
+- title: Static locals
+  url: https://www.learncpp.com/cpp-tutorial/static-local-variables/
+topics:
+- scope
+- namespaces
+- shadowing
+- static-duration
+- linkage
+objectives:
+- Distinguish a name’s scope from a value’s lifetime.
+- Trace a static local across calls.
+- Use a function inside a namespace.
+lesson: |-
+  ### Where a name can be used, and how long a value stays
+  **Scope** describes where a name is available in the source. A variable declared inside a function can normally be named only inside that function's block. **Lifetime** describes how long its stored object exists. These are related questions, but they are not the same question.
+
+  An ordinary local integer is created again on each call. A `static` local integer keeps its value between calls:
+
+  ```cpp
+  int nextTicket() {
+      static int ticket{0};
+      return ++ticket;
+  }
+  ```
+
+  The starting zero is supplied once. `++ticket` means “increase ticket by one, then use the increased value.” The first call returns one; the next call begins with the value left by the previous call. The name ticket is still local to this function: static does not make it a global name. The two calls in the example are deliberately separate statements so their order is easy to follow.
+
+  ### Put related functions under a clear name
+  A **namespace** groups names. The supplied coding task defines `toMinutes` inside `namespace units`. Its caller writes `units::toMinutes(hours)`: the `::` says “look for toMinutes inside units.” A namespace is an organization tool; it does not change the hours-to-minutes calculation.
+
+  ```cpp
+  namespace units {
+      int toMinutes(int hours) {
+          // Your calculation goes here.
+      }
+  }
+  ```
+
+  An hour contains sixty minutes. Return that conversion using the existing parameter; `main` reads the input and prints the result. No extra header or hidden helper is required.
+
+  ### Keep the ideas separate while practicing
+  The example, visualization, puzzle, and prediction concern the remembered ticket value. Explain why asks whether a local name can have a long-lived value. Write code applies namespace organization to a different function. If a result surprises you, first ask “which declaration does this name refer to?” and then “is this a new object or a value kept from an earlier call?”
+
+  The wider LearnCpp chapter also discusses linkage, the rules for connecting names across source files, and shadowing, where an inner name hides an outer one. Those are follow-up reading topics; no exercise here depends on an unexplained multi-file linkage rule.
+example: |
+  #include <iostream>
+  int nextTicket() {
+      static int ticket{0};
+      return ++ticket;
+  }
+  int main() {
+      std::cout << nextTicket() << ' ';
+      std::cout << nextTicket() << '\n';
+  }
+explanations:
+- - static int ticket{0};
+  - Create this counter once. Later calls keep using the value it has reached.
+- - return ++ticket;
+  - Increase the remembered count, then give that new number back to the caller.
+- - std::cout << nextTicket() << ' ';
+  - This first call completes before the following output statement begins. Its space separates the two printed
+    tickets.
+blank: static int ticket{0};
+wrong:
+- - int ticket{0};
+  - An ordinary local is initialized again on each call. The two calls would each begin at zero instead of
+    sharing the remembered count.
+- - const int ticket{0};
+  - const prevents changing this integer after initialization. The next line needs to increase it, so the declaration
+    would contradict that action.
+question: Which statement correctly distinguishes scope and lifetime?
+choices:
+- - A static local name is limited to its block, while its stored value survives later calls.
+  - Scope concerns the name; storage duration concerns how long the object persists.
+- - Adding static makes a local name available in every function.
+  - Its value lasts longer, but the declaration still has local scope.
+- - Every return resets all local values, including static locals, to their initializer.
+  - 'That is the useful difference here: an ordinary local is recreated, but a static local is initialized
+    once.'
+task: Complete `toMinutes(int hours)` inside the supplied namespace `units`. One hour contains 60 minutes.
+  Input is a whole number of hours from 0 to 1000; the supplied caller prints the returned number of minutes.
+  Edit only the marked return calculation.
+solution: |
+  #include <iostream>
+  namespace units {
+      int toMinutes(int hours) {
+          return hours * 60;
+      }
+  }
+  int main() {
+      int hours{};
+      std::cin >> hours;
+      std::cout << units::toMinutes(hours) << '\n';
+  }
+editable: '        return hours * 60;'
+cases:
+- - One hour
+  - |
+    1
+  - |
+    60
+- - Zero
+  - |
+    0
+  - |
+    0
+- - Day
+  - |
+    24
+  - |
+    1440
+- - Upper input bound
+  - |
+    1000
+  - |
+    60000
+region_prompts:
+- Return the number of minutes in the given hours.
+hints_by_type:
+  code-completion:
+  - Compare a fresh counter on each call with one counter that remembers the last issued number.
+  - The initializer should run once, while the name remains inside the function. Which declaration gives that
+    combination?
+  multiple-choice-question:
+  - Treat “where can I name it?” and “when is it destroyed?” as two separate questions.
+  - 'A static local is the example that separates them: a local name, but a value that survives a return.'
+  free-coding:
+  - 'Do the conversion by hand: two hours contains twice as many minutes as one hour.'
+  - The namespace and function signature are supplied. Return hours multiplied by the minutes in one hour;
+    main already prints it.
+  parsons-puzzles:
+  - Create the call sequence in the same order that tickets should be issued.
+  - The static counter belongs inside nextTicket. In main, each call should finish before the following result
+    is printed.
+  parameterized-code-tracing:
+  - After a call returns, keep the ticket value in your table rather than resetting it to zero.
+  - Prefix ++ changes the stored value before returning it. Apply that once for each displayed call.
+completion_explanation: static preserves the counter between calls while keeping its name local. An ordinary
+  local would start at zero again on every call.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int nextTicket() {
+        static int ticket{0};
+        return ++ticket;
+    }
+    int main() {
+        int first{nextTicket()};
+        int second{nextTicket()};
+        std::cout << first << ' ' << second << '\n';
+    }
+  blocks:
+  - snippet: '    int first{nextTicket()};'
+    explanation: Issue and retain the first ticket before requesting the second one.
+  - snippet: '    int second{nextTicket()};'
+    explanation: The same static counter continues from the first call, giving the next ticket.
+  - snippet: '    std::cout << first << '' '' << second << ''\n'';'
+    explanation: Print the first and second results in their issue order.
+  goal: Request the first ticket, then the second, and print them in that order. nextTicket and its persistent
+    counter are already supplied.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    int nextTicket() {
+        static int ticket{0};
+        return ++ticket;
+    }
+    int main() {
+        int first{nextTicket()};
+        int second{nextTicket()};
+        std::cout << first << ' ' << second << '\n';
+    }
+  token: '0'
+  values:
+  - 0
+  - 5
+  - 9
+  goal: The static counter’s starting value changes. Predict the first and second tickets, remembering the
+    counter between calls.
+  stdin: ''
+  context: static int ticket{0};
+  walkthrough:
+  - snippet: static int ticket{0};
+    note: On the first call only, initialize the remembered counter to zero.
+    state:
+      ticket: 0
+  - snippet: return ++ticket;
+    note: The first call increases the counter before returning it.
+    state:
+      ticket: 1
+      returned value: 1
+  - snippet: int first{nextTicket()};
+    note: Keep that returned one as first.
+    state:
+      first: 1
+  - snippet: return ++ticket;
+    note: The next call reuses the counter, increasing one to two instead of initializing again.
+    state:
+      ticket: 2
+      returned value: 2
+  - snippet: int second{nextTicket()};
+    note: Keep the second returned ticket separately.
+    state:
+      second: 2
+  - snippet: std::cout << first << ' ' << second << '\n';
+    note: 'Display the issue order: first, then second.'
+    state:
+      output: 1 2
+  output: |
+    1 2
+  expected:
+  - |
+    1 2
+  - |
+    6 7
+  - |
+    10 11
+case_purposes:
+- One hour establishes the conversion factor.
+- Zero hours should convert to zero minutes.
+- A longer duration must scale using the same rule.
+- The upper permitted input still uses the same conversion.
+
+completion_goal: "Let nextTicket remember its counter between calls, so successive calls return one and then two."

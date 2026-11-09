@@ -1,0 +1,71 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-08-control-flow-code-completion
+title: Branches and loops · fill gaps
+description: Practice branches and loops.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+  topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int limit{4};
+        int total{0};
+        for (int i{1}; i <= limit; ++i) {
+            total += i;
+        }
+        std::cout << total << '\n';
+    }
+statement: |-
+  Add every integer from 1 through limit, including limit itself, then print the total once. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  10
+  ```
+hints:
+- The goal includes the limit itself. Check what the condition does when i equals limit.
+- Compare the totals for limit 1. The loop should still add that one allowed value.
+elements:
+- type: blank
+  location:
+    snippet: i <= limit
+  choices:
+  - snippet: i <= limit
+    role: solution
+    explanations:
+    - body: The inclusive condition allows the final value to contribute. A strict less-than test would miss
+        that last contribution.
+  - snippet: i < limit
+    role: distractor
+    explanations:
+    - body: Using < instead of <= stops before the final allowed value can be added. Try a limit of one to
+        see the missing visit.
+  - snippet: i == limit
+    role: distractor
+    explanations:
+    - body: Starting at one and asking whether it equals the supplied limit usually fails immediately. A loop
+        condition should accept the whole intended sequence.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    10

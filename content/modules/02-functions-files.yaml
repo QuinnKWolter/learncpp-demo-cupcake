@@ -1,0 +1,236 @@
+slug: 02-functions-files
+title: Functions, declarations, and files
+chapters: '2'
+readings:
+- title: Function parameters
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-function-parameters-and-arguments/
+- title: Header files
+  url: https://www.learncpp.com/cpp-tutorial/header-files/
+topics:
+- functions
+- parameters
+- return-values
+- headers
+objectives:
+- Follow arguments into a function and its return value back to main.
+- Distinguish a visible declaration from a definition.
+- Write a different rectangle calculation in a supplied function.
+lesson: |-
+  ### A function is a named calculation
+  A function lets us give a useful calculation a name and call it when we need it. In this module we calculate a rectangle's perimeter: the distance around its four sides. The rule is `2 * (width + height)` because there are two widths and two heights.
+
+  ```cpp
+  int rectanglePerimeter(int width, int height) {
+      return 2 * (width + height);
+  }
+  ```
+
+  The first `int` says the function gives back a whole number. `width` and `height` are parameters: names for the values supplied by a call. In `rectanglePerimeter(3, 5)`, 3 becomes width and 5 becomes height for that call. The parentheses in the calculation add the dimensions before multiplying. `return` sends the answer back to the calling line and ends that call. It does not print anything. `std::cout` prints the returned answer in `main`.
+
+  ### Why are there two files?
+  The example deliberately separates the function's announcement from its instructions. A **declaration** announces the name, result type, and parameter types. A **definition** also supplies the body in braces. The compiler needs an announcement before the first call.
+
+  The supplied `geometry.hpp` header contains this declaration:
+
+  ```cpp
+  int rectanglePerimeter(int width, int height);
+  ```
+
+  `#include "geometry.hpp"` makes that announcement available to `main.cpp`. The double quotes mean this is a file supplied with the exercise. Open **Supporting file: geometry.hpp** above the activity to read it. Its `#ifndef`, `#define`, and `#endif` lines are an include guard: they keep this header's contents from being included twice in one source file. You do not need to edit the guard.
+
+  The complete function definition is visible below `main` in the program. Read its body to see the whole calculation, then follow the returned number back to main. Both files are supplied when you check an answer.
+
+  ### Follow a call and come back
+  For width 3 and height 5, enter the function, calculate `2 * (3 + 5)`, and return to the output line. The parameters belong to this call; another call can use different dimensions. This same call-and-return sequence is shown in Step through and Predict output.
+
+  ### Use the idea in a new task
+  Write code asks for **area**, the number of unit squares inside a rectangle, rather than perimeter. Area is `width * height`. The function name, parameters, input, and output lines are supplied. Write only the return calculation. Check a rectangle and a square: the same formula must work for both. Never print from the function just to display the answer; the supplied `main` already does that.
+example: |
+  #include <iostream>
+  #include "geometry.hpp"
+  int main() {
+      int width{3};
+      int height{5};
+      std::cout << rectanglePerimeter(width, height) << '\n';
+  }
+  int rectanglePerimeter(int width, int height) {
+      return 2 * (width + height);
+  }
+explanations:
+- - '#include "geometry.hpp"'
+  - This supplied header announces rectanglePerimeter before main calls it. Open the supporting file to see
+    the short declaration.
+- - rectanglePerimeter(width, height)
+  - Pass the two values to the named calculation. This expression becomes the number that the function returns.
+- - int rectanglePerimeter(int width, int height) {
+  - This is the definition. For each call, width and height receive that call’s two arguments.
+- - return 2 * (width + height);
+  - First add one width and one height, then double that sum to count all four sides. Send that answer back
+    to main; main prints it.
+blank: 2 * (width + height)
+wrong:
+- - width * height
+  - This calculates area, the inside of the rectangle. The distance around it includes two widths and two heights.
+- - width + height
+  - This counts only one width and one height. The opposite two sides are still part of the boundary.
+question: A function returns an integer but does not print anything. What does `return 8;` do?
+choices:
+- - It gives 8 back to the caller and ends this function call.
+  - The caller can use that returned number in an expression, including a later output statement.
+- - It prints 8 on the screen immediately.
+  - Returning and printing are separate actions. A std::cout operation would be needed to display the returned
+    number.
+- - It ends every waiting function call, even if this is not main.
+  - A return leaves this call and resumes its caller; it does not end the entire chain of callers.
+task: A rectangle’s area is width × height. Complete `rectangleArea(int width, int height)` by returning that
+  area. The supplied code reads two whole numbers from 1 to 1000 and prints the returned result. Edit only
+  the marked function body; it should return a number, not print it.
+solution: |
+  #include <iostream>
+  int rectangleArea(int width, int height) {
+      return width * height;
+  }
+  int main() {
+      int width{}, height{};
+      std::cin >> width >> height;
+      std::cout << rectangleArea(width, height) << '\n';
+  }
+editable: '    return width * height;'
+cases:
+- - Rectangle
+  - |
+    3 5
+  - |
+    15
+- - Square
+  - |
+    4 4
+  - |
+    16
+- - Thin rectangle
+  - |
+    1 9
+  - |
+    9
+- - Larger dimensions
+  - |
+    1000 2
+  - |
+    2000
+includes:
+  geometry.hpp: |
+    // A declaration announces this function before main calls it.
+    // Its definition (the calculation) is visible in main.cpp.
+    #ifndef CUPCAKE_GEOMETRY_HPP
+    #define CUPCAKE_GEOMETRY_HPP
+    int rectanglePerimeter(int width, int height);
+    #endif
+region_prompts:
+- Return the area using the width and height parameters.
+hints_by_type:
+  code-completion:
+  - Locate the function body below main. The missing expression must calculate distance around all four sides.
+  - A rectangle has two sides of each dimension. Add one width and one height, then account for the second
+    pair.
+  multiple-choice-question:
+  - 'Separate two actions: returning a value to another part of the program and displaying text on the screen.'
+  - The caller decides what to do with the returned number. Look for std::cout when deciding what actually
+    gets printed.
+  free-coding:
+  - This task asks for area, not the perimeter in the example. Draw a rectangle with 3 rows of 5 squares.
+  - Return one multiplication using the two parameter names. The supplied caller reads the dimensions and prints
+    the returned value.
+  parsons-puzzles:
+  - A call can only use values already created. Look for the dimension declarations before the call.
+  - After the call returns, its result can be printed. The function declaration and definition are already
+    supplied around the movable part.
+  parameterized-code-tracing:
+  - Copy the displayed width and the fixed height into the function parameters for this call.
+  - Calculate inside the function first. Then put its returned number into the output line; return itself does
+    not create another output line.
+completion_explanation: The perimeter counts both pairs of sides. Multiplying width by height calculates area
+  instead; adding only once counts only half the boundary.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    #include "geometry.hpp"
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+  blocks:
+  - snippet: '    int width{3};'
+    explanation: Supply the rectangle width before passing it to the function.
+  - snippet: '    int height{5};'
+    explanation: Supply the rectangle height. The two dimension declarations can be in either order.
+  - snippet: '    std::cout << rectanglePerimeter(width, height) << ''\n'';'
+    explanation: Call the visible perimeter definition with both dimensions and print its returned answer.
+  goal: Prepare width 3 and height 5, then call rectanglePerimeter and print its answer. The declaration in
+    geometry.hpp and the definition below main are supplied.
+  stdin: ''
+  groups:
+    0: dimensions
+    1: dimensions
+tracing:
+  source: |
+    #include <iostream>
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+  token: '3'
+  values:
+  - 3
+  - 1
+  - 5
+  goal: The width changes. Follow the call into the visible perimeter function and predict its returned result
+    on the one output line.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int width{3};
+    note: Prepare the caller’s width, three.
+    state:
+      width: 3
+  - snippet: int height{5};
+    note: Prepare the caller’s height, five.
+    state:
+      height: 5
+  - snippet: rectanglePerimeter(width, height)
+    note: Supply those two values to the function parameters.
+    state:
+      parameter width: 3
+      parameter height: 5
+  - snippet: return 2 * (width + height);
+    note: Add three and five, then double that sum. The result returns to main.
+    state:
+      returned value: 16
+  - snippet: std::cout << rectanglePerimeter(width, height) << '\n';
+    note: The output expression receives the returned sixteen and prints it once.
+    state:
+      output: '16'
+  output: |
+    16
+  expected:
+  - |
+    16
+  - |
+    12
+  - |
+    20
+case_purposes:
+- Different dimensions distinguish area from adding side lengths.
+- A square still uses multiplication, not a special-case formula.
+- A dimension of one should leave the other as the area.
+- Larger dimensions help reject a hard-coded answer based on a small example.
+
+completion_goal: "Make rectanglePerimeter return the distance around all four sides of the rectangle. The supplied main prints that returned number."

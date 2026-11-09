@@ -1,0 +1,224 @@
+slug: 19-class-templates
+title: Class templates and specialization
+chapters: '26'
+readings:
+- title: Class templates
+  url: https://www.learncpp.com/cpp-tutorial/template-classes/
+- title: Non-type parameters
+  url: https://www.learncpp.com/cpp-tutorial/template-non-type-parameters/
+topics:
+- class-templates
+- non-type-parameters
+- specialization
+objectives:
+- Instantiate a class template with different types.
+- Read stored members through a const observer.
+- Return a generic sum without losing fractional information.
+lesson: |-
+  ### Turn a class design into a reusable pattern
+  A class template applies the template idea from functions to a whole type. In `template <typename T> class Box`, T stands for the chosen member type. `Box<int>` stores an integer; `Box<double>` stores a double. They are different types produced from the same pattern.
+
+  ```cpp
+  template <typename T>
+  class Box {
+      T value_;
+  public:
+      explicit Box(T value) : value_{value} {}
+      T value() const { return value_; }
+  };
+  ```
+
+  The constructor receives a T and initializes the stored T member. The observer returns a T and leaves the object unchanged. The same source pattern preserves the different value types; it does not convert every member to an integer. Explain why asks you to distinguish sharing a pattern from being the same instantiated type.
+
+  ### Follow one object at a time
+  The example creates one integer box and one fractional box. The puzzle orders construction, observation, and printing for one box. Step through and Predict output vary an integer stored in the box. There is no automatic doubling, clearing, or type conversion when value() is called: the observer simply returns the stored value.
+
+  ### Your class holds a pair
+  The supplied Pair<T> class has two private members, first_ and second_. Its constructor has already stored the two arguments. Complete the const sum observer so it returns their sum as a T. main checks an input Pair<int> and a fixed Pair<double>. A solution using an integer-only local or return type could lose the fractional part and violate the pattern's promise.
+
+  ### Two extensions in the reading
+  A non-type template parameter supplies a build-time value rather than a type, for example the fixed element count in `std::array<int, 3>`. An ordinary number read from input cannot take that build-time role.
+
+  Specialization supplies a particular implementation for selected template arguments. It is useful when the general pattern does not fit a special type, rather than merely to repeat the same code. These are follow-up reading ideas; every activity here practices the general class pattern so you can understand it before choosing special cases.
+
+  When describing a box, say its complete type—Box<int> or Box<double>—and trace its own stored value. That habit prevents confusing the template's placeholder name with a single shared object or one universal storage type.
+example: |
+  #include <iostream>
+  template <typename T>
+  class Box {
+      T value_;
+  public:
+      explicit Box(T value) : value_{value} {}
+      T value() const { return value_; }
+  };
+  int main() {
+      Box<int> integer{8};
+      Box<double> fraction{2.5};
+      std::cout << integer.value() << ' ' << fraction.value() << '\n';
+  }
+explanations:
+- - template <typename T>
+  - This class is a pattern whose member and result types are chosen by its template argument.
+- - 'explicit Box(T value) : value_{value} {}'
+  - Store the constructor argument in the member with the same chosen type.
+- - T value() const { return value_; }
+  - Return the stored value without changing it or converting it to a fixed type.
+- - Box<double> fraction{2.5};
+  - This is a separate double-valued instantiation; its fraction should survive observation.
+blank: return value_;
+wrong:
+- - return T{};
+  - T{} creates a fresh default value, such as zero for int. It forgets the value that the constructor stored
+    in this box.
+- - return value_ + value_;
+  - This doubles the member rather than observing it. Reading value() should not silently apply a second calculation.
+question: Are Box<int> and Box<double> the same C++ type?
+choices:
+- - No; they are distinct types made from the same class pattern.
+  - Substituting int and double produces different instantiations. Sharing the template definition does not
+    make those types identical.
+- - Yes; the template arguments disappear before C++ checks their member types.
+  - The substituted type is used for the actual member and observer types; it is not erased before checking.
+- - Yes; every Box object shares one stored T value.
+  - Each box has its own member, and each instantiation has its chosen type. T is a placeholder in the definition,
+    not one shared object.
+task: Complete the supplied `Pair<T>::sum() const` observer by returning first_ + second_. The caller reads
+  two integers from −1000 to 1000 and also tests a Pair<double> containing 1.25 and 2.5. It prints both sums.
+  Keep the result type T and leave both members unchanged.
+solution: |
+  #include <iostream>
+  template <typename T>
+  class Pair {
+      T first_, second_;
+  public:
+      Pair(T a, T b) : first_{a}, second_{b} {}
+      T sum() const {
+          return first_ + second_;
+      }
+  };
+  int main() {
+      int a{}, b{};
+      std::cin >> a >> b;
+      const Pair<int> integers{a, b};
+      const Pair<double> fractions{1.25, 2.5};
+      std::cout << integers.sum() << ' ' << fractions.sum() << '\n';
+  }
+editable: '        return first_ + second_;'
+cases:
+- - Positive
+  - |
+    3 7
+  - |
+    10 3.75
+- - Signed
+  - |
+    -5 2
+  - |
+    -3 3.75
+- - Zero
+  - |
+    0 0
+  - |
+    0 3.75
+region_prompts:
+- Return the sum of the two stored T members without changing them.
+hints_by_type:
+  code-completion:
+  - 'Read the observer’s name literally: it should give back the value already stored in this box.'
+  - Creating a fresh T{} would return a default value, and adding the member to itself would double it. Neither
+    is an observation of the original value.
+  multiple-choice-question:
+  - Compare “same source pattern” with “same completed type.” What argument was substituted for T in each case?
+  - The different template argument lists are part of the type names, so the two instantiations are not the
+    same type.
+  free-coding:
+  - The constructor has already stored the two T values. The observer only needs to combine them.
+  - Add first_ and second_ directly and return that result. Preserve T so the fractional pair can return a
+    fractional sum.
+  parsons-puzzles:
+  - Choose and construct the concrete box before asking its observer for a value.
+  - Printing the observed value is the last step. The supplied class definition handles the type pattern and
+    storage.
+  parameterized-code-tracing:
+  - Replace T with the concrete type named in the program, then record the value supplied to that box’s constructor.
+  - The observer does not modify the member; use the same stored number when predicting the print.
+completion_explanation: Returning the existing member preserves exactly what was stored. A default-constructed
+  T or a doubled member would answer a different question.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    template <typename T>
+    class Box {
+        T value_;
+    public:
+        explicit Box(T value) : value_{value} {}
+        T value() const { return value_; }
+    };
+    int main() {
+        Box<int> box{8};
+        int observed{box.value()};
+        std::cout << observed << '\n';
+    }
+  blocks:
+  - snippet: '    Box<int> box{8};'
+    explanation: Choose the integer instantiation and construct one box with its stored value.
+  - snippet: '    int observed{box.value()};'
+    explanation: Read the existing member through its const observer.
+  - snippet: '    std::cout << observed << ''\n'';'
+    explanation: Display the returned value; observation did not change the box.
+  goal: Construct an integer Box, read its value into observed, and print that observation.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    template <typename T>
+    class Box {
+        T value_;
+    public:
+        explicit Box(T value) : value_{value} {}
+        T value() const { return value_; }
+    };
+    int main() {
+        Box<int> box{8};
+        std::cout << box.value() << '\n';
+    }
+  token: '8'
+  values:
+  - 8
+  - 0
+  - -3
+  goal: The constructor argument changes. Follow storage in Box<int> and its unchanged value returned by the
+    observer.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: Box<int> box{8};
+    note: Choose int for T and construct this object with eight.
+    state:
+      chosen T: int
+      stored member: 8
+  - snippet: T value() const { return value_; }
+    note: The observer returns the stored integer. It neither changes nor doubles it.
+    state:
+      returned value: 8
+  - snippet: std::cout << box.value() << '\n';
+    note: Print the returned stored value.
+    state:
+      output: '8'
+  output: |
+    8
+  expected:
+  - |
+    8
+  - |
+    0
+  - |
+    -3
+case_purposes:
+- The integer sum and the double sum must both use the same template pattern.
+- Signed integer operands must keep their sign while the double result keeps its fraction.
+- A zero integer sum must not affect the independent fractional pair.
+
+completion_goal: "Make the Box observer return the value stored in that object, keeping its chosen type and leaving the member unchanged."

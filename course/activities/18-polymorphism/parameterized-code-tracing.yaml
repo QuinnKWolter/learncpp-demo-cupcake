@@ -1,0 +1,62 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-18-polymorphism-parameterized-code-tracing
+title: Inheritance and virtual dispatch · predict output
+description: Practice inheritance and virtual dispatch.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+  topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+statement: |-
+  The value returned by Derived changes. Predict the virtual call through Base& without treating that reference as a sliced copy.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Name the actual object type separately from the reference type.
+- For a virtual call through a reference to Derived, use Derived’s body even though the reference is declared
+  Base&.
+elements:
+- type: parameter
+  location:
+    snippet: '2'
+    context: int value() const override { return 2; }
+  values:
+  - 2
+  - 4
+  - 6
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    2

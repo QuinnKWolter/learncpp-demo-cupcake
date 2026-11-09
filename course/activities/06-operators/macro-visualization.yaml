@@ -1,0 +1,109 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-06-operators-macro-visualization
+title: Operators, conditions, and bit flags · step through
+description: Practice operators, conditions, and bit flags.
+pedagogy:
+  activity: macro-visualization
+  difficulty: novice
+  prereq_topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+  topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int age{14};
+        bool eligible{age >= 12 && age <= 17};
+        std::cout << std::boolalpha << eligible << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The age changes. Check both inclusive bounds before predicting the true/false word.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - age
+  - - createVariable
+    - lower bound
+  - - createVariable
+    - upper bound
+  - - createVariable
+    - eligible
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 3
+  - - _addValue
+    - '14'
+    - 0
+    - int
+  - - _assign
+    - age
+  - - showText
+    - Begin with age fourteen in this walkthrough.
+  - - _setLine
+    - 4
+  - - _addValue
+    - 'true'
+    - 0
+    - std::string
+  - - _assign
+    - lower bound
+  - - _addValue
+    - 'true'
+    - 0
+    - std::string
+  - - _assign
+    - upper bound
+  - - _addValue
+    - 'true'
+    - 0
+    - std::string
+  - - _assign
+    - eligible
+  - - showText
+    - Fourteen meets the lower bound and the upper bound, so both conditions hold.
+  - - _setLine
+    - 5
+  - - _addValue
+    - 'true'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - boolalpha displays the stored answer as the word true.
+  lines:
+  - '#include <iostream>'
+  - int main() {
+  - '    int age{14};'
+  - '    bool eligible{age >= 12 && age <= 17};'
+  - '    std::cout << std::boolalpha << eligible << ''\n'';'
+  - '}'

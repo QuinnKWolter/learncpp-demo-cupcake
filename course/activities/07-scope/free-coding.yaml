@@ -1,0 +1,116 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-07-scope-free-coding
+title: Scope, duration, and linkage · write code
+description: Practice scope, duration, and linkage.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+  topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    namespace units {
+        int toMinutes(int hours) {
+            return hours * 60;
+        }
+    }
+    int main() {
+        int hours{};
+        std::cin >> hours;
+        std::cout << units::toMinutes(hours) << '\n';
+    }
+statement: |-
+  Complete `toMinutes(int hours)` inside the supplied namespace `units`. One hour contains 60 minutes. Input is a whole number of hours from 0 to 1000; the supplied caller prints the returned number of minutes. Edit only the marked return calculation.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- 'Do the conversion by hand: two hours contains twice as many minutes as one hour.'
+- The namespace and function signature are supplied. Return hours multiplied by the minutes in one hour; main
+  already prints it.
+elements:
+- type: editable
+  location:
+    snippet: '        return hours * 60;'
+  placeholder: '        // Return the number of minutes in the given hours.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      namespace units {
+          int toMinutes(int hours) {
+- type: locked
+  location:
+    snippet: |2
+
+          }
+      }
+      int main() {
+          int hours{};
+          std::cin >> hours;
+          std::cout << units::toMinutes(hours) << '\n';
+      }
+testcases:
+- title: One hour
+  visible: true
+  stdin:
+  - '1'
+  stdout: |
+    60
+  feedback:
+    on_pass:
+    - One hour establishes the conversion factor.
+    on_fail:
+    - 'One hour establishes the conversion factor. Do the conversion by hand: two hours contains twice as many
+      minutes as one hour.'
+- title: Zero
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - Zero hours should convert to zero minutes.
+    on_fail:
+    - 'Zero hours should convert to zero minutes. Do the conversion by hand: two hours contains twice as many
+      minutes as one hour.'
+- title: Day
+  visible: true
+  stdin:
+  - '24'
+  stdout: |
+    1440
+  feedback:
+    on_pass:
+    - A longer duration must scale using the same rule.
+    on_fail:
+    - 'A longer duration must scale using the same rule. Do the conversion by hand: two hours contains twice
+      as many minutes as one hour.'
+- title: Upper input bound
+  visible: true
+  stdin:
+  - '1000'
+  stdout: |
+    60000
+  feedback:
+    on_pass:
+    - The upper permitted input still uses the same conversion.
+    on_fail:
+    - 'The upper permitted input still uses the same conversion. Do the conversion by hand: two hours contains
+      twice as many minutes as one hour.'

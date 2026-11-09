@@ -1,0 +1,75 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-code-completion
+title: Vectors, arrays, iterators, and algorithms · fill gaps
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <algorithm>
+    #include <iostream>
+    #include <vector>
+    int main() {
+        std::vector<int> values{5, 1, 3};
+        std::sort(values.begin(), values.end());
+        for (int value : values) {
+            std::cout << value << ' ';
+        }
+        std::cout << '\n';
+    }
+statement: |-
+  Sort every element of the supplied vector into increasing order before printing it. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  1 3 5
+  ```
+hints:
+- Sort needs the start of the list and the position just beyond its final element.
+- A range that begins and ends at begin contains no elements. A range ending one element later is still too
+  short for the whole vector.
+elements:
+- type: blank
+  location:
+    snippet: values.end()
+  choices:
+  - snippet: values.end()
+    role: solution
+    explanations:
+    - body: end marks the boundary after the last element, so the half-open range covers the entire vector.
+        An earlier boundary would leave some values unsorted.
+  - snippet: values.begin()
+    role: distractor
+    explanations:
+    - body: A range with the same beginning and ending is empty. Sorting no elements leaves the original unsorted
+        vector unchanged.
+  - snippet: values.begin() + 1
+    role: distractor
+    explanations:
+    - body: That endpoint includes only the first element. A one-element range is already sorted, but the other
+        values remain outside the work.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: "1 3 5 \n"

@@ -1,0 +1,40 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-07-scope-multiple-choice-question
+title: Scope, duration, and linkage · explain why
+description: Practice scope, duration, and linkage.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+  topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+question: Which statement correctly distinguishes scope and lifetime?
+include_choices: 3
+hints:
+- Treat “where can I name it?” and “when is it destroyed?” as two separate questions.
+- 'A static local is the example that separates them: a local name, but a value that survives a return.'
+choices:
+- body: A static local name is limited to its block, while its stored value survives later calls.
+  role: solution
+  explanations:
+  - body: Scope concerns the name; storage duration concerns how long the object persists.
+- body: Adding static makes a local name available in every function.
+  role: distractor
+  explanations:
+  - body: Its value lasts longer, but the declaration still has local scope.
+- body: Every return resets all local values, including static locals, to their initializer.
+  role: distractor
+  explanations:
+  - body: 'That is the useful difference here: an ordinary local is recreated, but a static local is initialized
+      once.'

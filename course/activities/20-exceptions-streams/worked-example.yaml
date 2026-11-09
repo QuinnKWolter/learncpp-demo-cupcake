@@ -1,0 +1,75 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-20-exceptions-streams-worked-example
+title: Exceptions and stream-based I/O · worked example
+description: Practice exceptions and stream-based i/o.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - exceptions
+  - stack-unwinding
+  - streams
+  - parsing
+  - file-io
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <stdexcept>
+    int checkedDivide(int numerator, int denominator) {
+        if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+        return numerator / denominator;
+    }
+    int main() {
+        try {
+            std::cout << checkedDivide(12, 3) << '\n';
+            std::cout << checkedDivide(0, 3) << '\n';
+            std::cout << checkedDivide(12, 0) << '\n';
+        } catch (const std::exception& error) {
+            std::cout << error.what() << '\n';
+        }
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    4
+    0
+    zero
+  console: |
+    4
+    0
+    zero
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: denominator == 0
+  explanations:
+  - body: Check the divisor, because a zero divisor makes division invalid. A zero numerator is allowed.
+- type: explanation
+  location:
+    snippet: throw std::invalid_argument{"zero"};
+  explanations:
+  - body: Signal the failure with a standard error object whose message is zero; do not compute a quotient
+      on this path.
+- type: explanation
+  location:
+    snippet: try {
+  explanations:
+  - body: Begin the normal path that may transfer control to a handler if a call throws.
+- type: explanation
+  location:
+    snippet: catch (const std::exception& error)
+  explanations:
+  - body: Catch and observe a standard exception. Its what() message can explain the failure.

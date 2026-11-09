@@ -1,0 +1,81 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-parsons-puzzles
+title: Debug by tracing, then testing · arrange code
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+statement: |-
+  Swap the supplied left and right values without losing either original, then print the swapped pair.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Find the block that preserves the original left value. It must happen before left changes.
+- Printing belongs after both assignments; otherwise you would display a partly finished swap.
+elements:
+- type: block
+  location:
+    snippet: '    int saved{left};'
+  choices:
+  - snippet: '    int saved{left};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Save the original left value before overwriting it.
+- type: block
+  location:
+    snippet: '    left = right;'
+  choices:
+  - snippet: '    left = right;'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Move the original right value into left while saved protects the other original.
+- type: block
+  location:
+    snippet: '    right = saved;'
+  choices:
+  - snippet: '    right = saved;'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Finish by recovering the original left value from saved.
+- type: block
+  location:
+    snippet: '    std::cout << left << '' '' << right << ''\n'';'
+  choices:
+  - snippet: '    std::cout << left << '' '' << right << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Print after the whole swap is complete, so both positions show their final values.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    9 2

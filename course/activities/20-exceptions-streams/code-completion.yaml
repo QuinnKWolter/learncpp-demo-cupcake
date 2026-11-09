@@ -1,0 +1,81 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-20-exceptions-streams-code-completion
+title: Exceptions and stream-based I/O · fill gaps
+description: Practice exceptions and stream-based i/o.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - exceptions
+  - stack-unwinding
+  - streams
+  - parsing
+  - file-io
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <stdexcept>
+    int checkedDivide(int numerator, int denominator) {
+        if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+        return numerator / denominator;
+    }
+    int main() {
+        try {
+            std::cout << checkedDivide(12, 3) << '\n';
+            std::cout << checkedDivide(0, 3) << '\n';
+            std::cout << checkedDivide(12, 0) << '\n';
+        } catch (const std::exception& error) {
+            std::cout << error.what() << '\n';
+        }
+    }
+statement: |-
+  Make checkedDivide reject a zero denominator with an exception while allowing division by a nonzero denominator, including a zero numerator. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  4
+  0
+  zero
+  ```
+hints:
+- Division fails when the divisor is zero, not when the dividend is zero.
+- Try the valid calculation zero divided by three. Rejecting a zero numerator would incorrectly reject that
+  case.
+elements:
+- type: blank
+  location:
+    snippet: denominator == 0
+  choices:
+  - snippet: denominator == 0
+    role: solution
+    explanations:
+    - body: Only a zero denominator makes this integer division invalid. Checking the numerator would reject
+        a valid zero result and miss the actual error.
+  - snippet: denominator != 0
+    role: distractor
+    explanations:
+    - body: 'This reverses the guard: it rejects usable nonzero divisors and allows the invalid zero divisor
+        to reach division.'
+  - snippet: numerator == 0
+    role: distractor
+    explanations:
+    - body: A zero numerator is valid and gives a zero result for a nonzero divisor. It is the denominator
+        that must not be zero.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    4
+    0
+    zero

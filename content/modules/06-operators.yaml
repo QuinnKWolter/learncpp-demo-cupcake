@@ -1,0 +1,242 @@
+slug: 06-operators
+title: Operators, conditions, and bit flags
+chapters: 6, O
+readings:
+- title: Arithmetic
+  url: https://www.learncpp.com/cpp-tutorial/arithmetic-operators/
+- title: Logic
+  url: https://www.learncpp.com/cpp-tutorial/logical-operators/
+- title: Bit flags
+  url: https://www.learncpp.com/cpp-tutorial/bit-flags-and-bit-manipulation-via-stdbitset/
+topics:
+- operators
+- precedence
+- remainder
+- boolean-logic
+- bit-flags
+objectives:
+- Combine complete comparisons with AND.
+- Include endpoints deliberately.
+- Combine a range and an evenness test.
+lesson: |-
+  ### Build a decision from small questions
+  A comparison gives a true/false answer. `age >= 12` asks whether age is at least twelve; `age <= 17` asks whether it is at most seventeen. `>=` and `<=` include the endpoint. `>` and `<` do not.
+
+  ```cpp
+  bool eligible{age >= 12 && age <= 17};
+  ```
+
+  `bool` stores true or false. `&&` means **both conditions must be true**. In the example, an eligible age must meet both bounds. `||` means **at least one condition is true**. Substituting OR here would be a mistake: every age is either at least twelve or at most seventeen, even an age outside the intended group. `std::boolalpha` prints the result as the words true and false.
+
+  ### Give each comparison its own value
+  In mathematics you may write a chained inequality. In C++, write `0 <= n && n <= 10`. `0 <= n <= 10` first works out `0 <= n` and then compares that true/false result with 10. It no longer checks both bounds of n. Explain why asks you to recognize this change in meaning.
+
+  ### Ask whether a number is even
+  `n % 2` gives the remainder after dividing by two. For an even integer that remainder is zero, so `n % 2 == 0` asks “is n even?” `==` compares values; a single `=` assigns a value. These are different operations.
+
+  The coding task combines three questions: at least 10, at most 20, and even. All three must hold, so join them with AND. The supplied input and output lines are ready; write the condition in the marked declaration. Check both endpoints, an odd number inside, and an even number outside.
+
+  ### Why order can matter
+  Logical AND and OR can stop early once the answer is known. This is called short-circuiting. No later check can make a failed AND true. The optional bit-flags reading describes `&` and `|`, which work on individual bits and are not substitutes for `&&` and `||`. You do not need bit manipulation for these activities.
+
+  Step through checks the two age bounds separately. Predict output changes an age, while the puzzle helps connect a comparison, a Boolean result, and its printed display.
+example: |
+  #include <iostream>
+  int main() {
+      int age{16};
+      std::cin >> age;
+      bool eligible{age >= 12 && age <= 17};
+      std::cout << std::boolalpha << eligible << '\n';
+  }
+explanations:
+- - std::cin >> age;
+  - The initial 16 is replaced by the supplied input for this run. Check the sample input before predicting
+    the result.
+- - age >= 12 && age <= 17
+  - Ask both range questions. Ages 12 and 17 are included because each comparison permits equality.
+- - std::boolalpha
+  - The resulting bool is printed as true or false instead of as a digit.
+blank: age >= 12 && age <= 17
+wrong:
+- - age >= 12 || age <= 17
+  - OR needs only one side. An age below twelve still meets the upper bound, and an age above seventeen still
+    meets the lower bound, so neither is rejected.
+- - age > 12 && age < 17
+  - Strict comparisons leave out twelve and seventeen, even though the requested group includes both endpoints.
+question: For an integer `n`, why is `0 <= n <= 10` an incorrect way to test the interval [0,10]?
+choices:
+- - The first comparison produces a bool, and that result is then compared with 10.
+  - C++ does not read this as two comparisons of n. Write both comparisons explicitly and join them with &&.
+- - It automatically checks both bounds of n, just as a mathematical chained inequality does.
+  - The mathematical notation is tempting, but C++ evaluates a comparison result before the next comparison.
+- - The chain is the same as n <= 10 because its lower bound is discarded.
+  - The lower comparison is evaluated, but its true/false result—not n—is what the second comparison receives.
+task: The supplied code reads a whole number n from −100 to 100. Set accepted to true only when n is even and
+  lies between 10 and 20, including both endpoints. Otherwise accepted should be false. The output line already
+  displays the Boolean word.
+solution: |
+  #include <iostream>
+  int main() {
+      int n{};
+      std::cin >> n;
+      bool accepted{n >= 10 && n <= 20 && n % 2 == 0};
+      std::cout << std::boolalpha << accepted << '\n';
+  }
+editable: '    bool accepted{n >= 10 && n <= 20 && n % 2 == 0};'
+cases:
+- - Lower
+  - |
+    10
+  - |
+    true
+- - Upper
+  - |
+    20
+  - |
+    true
+- - Odd
+  - |
+    15
+  - |
+    false
+- - Outside
+  - |
+    22
+  - |
+    false
+- - Negative
+  - |
+    -10
+  - |
+    false
+- - Just below the interval
+  - |
+    9
+  - |
+    false
+example_input: |
+  16
+completion_cases: &id001
+- - Inside
+  - |
+    16
+  - |
+    true
+- - Lower
+  - |
+    12
+  - |
+    true
+- - Upper
+  - |
+    17
+  - |
+    true
+- - Below
+  - |
+    11
+  - |
+    false
+- - Above
+  - |
+    18
+  - |
+    false
+region_prompts:
+- Set accepted to true only when n meets both bounds and is even.
+hints_by_type:
+  code-completion:
+  - Try an age just outside the group, such as 11. Which comparison fails, and should that be enough to reject
+    it?
+  - The range has two requirements, not two alternative ways to qualify. Choose an operator that requires both.
+  multiple-choice-question:
+  - Follow C++ evaluation from left to right for the first comparison. What kind of value does a comparison
+    produce?
+  - The second comparison receives true or false, not the original n. Write two separate comparisons joined
+    by AND instead.
+  free-coding:
+  - 'List the three checks in words before writing symbols: lower bound, upper bound, evenness.'
+  - An even number outside the interval must still be rejected. Join all three checks so none can be skipped
+    as an alternative.
+  parsons-puzzles:
+  - Read the starting value, calculate the decision, then print that decision.
+  - Use the Boolean variable after the declaration that creates it. The output line should not come before
+    its value has been decided.
+  parameterized-code-tracing:
+  - Evaluate each age comparison separately. Write T or F beside each before combining them.
+  - For AND, one false comparison makes the whole result false. The output is a word because boolalpha is supplied.
+completion_explanation: AND requires both ends of the range to hold. OR would let an out-of-range value pass
+  merely because it satisfies the other bound.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int age{16};
+        std::cin >> age;
+        bool eligible{age >= 12 && age <= 17};
+        std::cout << std::boolalpha << eligible << '\n';
+    }
+  blocks:
+  - snippet: '    int age{16};'
+    explanation: Create the input variable before reading into it.
+  - snippet: '    std::cin >> age;'
+    explanation: Read the actual test age before calculating eligibility.
+  - snippet: '    bool eligible{age >= 12 && age <= 17};'
+    explanation: Require both inclusive age limits after the read succeeds for these integer inputs.
+  - snippet: '    std::cout << std::boolalpha << eligible << ''\n'';'
+    explanation: Print the calculated eligibility, with boolalpha making it a word.
+  goal: Read an integer age and print true only for ages 12 through 17, including both endpoints.
+  stdin: |
+    16
+  groups: {}
+  cases: *id001
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int age{14};
+        bool eligible{age >= 12 && age <= 17};
+        std::cout << std::boolalpha << eligible << '\n';
+    }
+  token: '14'
+  values:
+  - 14
+  - 11
+  - 18
+  goal: The age changes. Check both inclusive bounds before predicting the true/false word.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int age{14};
+    note: Begin with age fourteen in this walkthrough.
+    state:
+      age: 14
+  - snippet: age >= 12 && age <= 17
+    note: Fourteen meets the lower bound and the upper bound, so both conditions hold.
+    state:
+      lower bound: 'true'
+      upper bound: 'true'
+      eligible: 'true'
+  - snippet: std::cout << std::boolalpha << eligible << '\n';
+    note: boolalpha displays the stored answer as the word true.
+    state:
+      output: 'true'
+  output: |
+    true
+  expected:
+  - |
+    true
+  - |
+    false
+  - |
+    false
+case_purposes:
+- The lower endpoint is allowed when it is even.
+- The upper endpoint is allowed when it is even.
+- A value inside the range still fails when odd.
+- An even number is rejected when above the range.
+- A negative even number still fails the lower bound.
+- A value just below the lower endpoint must be rejected.
+
+completion_goal: "Print true only when age is at least 12 and at most 17. Both endpoints belong to this range."

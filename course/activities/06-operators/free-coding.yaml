@@ -1,0 +1,131 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-06-operators-free-coding
+title: Operators, conditions, and bit flags · write code
+description: Practice operators, conditions, and bit flags.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+  topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int n{};
+        std::cin >> n;
+        bool accepted{n >= 10 && n <= 20 && n % 2 == 0};
+        std::cout << std::boolalpha << accepted << '\n';
+    }
+statement: |-
+  The supplied code reads a whole number n from −100 to 100. Set accepted to true only when n is even and lies between 10 and 20, including both endpoints. Otherwise accepted should be false. The output line already displays the Boolean word.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- 'List the three checks in words before writing symbols: lower bound, upper bound, evenness.'
+- An even number outside the interval must still be rejected. Join all three checks so none can be skipped
+  as an alternative.
+elements:
+- type: editable
+  location:
+    snippet: '    bool accepted{n >= 10 && n <= 20 && n % 2 == 0};'
+  placeholder: '    // Set accepted to true only when n meets both bounds and is even.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int main() {
+          int n{};
+          std::cin >> n;
+- type: locked
+  location:
+    snippet: |2
+
+          std::cout << std::boolalpha << accepted << '\n';
+      }
+testcases:
+- title: Lower
+  visible: true
+  stdin:
+  - '10'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - The lower endpoint is allowed when it is even.
+    on_fail:
+    - 'The lower endpoint is allowed when it is even. List the three checks in words before writing symbols:
+      lower bound, upper bound, evenness.'
+- title: Upper
+  visible: true
+  stdin:
+  - '20'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - The upper endpoint is allowed when it is even.
+    on_fail:
+    - 'The upper endpoint is allowed when it is even. List the three checks in words before writing symbols:
+      lower bound, upper bound, evenness.'
+- title: Odd
+  visible: true
+  stdin:
+  - '15'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - A value inside the range still fails when odd.
+    on_fail:
+    - 'A value inside the range still fails when odd. List the three checks in words before writing symbols:
+      lower bound, upper bound, evenness.'
+- title: Outside
+  visible: true
+  stdin:
+  - '22'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - An even number is rejected when above the range.
+    on_fail:
+    - 'An even number is rejected when above the range. List the three checks in words before writing symbols:
+      lower bound, upper bound, evenness.'
+- title: Negative
+  visible: true
+  stdin:
+  - '-10'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - A negative even number still fails the lower bound.
+    on_fail:
+    - 'A negative even number still fails the lower bound. List the three checks in words before writing symbols:
+      lower bound, upper bound, evenness.'
+- title: Just below the interval
+  visible: true
+  stdin:
+  - '9'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - A value just below the lower endpoint must be rejected.
+    on_fail:
+    - 'A value just below the lower endpoint must be rejected. List the three checks in words before writing
+      symbols: lower bound, upper bound, evenness.'

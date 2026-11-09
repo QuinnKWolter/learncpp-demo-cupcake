@@ -1,0 +1,73 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-07-scope-code-completion
+title: Scope, duration, and linkage · fill gaps
+description: Practice scope, duration, and linkage.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+  topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int nextTicket() {
+        static int ticket{0};
+        return ++ticket;
+    }
+    int main() {
+        std::cout << nextTicket() << ' ';
+        std::cout << nextTicket() << '\n';
+    }
+statement: |-
+  Let nextTicket remember its counter between calls, so successive calls return one and then two. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  1 2
+  ```
+hints:
+- Compare a fresh counter on each call with one counter that remembers the last issued number.
+- The initializer should run once, while the name remains inside the function. Which declaration gives that
+  combination?
+elements:
+- type: blank
+  location:
+    snippet: static int ticket{0};
+  choices:
+  - snippet: static int ticket{0};
+    role: solution
+    explanations:
+    - body: static preserves the counter between calls while keeping its name local. An ordinary local would
+        start at zero again on every call.
+  - snippet: int ticket{0};
+    role: distractor
+    explanations:
+    - body: An ordinary local is initialized again on each call. The two calls would each begin at zero instead
+        of sharing the remembered count.
+  - snippet: const int ticket{0};
+    role: distractor
+    explanations:
+    - body: const prevents changing this integer after initialization. The next line needs to increase it,
+        so the declaration would contradict that action.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    1 2

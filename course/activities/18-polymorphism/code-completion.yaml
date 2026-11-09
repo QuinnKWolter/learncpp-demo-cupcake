@@ -1,0 +1,78 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-18-polymorphism-code-completion
+title: Inheritance and virtual dispatch · fill gaps
+description: Practice inheritance and virtual dispatch.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+  topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+statement: |-
+  Make calls through Base references use the Derived implementation of value when the actual object is Derived. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  2
+  ```
+hints:
+- The call is written through Base&. Which base declaration enables it to select the actual Derived object’s
+  operation?
+- A same-named nonvirtual function is not enough for dispatch through a base reference. The base must declare
+  this as a virtual operation.
+elements:
+- type: blank
+  location:
+    snippet: virtual int value() const
+  choices:
+  - snippet: virtual int value() const
+    role: solution
+    explanations:
+    - body: virtual in the base enables dispatch through Base&. Removing it would make this call use Base’s
+        operation even though the original object is Derived.
+  - snippet: int value() const
+    role: distractor
+    explanations:
+    - body: Without virtual in Base, the call through Base& would select the base operation. The Derived override
+        in this program would also no longer match a virtual operation.
+  - snippet: static int value()
+    role: distractor
+    explanations:
+    - body: A static member belongs to the class rather than an individual object, so it cannot be the virtual
+        object operation being replaced here.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    2

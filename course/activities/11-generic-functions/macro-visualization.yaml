@@ -1,0 +1,123 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-macro-visualization
+title: Overloads, templates, and constexpr · step through
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: macro-visualization
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) { return a < b ? b : a; }
+    int main() {
+        int a{3};
+        int b{8};
+        std::cout << larger(a, b) << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The first argument changes. Choose the larger returned value, including the equal-values case.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - a
+  - - createVariable
+    - b
+  - - createVariable
+    - chosen T
+  - - createVariable
+    - comparison
+  - - createVariable
+    - returned value
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 5
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - a
+  - - showText
+    - Prepare the first argument as an int.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '8'
+    - 0
+    - int
+  - - _assign
+    - b
+  - - _addValue
+    - int
+    - 0
+    - std::string
+  - - _assign
+    - chosen T
+  - - showText
+    - Prepare the second int argument; T will be int for this call.
+  - - _setLine
+    - 3
+  - - _addValue
+    - 'true'
+    - 0
+    - std::string
+  - - _assign
+    - comparison
+  - - _addValue
+    - '8'
+    - 0
+    - int
+  - - _assign
+    - returned value
+  - - showText
+    - Three is less than eight, so choose b from the true branch.
+  - - _setLine
+    - 7
+  - - _addValue
+    - '8'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - The caller prints the returned larger value once.
+  lines:
+  - '#include <iostream>'
+  - template <typename T>
+  - 'constexpr T larger(T a, T b) { return a < b ? b : a; }'
+  - int main() {
+  - '    int a{3};'
+  - '    int b{8};'
+  - '    std::cout << larger(a, b) << ''\n'';'
+  - '}'

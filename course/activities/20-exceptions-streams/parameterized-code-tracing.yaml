@@ -1,0 +1,60 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-20-exceptions-streams-parameterized-code-tracing
+title: Exceptions and stream-based I/O · predict output
+description: Practice exceptions and stream-based i/o.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - exceptions
+  - stack-unwinding
+  - streams
+  - parsing
+  - file-io
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <stdexcept>
+    int checkedDivide(int numerator, int denominator) {
+        if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+        return numerator / denominator;
+    }
+    int main() {
+        int denominator{0};
+        try {
+            std::cout << checkedDivide(12, denominator) << '\n';
+        } catch (const std::exception& error) {
+            std::cout << error.what() << '\n';
+        }
+    }
+statement: |-
+  The denominator changes. Decide whether the function returns normally or throws, then predict the one printed line.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Check the denominator before doing any arithmetic. If it is zero, follow the throw into the handler.
+- A throw stops the rest of that try path. Predict only the output statements actually reached.
+elements:
+- type: parameter
+  location:
+    snippet: '0'
+    context: int denominator{0};
+  values:
+  - 0
+  - 3
+  - 4
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    zero

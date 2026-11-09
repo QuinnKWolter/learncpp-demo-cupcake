@@ -1,0 +1,80 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-18-polymorphism-parsons-puzzles
+title: Inheritance and virtual dispatch · arrange code
+description: Practice inheritance and virtual dispatch.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+  topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+statement: |-
+  Construct Derived, refer to it through const Base&, and print the virtual value call’s result.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Create the Derived object before making a reference to it.
+- Bind the general reference to that existing object, then call the virtual operation through the reference.
+elements:
+- type: block
+  location:
+    snippet: '    Derived derived;'
+  choices:
+  - snippet: '    Derived derived;'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Construct the actual specific object first.
+- type: block
+  location:
+    snippet: '    const Base& base{derived};'
+  choices:
+  - snippet: '    const Base& base{derived};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Refer to that object through the general interface without making a base-value copy.
+- type: block
+  location:
+    snippet: '    std::cout << base.value() << ''\n'';'
+  choices:
+  - snippet: '    std::cout << base.value() << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Make the virtual call through the reference; its actual Derived object selects the body.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    2

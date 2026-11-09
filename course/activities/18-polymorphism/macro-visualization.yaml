@@ -1,0 +1,134 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-18-polymorphism-macro-visualization
+title: Inheritance and virtual dispatch · step through
+description: Practice inheritance and virtual dispatch.
+pedagogy:
+  activity: macro-visualization
+  difficulty: intermediate
+  prereq_topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+  topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The value returned by Derived changes. Predict the virtual call through Base& without treating that reference as a sliced copy.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - actual object
+  - - createVariable
+    - reference type
+  - - createVariable
+    - selected body
+  - - createVariable
+    - returned value
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 10
+  - - _addValue
+    - Derived
+    - 0
+    - std::string
+  - - _assign
+    - actual object
+  - - showText
+    - Construct a complete Derived object.
+  - - _setLine
+    - 11
+  - - _addValue
+    - const Base&
+    - 0
+    - std::string
+  - - _assign
+    - reference type
+  - - _addValue
+    - Derived
+    - 0
+    - std::string
+  - - _assign
+    - actual object
+  - - showText
+    - The reference’s interface is Base, but its object remains the same Derived.
+  - - _setLine
+    - 7
+  - - _addValue
+    - Derived::value
+    - 0
+    - std::string
+  - - _assign
+    - selected body
+  - - _addValue
+    - '2'
+    - 0
+    - int
+  - - _assign
+    - returned value
+  - - showText
+    - The virtual call chooses this derived body and returns two.
+  - - _setLine
+    - 12
+  - - _addValue
+    - '2'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the result of that selected body.
+  lines:
+  - '#include <iostream>'
+  - struct Base {
+  - '    virtual int value() const { return 1; }'
+  - '    virtual ~Base() = default;'
+  - '};'
+  - 'struct Derived : Base {'
+  - '    int value() const override { return 2; }'
+  - '};'
+  - int main() {
+  - '    Derived derived;'
+  - '    const Base& base{derived};'
+  - '    std::cout << base.value() << ''\n'';'
+  - '}'

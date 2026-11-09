@@ -1,0 +1,79 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-19-class-templates-parsons-puzzles
+title: Class templates and specialization · arrange code
+description: Practice class templates and specialization.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+  topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    class Box {
+        T value_;
+    public:
+        explicit Box(T value) : value_{value} {}
+        T value() const { return value_; }
+    };
+    int main() {
+        Box<int> box{8};
+        int observed{box.value()};
+        std::cout << observed << '\n';
+    }
+statement: |-
+  Construct an integer Box, read its value into observed, and print that observation.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Choose and construct the concrete box before asking its observer for a value.
+- Printing the observed value is the last step. The supplied class definition handles the type pattern and
+  storage.
+elements:
+- type: block
+  location:
+    snippet: '    Box<int> box{8};'
+  choices:
+  - snippet: '    Box<int> box{8};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Choose the integer instantiation and construct one box with its stored value.
+- type: block
+  location:
+    snippet: '    int observed{box.value()};'
+  choices:
+  - snippet: '    int observed{box.value()};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Read the existing member through its const observer.
+- type: block
+  location:
+    snippet: '    std::cout << observed << ''\n'';'
+  choices:
+  - snippet: '    std::cout << observed << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Display the returned value; observation did not change the box.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    8

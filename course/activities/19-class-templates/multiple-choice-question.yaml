@@ -1,0 +1,40 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-19-class-templates-multiple-choice-question
+title: Class templates and specialization · explain why
+description: Practice class templates and specialization.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+  topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+question: Are Box<int> and Box<double> the same C++ type?
+include_choices: 3
+hints:
+- Compare “same source pattern” with “same completed type.” What argument was substituted for T in each case?
+- The different template argument lists are part of the type names, so the two instantiations are not the same
+  type.
+choices:
+- body: No; they are distinct types made from the same class pattern.
+  role: solution
+  explanations:
+  - body: Substituting int and double produces different instantiations. Sharing the template definition does
+      not make those types identical.
+- body: Yes; the template arguments disappear before C++ checks their member types.
+  role: distractor
+  explanations:
+  - body: The substituted type is used for the actual member and observer types; it is not erased before checking.
+- body: Yes; every Box object shares one stored T value.
+  role: distractor
+  explanations:
+  - body: Each box has its own member, and each instantiation has its chosen type. T is a placeholder in the
+      definition, not one shared object.

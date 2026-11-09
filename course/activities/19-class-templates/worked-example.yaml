@@ -1,0 +1,68 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-19-class-templates-worked-example
+title: Class templates and specialization · worked example
+description: Practice class templates and specialization.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+  topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    class Box {
+        T value_;
+    public:
+        explicit Box(T value) : value_{value} {}
+        T value() const { return value_; }
+    };
+    int main() {
+        Box<int> integer{8};
+        Box<double> fraction{2.5};
+        std::cout << integer.value() << ' ' << fraction.value() << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    8 2.5
+  console: |
+    8 2.5
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: template <typename T>
+  explanations:
+  - body: This class is a pattern whose member and result types are chosen by its template argument.
+- type: explanation
+  location:
+    snippet: 'explicit Box(T value) : value_{value} {}'
+  explanations:
+  - body: Store the constructor argument in the member with the same chosen type.
+- type: explanation
+  location:
+    snippet: T value() const { return value_; }
+  explanations:
+  - body: Return the stored value without changing it or converting it to a fixed type.
+- type: explanation
+  location:
+    snippet: Box<double> fraction{2.5};
+  explanations:
+  - body: This is a separate double-valued instantiation; its fraction should survive observation.

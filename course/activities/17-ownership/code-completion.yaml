@@ -1,0 +1,71 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-17-ownership-code-completion
+title: Value operators, ownership, and relationships · fill gaps
+description: Practice value operators, ownership, and relationships.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+  topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <memory>
+    #include <utility>
+    int main() {
+        auto original{std::make_unique<int>(7)};
+        auto owner{std::move(original)};
+        std::cout << *owner << ' ' << std::boolalpha << (original == nullptr) << '\n';
+    }
+statement: |-
+  Transfer the owned integer from first to second, so second owns it and first is empty afterward. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  7 true
+  ```
+hints:
+- unique_ptr represents one owner. Ask whether the second line should copy ownership or transfer it.
+- The original object should survive, but its responsible owner should change. Creating a different integer
+  does not achieve that.
+elements:
+- type: blank
+  location:
+    snippet: std::move(original)
+  choices:
+  - snippet: std::move(original)
+    role: solution
+    explanations:
+    - body: std::move permits transfer of exclusive ownership. Copying would try to give the same object two
+        unique owners; creating a new zero-valued object would not transfer the original.
+  - snippet: original
+    role: distractor
+    explanations:
+    - body: unique_ptr cannot be copied into another unique owner. The code needs an explicit ownership transfer,
+        not two separate objects both claiming exclusive ownership.
+  - snippet: std::make_unique<int>(0)
+    role: distractor
+    explanations:
+    - body: This creates a different integer containing zero. The original would still own its seven, so no
+        ownership was transferred.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    7 true

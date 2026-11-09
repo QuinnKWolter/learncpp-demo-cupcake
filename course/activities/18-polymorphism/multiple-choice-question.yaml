@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-18-polymorphism-multiple-choice-question
+title: Inheritance and virtual dispatch · explain why
+description: Practice inheritance and virtual dispatch.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+  topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+question: What can happen when a Derived object is copied into a Base variable by value?
+include_choices: 3
+hints:
+- Compare a reference to the original Derived with a new Base object copied from it.
+- The new Base stores only the Base portion. No later call can restore a discarded derived portion.
+choices:
+- body: Only the Base portion is copied into the new Base object.
+  role: solution
+  explanations:
+  - body: This is slicing. The new object really is a Base, rather than a reference to the original complete
+      Derived.
+- body: The declared Base variable automatically becomes a Derived variable.
+  role: distractor
+  explanations:
+  - body: The new variable’s type stays Base. Copying does not change that declared type or add a derived portion.
+- body: The Base variable is just another view of the original Derived object.
+  role: distractor
+  explanations:
+  - body: That describes a reference more closely. A by-value initialization creates a separate Base object
+      and loses the derived portion.

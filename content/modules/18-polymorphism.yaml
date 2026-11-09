@@ -1,0 +1,238 @@
+slug: 18-polymorphism
+title: Inheritance and virtual dispatch
+chapters: 24–25
+readings:
+- title: Inheritance
+  url: https://www.learncpp.com/cpp-tutorial/basic-inheritance-in-c/
+- title: Virtual functions
+  url: https://www.learncpp.com/cpp-tutorial/virtual-functions/
+- title: Virtual destructors
+  url: https://www.learncpp.com/cpp-tutorial/virtual-destructors-virtual-assignment-and-overriding-virtualization/
+topics:
+- inheritance
+- virtual-functions
+- override
+- slicing
+- polymorphism
+objectives:
+- Distinguish a reference’s declared type from its actual object.
+- Follow a virtual call and explain slicing.
+- Supply a matching const override.
+lesson: |-
+  ### Use a general interface for a more specific object
+  Inheritance lets a derived type extend a base type. `struct Derived : Base` says that a Derived includes a Base part. In the example, Base supplies a general value operation and Derived supplies a more specific one.
+
+  ```cpp
+  virtual int value() const { return 1; }
+  int value() const override { return 2; }
+  ```
+
+  `virtual` in the base makes a call through a base reference choose the operation for the actual object. `override` in the derived declaration asks the compiler to check that it really replaces a base virtual operation with a matching signature. Keep the trailing const in both signatures; removing it changes the operation being declared.
+
+  `const Base& base{derived};` refers to the same Derived object through the general Base interface. The reference does not copy or change the object. Its name and declared type are general, but the actual object is still Derived. Step through and Predict output follow this exact distinction.
+
+  ### Why a value copy is different
+  Creating a Base variable by copying a Derived keeps only the Base part. This is called slicing. The new object is a Base; it does not secretly keep being a complete Derived. Explain why asks about this difference between referring to an existing object and constructing a new base value.
+
+  ### Your rectangle supplies a promised operation
+  The coding task's Shape declares `virtual int area() const = 0;`. The `= 0` means derived classes must provide this operation; it is not a returned zero. Rectangle supplies its override. Its constructor saves the input dimensions in width_ and height_. Complete the return calculation for area, width times height. main deliberately calls through a `const Shape&`, so the inherited interface is part of the test.
+
+  The line `virtual ~Shape() = default;` declares a virtual destructor. `~Shape` names cleanup at the end of an object's lifetime; `= default` asks the compiler to supply its normal implementation. Virtual cleanup supports safely destroying derived objects through a base owner. Our examples keep objects local, but the interface demonstrates this useful habit without requiring manual allocation.
+
+  The puzzle connects creating a specific object, binding the general reference, and making the virtual call. The class definitions are supplied and visible; there is no missing implementation outside the activity.
+example: |
+  #include <iostream>
+  struct Base {
+      virtual int value() const { return 1; }
+      virtual ~Base() = default;
+  };
+  struct Derived : Base {
+      int value() const override { return 2; }
+  };
+  int main() {
+      Derived derived;
+      const Base& base{derived};
+      std::cout << base.value() << '\n';
+  }
+explanations:
+- - virtual int value() const
+  - The base permits selection according to the actual object when called through a base reference.
+- - int value() const override
+  - This is Derived’s replacement body; override checks that its signature matches.
+- - const Base& base{derived};
+  - Refer to the existing Derived without copying away its more specific part.
+- - base.value()
+  - Select the Derived implementation because this is a virtual call on the actual Derived object.
+blank: virtual int value() const
+wrong:
+- - int value() const
+  - Without virtual in Base, the call through Base& would select the base operation. The Derived override in
+    this program would also no longer match a virtual operation.
+- - static int value()
+  - A static member belongs to the class rather than an individual object, so it cannot be the virtual object
+    operation being replaced here.
+question: What can happen when a Derived object is copied into a Base variable by value?
+choices:
+- - Only the Base portion is copied into the new Base object.
+  - This is slicing. The new object really is a Base, rather than a reference to the original complete Derived.
+- - The declared Base variable automatically becomes a Derived variable.
+  - The new variable’s type stays Base. Copying does not change that declared type or add a derived portion.
+- - The Base variable is just another view of the original Derived object.
+  - That describes a reference more closely. A by-value initialization creates a separate Base object and loses
+    the derived portion.
+task: Complete Rectangle’s supplied `area() const override` body. Return its stored width_ multiplied by its
+  stored height_. The caller reads two dimensions from 1 to 100, constructs a Rectangle, and prints area through
+  a const Shape reference. The constructor, interface, and output are already complete.
+solution: |
+  #include <iostream>
+  struct Shape {
+      virtual int area() const = 0;
+      virtual ~Shape() = default;
+  };
+  class Rectangle : public Shape {
+      int width_, height_;
+  public:
+      Rectangle(int w, int h) : width_{w}, height_{h} {}
+      int area() const override {
+          return width_ * height_;
+      }
+  };
+  int main() {
+      int w{}, h{};
+      std::cin >> w >> h;
+      Rectangle rectangle{w, h};
+      const Shape& shape{rectangle};
+      std::cout << shape.area() << '\n';
+  }
+editable: '        return width_ * height_;'
+cases:
+- - Rectangle
+  - |
+    3 7
+  - |
+    21
+- - Square
+  - |
+    5 5
+  - |
+    25
+- - Thin
+  - |
+    1 9
+  - |
+    9
+- - Both dimensions at the upper bound
+  - |
+    100 100
+  - |
+    10000
+region_prompts:
+- Return the rectangle area from its stored dimensions.
+hints_by_type:
+  code-completion:
+  - The call is written through Base&. Which base declaration enables it to select the actual Derived object’s
+    operation?
+  - A same-named nonvirtual function is not enough for dispatch through a base reference. The base must declare
+    this as a virtual operation.
+  multiple-choice-question:
+  - Compare a reference to the original Derived with a new Base object copied from it.
+  - The new Base stores only the Base portion. No later call can restore a discarded derived portion.
+  free-coding:
+  - The constructor has already saved both dimensions. Area counts rows times columns, not the distance around
+    the edges.
+  - Return the product of width_ and height_. Keep the supplied const override signature so the call through
+    const Shape& can use it.
+  parsons-puzzles:
+  - Create the Derived object before making a reference to it.
+  - Bind the general reference to that existing object, then call the virtual operation through the reference.
+  parameterized-code-tracing:
+  - Name the actual object type separately from the reference type.
+  - For a virtual call through a reference to Derived, use Derived’s body even though the reference is declared
+    Base&.
+completion_explanation: virtual in the base enables dispatch through Base&. Removing it would make this call
+  use Base’s operation even though the original object is Derived.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+  blocks:
+  - snippet: '    Derived derived;'
+    explanation: Construct the actual specific object first.
+  - snippet: '    const Base& base{derived};'
+    explanation: Refer to that object through the general interface without making a base-value copy.
+  - snippet: '    std::cout << base.value() << ''\n'';'
+    explanation: Make the virtual call through the reference; its actual Derived object selects the body.
+  goal: Construct Derived, refer to it through const Base&, and print the virtual value call’s result.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+  token: '2'
+  values:
+  - 2
+  - 4
+  - 6
+  goal: The value returned by Derived changes. Predict the virtual call through Base& without treating that
+    reference as a sliced copy.
+  stdin: ''
+  context: int value() const override { return 2; }
+  walkthrough:
+  - snippet: Derived derived;
+    note: Construct a complete Derived object.
+    state:
+      actual object: Derived
+  - snippet: const Base& base{derived};
+    note: The reference’s interface is Base, but its object remains the same Derived.
+    state:
+      reference type: const Base&
+      actual object: Derived
+  - snippet: int value() const override { return 2; }
+    note: The virtual call chooses this derived body and returns two.
+    state:
+      selected body: Derived::value
+      returned value: 2
+  - snippet: std::cout << base.value() << '\n';
+    note: Print the result of that selected body.
+    state:
+      output: '2'
+  output: |
+    2
+  expected:
+  - |
+    2
+  - |
+    4
+  - |
+    6
+case_purposes:
+- Different dimensions distinguish area from perimeter.
+- A square still uses the stored dimensions through the same virtual interface.
+- A thin rectangle checks that neither dimension is ignored.
+- The upper dimensions check the complete permitted product.
+
+completion_goal: "Make calls through Base references use the Derived implementation of value when the actual object is Derived."

@@ -1,0 +1,52 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-06-operators-parameterized-code-tracing
+title: Operators, conditions, and bit flags · predict output
+description: Practice operators, conditions, and bit flags.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+  topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int age{14};
+        bool eligible{age >= 12 && age <= 17};
+        std::cout << std::boolalpha << eligible << '\n';
+    }
+statement: |-
+  The age changes. Check both inclusive bounds before predicting the true/false word.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Evaluate each age comparison separately. Write T or F beside each before combining them.
+- For AND, one false comparison makes the whole result false. The output is a word because boolalpha is supplied.
+elements:
+- type: parameter
+  location:
+    snippet: '14'
+  values:
+  - 14
+  - 11
+  - 18
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    true

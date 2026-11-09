@@ -1,0 +1,157 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-parsons-puzzles
+title: Input validation and meaningful tests · arrange code
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{};
+        if (!(std::cin >> score)) {
+            std::cout << "invalid\n";
+            return 0;
+        }
+        if (score >= 0 && score <= 100) {
+            std::cout << "valid\n";
+        } else {
+            std::cout << "invalid\n";
+        }
+    }
+statement: |-
+  Read a score, reject a failed read, and then print valid for 0–100 or invalid for other integers.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Reject invalid values before any branch can call them valid.
+- A successful conversion to int is only the first check. The allowed range is a separate decision.
+elements:
+- type: block
+  location:
+    snippet: '    int score{};'
+  choices:
+  - snippet: '    int score{};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create score before trying to read it.
+- type: block
+  location:
+    snippet: |2-
+          if (!(std::cin >> score)) {
+              std::cout << "invalid\n";
+              return 0;
+          }
+  choices:
+  - snippet: |2-
+          if (!(std::cin >> score)) {
+              std::cout << "invalid\n";
+              return 0;
+          }
+    role: solution
+    indent: 4
+    explanations:
+    - body: Reject a failed read and stop before testing the numeric range.
+- type: block
+  location:
+    snippet: |2-
+          if (score >= 0 && score <= 100) {
+              std::cout << "valid\n";
+          } else {
+              std::cout << "invalid\n";
+          }
+  choices:
+  - snippet: |2-
+          if (score >= 0 && score <= 100) {
+              std::cout << "valid\n";
+          } else {
+              std::cout << "invalid\n";
+          }
+    role: solution
+    indent: 4
+    explanations:
+    - body: After successful parsing, choose a result from the allowed inclusive range.
+testcases:
+- title: Inside
+  visible: true
+  stdin:
+  - '75'
+  stdout: |
+    valid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Reject invalid values before any branch can call them valid.
+- title: Lower
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    valid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Reject invalid values before any branch can call them valid.
+- title: Upper
+  visible: true
+  stdin:
+  - '100'
+  stdout: |
+    valid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Reject invalid values before any branch can call them valid.
+- title: Below
+  visible: true
+  stdin:
+  - '-1'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Reject invalid values before any branch can call them valid.
+- title: Above
+  visible: true
+  stdin:
+  - '101'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Reject invalid values before any branch can call them valid.
+- title: Text
+  visible: true
+  stdin:
+  - oops
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Reject invalid values before any branch can call them valid.

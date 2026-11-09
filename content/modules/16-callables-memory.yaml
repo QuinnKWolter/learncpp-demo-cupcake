@@ -1,0 +1,216 @@
+slug: 16-callables-memory
+title: Dynamic lifetime, recursion, and lambdas
+chapters: 19–20
+readings:
+- title: Dynamic allocation
+  url: https://www.learncpp.com/cpp-tutorial/dynamic-memory-allocation-with-new-and-delete/
+- title: Recursion
+  url: https://www.learncpp.com/cpp-tutorial/recursion/
+- title: Lambdas
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/
+topics:
+- dynamic-allocation
+- recursion
+- lambdas
+- captures
+objectives:
+- Distinguish a captured copy from its original.
+- Trace an ordinary lambda call.
+- Write a recursive calculation with a stopping case.
+lesson: |-
+  ### Keep a small function as a value
+  A **lambda** is a small function written where it is needed. You can store it in a variable and call it later. In this example, value is its ordinary parameter; bonus comes from the surrounding function.
+
+  ```cpp
+  auto addBonus{[bonus](int value) { return value + bonus; }};
+  ```
+
+  The capture list `[bonus]` stores a copy of bonus when this lambda is created. Changing the original bonus later does not change that saved copy. `[&bonus]` would instead refer to the original integer and see later changes, as long as that integer remains alive. An empty capture list `[]` does not make the local bonus available to the body.
+
+  The worked example changes the original bonus before calling addBonus. Step through and Predict output ask you to keep the saved copy and the original in separate rows. The puzzle puts creation of that copy before the later change. This order explains the result; it is not an arbitrary code arrangement.
+
+  ### A function can call itself on a smaller problem
+  **Recursion** means a function calls itself. To calculate a sum through n, it can add n to the sum through n − 1. Every call has its own n. A base case supplies an answer without another call: for a sum through zero, that answer is zero.
+
+  For a sum through 3, think “3 plus the sum through 2,” then “2 plus the sum through 1,” and finally reach zero. After reaching the base case, the answers come back up through the waiting calls. Each step needs both a stopping rule and progress toward it. A base case written after an unconditional recursive call comes too late.
+
+  ### Your coding task
+  Complete sumTo for inputs from 0 to 100. Handle zero directly, then make the remaining case smaller. Keep printing in main, after the function has returned the completed sum. The range keeps the number of calls and the resulting integer small enough for this exercise.
+
+  ### Where storage fits
+  The wider reading distinguishes automatic objects, whose lifetimes follow a scope, from dynamically created objects, whose owner must arrange cleanup. We do not use raw new/delete in this module's exercises; the next module introduces a library owner. The important shared habit is to ask what a function retains and whether that retained object is still alive when the function uses it.
+example: |
+  #include <iostream>
+  int main() {
+      int bonus{3};
+      auto addBonus{[bonus](int value) { return value + bonus; }};
+      bonus = 9;
+      std::cout << addBonus(4) << '\n';
+  }
+explanations:
+- - '[bonus]'
+  - Capture a copy now. This is when the lambda stores the bonus it will use on later calls.
+- - (int value) { return value + bonus; }
+  - Each call supplies value; the body adds the separately captured bonus and returns the total.
+- - bonus = 9;
+  - Change the original variable. The earlier copy inside the lambda stays as it was.
+- - addBonus(4)
+  - Use four as the parameter and the captured bonus as the other operand.
+blank: '[bonus]'
+wrong:
+- - '[&bonus]'
+  - A reference capture would keep referring to the original bonus. The later assignment to nine would then
+    affect the call, unlike the saved-copy behavior requested.
+- - '[]'
+  - With an empty capture list, the body cannot use this surrounding local bonus. The function needs to retain
+    the value it depends on.
+question: What makes a recursive sum through n stop correctly when n reaches zero?
+choices:
+- - Return the zero-case answer before making another recursive call.
+  - At zero there is no smaller sum to request. Returning directly lets the waiting calls finish.
+- - Make the recursive call first, then check whether n is zero.
+  - At zero that call happens before the check, so the intended stopping condition cannot stop it in time.
+- - Keep calling the same function with the same n until it stops by itself.
+  - Repeating an unchanged problem does not move toward a stopping case.
+task: Complete `sumTo(int n)` using recursion (a call to the same function with a smaller input). Return the
+  sum of whole numbers from 1 through n. For n = 0, return zero without another call. Input is n from 0 to
+  100. The supplied main prints the returned sum once.
+solution: |
+  #include <iostream>
+  int sumTo(int n) {
+      if (n == 0) { return 0; }
+      return n + sumTo(n - 1);
+  }
+  int main() {
+      int n{};
+      std::cin >> n;
+      std::cout << sumTo(n) << '\n';
+  }
+editable: |2-
+      if (n == 0) { return 0; }
+      return n + sumTo(n - 1);
+cases:
+- - Base
+  - |
+    0
+  - |
+    0
+- - One
+  - |
+    1
+  - |
+    1
+- - Several
+  - |
+    5
+  - |
+    15
+- - Limit
+  - |
+    100
+  - |
+    5050
+region_prompts:
+- Handle the zero case, then return n plus the smaller sum.
+hints_by_type:
+  code-completion:
+  - Look at when the lambda is created and when bonus changes. Should its saved bonus follow that later change?
+  - A value capture stores a copy at creation time. A reference capture follows the original instead. Choose
+    the one that preserves the original bonus.
+  multiple-choice-question:
+  - The zero case must be reached without first making yet another recursive call.
+  - Changing n toward zero is necessary, but at zero the function must return an answer directly. Check the
+    order of those two decisions.
+  free-coding:
+  - First decide what the sum should be when there is nothing to add. That case should return without calling
+    sumTo again.
+  - For a positive n, combine n with the sum for the smaller input n − 1. Eventually that smaller input reaches
+    your stopping case.
+  parsons-puzzles:
+  - Capture a value before changing the original if you want the function to retain the earlier value.
+  - The later call uses whichever value was captured at creation. Put the final print after the original has
+    changed so the difference is observable.
+  parameterized-code-tracing:
+  - Make separate rows for the original bonus and the copy kept by the lambda.
+  - The later assignment changes only the original row. Add the call argument to the captured row when predicting
+    output.
+completion_explanation: A value capture keeps the earlier bonus. Reference capture would make the same body
+  observe the later assignment instead.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+  blocks:
+  - snippet: '    int bonus{3};'
+    explanation: The original value must exist before a lambda can capture it.
+  - snippet: '    auto addBonus{[bonus](int value) { return value + bonus; }};'
+    explanation: Capture the earlier bonus before the later assignment changes the original.
+  - snippet: '    bonus = 9;'
+    explanation: Change only the original variable after the captured copy has been created.
+  - snippet: '    std::cout << addBonus(4) << ''\n'';'
+    explanation: Call the lambda and display the sum using its earlier captured copy.
+  goal: Capture the original bonus, change the original afterward, and print addBonus(4) using the saved copy.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+  token: '3'
+  values:
+  - 3
+  - 0
+  - 7
+  goal: The bonus at capture time changes. Predict the later lambda call using its saved copy, not the changed
+    original.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int bonus{3};
+    note: The original starts at three.
+    state:
+      original bonus: 3
+  - snippet: auto addBonus{[bonus](int value) { return value + bonus; }};
+    note: Create the lambda now and save a copy of three.
+    state:
+      captured bonus: 3
+  - snippet: bonus = 9;
+    note: Only the original variable changes to nine.
+    state:
+      original bonus: 9
+  - snippet: addBonus(4)
+    note: The call argument four is added to the saved three.
+    state:
+      call value: 4
+      returned value: 7
+  - snippet: std::cout << addBonus(4) << '\n';
+    note: Print the returned seven. The captured copy was not changed by the assignment.
+    state:
+      output: '7'
+  output: |
+    7
+  expected:
+  - |
+    7
+  - |
+    4
+  - |
+    11
+case_purposes:
+- Zero is the direct stopping case; no recursive call is needed.
+- One reaches the stopping case after one smaller request.
+- Several levels check the return path as well as descent.
+- The upper input bound checks progress and the full resulting sum.
+
+completion_goal: "Make addBonus retain a copy of bonus when the lambda is created. Later changes to the original should not affect that saved copy."

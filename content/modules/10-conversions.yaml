@@ -1,0 +1,199 @@
+slug: 10-conversions
+title: Conversions and type deduction
+chapters: '10'
+readings:
+- title: Explicit casts
+  url: https://www.learncpp.com/cpp-tutorial/explicit-type-conversion-casting-and-static-cast/
+- title: auto
+  url: https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/
+topics:
+- conversions
+- narrowing
+- auto
+- type-aliases
+objectives:
+- Predict the type deduced by auto.
+- Identify where integer division loses a fraction.
+- Keep a fractional result until output formatting.
+lesson: |-
+  ### auto follows the initializer you actually wrote
+  `auto` asks the compiler to work out a variable's type from its starting expression. It does not mean that the variable can later change type. In `auto count{6};`, 6 is an integer literal, so count is an int.
+
+  ```cpp
+  auto whole{9 / 2};
+  auto fraction{static_cast<double>(9) / 2};
+  ```
+
+  In the first line, both operands are integers. Division drops the fraction and produces an int result. In the second line, the explicit conversion supplies a double before division, so the result and the deduced variable type are double. `auto` accepts those results; it does not correct an earlier calculation for us.
+
+  ### Place the conversion where the information would be lost
+  `static_cast<double>(9 / 2)` converts a quotient that has already lost its fractional part. `static_cast<double>(9) / 2` instead lets the division keep a fractional result. Fill gaps asks you to choose between these points in the calculation. Step through and Predict output keep the two results side by side.
+
+  ### Your coding task: total divided by count
+  The supplied code reads total and count as integers. Count is guaranteed to be positive. Create average from a fractional division and leave the supplied output line in place. `<iomanip>`, `std::fixed`, and `std::setprecision(2)` make the display use exactly two digits after the decimal point, such as 4.50. The formatting is provided so you can focus on the calculation.
+
+  ### A helpful compiler check
+  Braces reject many conversions that could lose information, called narrowing conversions. For example, `int n{2.5};` is rejected rather than quietly throwing away the half. A type alias gives an existing type another name; it does not create a new kind of numeric storage. These wider chapter ideas explain why clear type choices matter, but no activity requires an unfamiliar alias.
+
+  When checking an answer, ask what type each operand has **before** the operation. Then ask what type its result has. Do those in that order, before thinking about the destination variable's name.
+example: |
+  #include <iostream>
+  int main() {
+      auto whole{9 / 2};
+      auto fraction{static_cast<double>(9) / 2};
+      std::cout << whole << ' ' << fraction << '\n';
+  }
+explanations:
+- - auto whole{9 / 2};
+  - The initializer computes an integer quotient. auto therefore makes whole an int.
+- - static_cast<double>(9) / 2
+  - Convert the numerator first, so the division can keep its fractional part.
+- - auto fraction
+  - Because its initializer is a double expression, this variable is also a double.
+blank: static_cast<double>(9) / 2
+wrong:
+- - static_cast<double>(9 / 2)
+  - The division inside the cast happens first with two integers. Casting that finished quotient cannot restore
+    its discarded fraction.
+- - 9 / 2
+  - The two literals are integers, so this keeps whole-number division. auto only follows the result; it does
+    not change the arithmetic.
+question: What type does `auto count{6};` deduce?
+choices:
+- - int
+  - The initializer is the whole-number literal six, whose type here is int. That fixes count’s type.
+- - double
+  - auto follows the initializer’s actual type, not a possible later use with fractional numbers.
+- - A flexible type that can later become double.
+  - C++ deduces one fixed type at this declaration. auto does not make a variable dynamically change its type
+    later.
+task: The supplied code reads total (0–10000) and count (1–100) as integers. Create average with auto using
+  fractional division, so a half or other fraction is not lost. The supplied output line prints average to
+  two decimal places; do not add another output statement.
+solution: |
+  #include <iostream>
+  #include <iomanip>
+  int main() {
+      int total{}, count{};
+      std::cin >> total >> count;
+      auto average{static_cast<double>(total) / count};
+      std::cout << std::fixed << std::setprecision(2) << average << '\n';
+  }
+editable: '    auto average{static_cast<double>(total) / count};'
+cases:
+- - Fraction
+  - |
+    9 2
+  - |
+    4.50
+- - Third
+  - |
+    10 3
+  - |
+    3.33
+- - Zero
+  - |
+    0 7
+  - |
+    0.00
+- - Single item
+  - |
+    9 1
+  - |
+    9.00
+region_prompts:
+- Calculate average as a fractional quotient using auto.
+hints_by_type:
+  code-completion:
+  - Compare “convert, then divide” with “divide, then convert.” In which order can the half still survive?
+  - The conversion needs to affect an operand of /. A double destination alone comes too late.
+  multiple-choice-question:
+  - Look only at the initializer 6, not at how the variable might be used later.
+  - auto uses the type of that expression. A plain whole-number literal here has type int.
+  free-coding:
+  - Use 9 and 2 as a trial input. The requested two-decimal answer needs to retain a half before formatting
+    it.
+  - Convert total before dividing by count. auto will then deduce the fractional result type.
+  parsons-puzzles:
+  - The input values must be ready before you calculate the quotient.
+  - Keep the conversion next to the numerator in the calculation, then print the completed result.
+  parameterized-code-tracing:
+  - Work out each division independently. One is entirely integer arithmetic; the other has a converted operand.
+  - Write both results in output order with the separating space. Do not give the integer expression a fraction
+    just because the next expression has one.
+completion_explanation: The operand conversion changes how division is performed. A conversion around a completed
+  integer quotient would only convert the already truncated answer.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        auto whole{9 / 2};
+        auto fraction{static_cast<double>(9) / 2};
+        std::cout << whole << ' ' << fraction << '\n';
+    }
+  blocks:
+  - snippet: '    auto whole{9 / 2};'
+    explanation: Create the whole-number quotient. This and the fractional quotient can be calculated in either
+      order.
+  - snippet: '    auto fraction{static_cast<double>(9) / 2};'
+    explanation: Create the fractional quotient with a converted operand; it does not depend on whole.
+  - snippet: '    std::cout << whole << '' '' << fraction << ''\n'';'
+    explanation: Both quotients must exist before this comparison can be printed.
+  goal: Calculate both quotient forms, then print the whole-number result followed by the fractional result.
+  stdin: ''
+  groups:
+    0: independent-quotients
+    1: independent-quotients
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int total{9};
+        int count{2};
+        auto average{static_cast<double>(total) / count};
+        std::cout << average << '\n';
+    }
+  token: '9'
+  values:
+  - 9
+  - 8
+  - 1
+  goal: The total changes. Follow the operand conversion and predict the quotient printed with the stream’s
+    default formatting.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int total{9};
+    note: The walkthrough total is nine, stored as an integer.
+    state:
+      total: 9
+  - snippet: int count{2};
+    note: The count is two.
+    state:
+      count: 2
+  - snippet: auto average{static_cast<double>(total) / count};
+    note: A converted operand gives fractional division; auto follows that double result.
+    state:
+      average: '4.5'
+      deduced type: double
+  - snippet: std::cout << average << '\n';
+    note: Print four and a half. This trace does not request a fixed number of decimal places.
+    state:
+      output: '4.5'
+  output: |
+    4.5
+  expected:
+  - |
+    4.5
+  - |
+    4
+  - |
+    0.5
+case_purposes:
+- A half must survive until two-decimal output formatting.
+- A non-terminating decimal is rounded by the supplied formatting.
+- A zero total remains a valid average with positive count.
+- A count of one should leave the numeric total unchanged before formatting.
+
+completion_goal: "Preserve a fractional quotient when dividing total by count. Converting the result after integer division would be too late."

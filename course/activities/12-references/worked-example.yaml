@@ -1,0 +1,67 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-12-references-worked-example
+title: References, pointers, and optional results · worked example
+description: Practice references, pointers, and optional results.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - overloading
+  - function-templates
+  - constexpr
+  topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    void addBonus(int& score) {
+        score += 5;
+    }
+    int main() {
+        int score{10};
+        addBonus(score);
+        int* pointer{&score};
+        if (pointer != nullptr) {
+            std::cout << *pointer << '\n';
+        }
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    15
+  console: |
+    15
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: int& score
+  explanations:
+  - body: This parameter is an alias for the caller’s score, so a change here is visible there.
+- type: explanation
+  location:
+    snippet: score += 5;
+  explanations:
+  - body: Increase the shared integer by five; no second return value is needed.
+- type: explanation
+  location:
+    snippet: int* pointer{&score};
+  explanations:
+  - body: Keep the address of the live score. This is a pointer to it, not a copy of its value.
+- type: explanation
+  location:
+    snippet: '*pointer'
+  explanations:
+  - body: After checking for a non-null pointer, read the current integer at that address.

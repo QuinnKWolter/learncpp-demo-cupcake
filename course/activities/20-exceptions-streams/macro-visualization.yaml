@@ -1,0 +1,126 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-20-exceptions-streams-macro-visualization
+title: Exceptions and stream-based I/O · step through
+description: Practice exceptions and stream-based i/o.
+pedagogy:
+  activity: macro-visualization
+  difficulty: intermediate
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - exceptions
+  - stack-unwinding
+  - streams
+  - parsing
+  - file-io
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <stdexcept>
+    int checkedDivide(int numerator, int denominator) {
+        if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+        return numerator / denominator;
+    }
+    int main() {
+        int denominator{0};
+        try {
+            std::cout << checkedDivide(12, denominator) << '\n';
+        } catch (const std::exception& error) {
+            std::cout << error.what() << '\n';
+        }
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The denominator changes. Decide whether the function returns normally or throws, then predict the one printed line.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - denominator
+  - - createVariable
+    - path
+  - - createVariable
+    - message
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 8
+  - - _addValue
+    - '0'
+    - 0
+    - int
+  - - _assign
+    - denominator
+  - - showText
+    - Use a zero divisor for this fixed walkthrough.
+  - - _setLine
+    - 4
+  - - _addValue
+    - throw
+    - 0
+    - std::string
+  - - _assign
+    - path
+  - - _addValue
+    - zero
+    - 0
+    - std::string
+  - - _assign
+    - message
+  - - showText
+    - The guard detects invalid division and throws instead of calculating a quotient.
+  - - _setLine
+    - 11
+  - - _addValue
+    - handler
+    - 0
+    - std::string
+  - - _assign
+    - path
+  - - showText
+    - Control reaches the handler; it does not continue with a normal quotient in try.
+  - - _setLine
+    - 12
+  - - _addValue
+    - zero
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the exception message on the error path.
+  lines:
+  - '#include <iostream>'
+  - '#include <stdexcept>'
+  - int checkedDivide(int numerator, int denominator) {
+  - '    if (denominator == 0) { throw std::invalid_argument{"zero"}; }'
+  - '    return numerator / denominator;'
+  - '}'
+  - int main() {
+  - '    int denominator{0};'
+  - '    try {'
+  - '        std::cout << checkedDivide(12, denominator) << ''\n'';'
+  - '    } catch (const std::exception& error) {'
+  - '        std::cout << error.what() << ''\n'';'
+  - '    }'
+  - '}'

@@ -1,0 +1,52 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-parameterized-code-tracing
+title: Debug by tracing, then testing · predict output
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+statement: |-
+  The original left value changes. Predict the two values printed after the complete swap.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Use a small table with a column for each variable. Change only one column at each assignment.
+- When you read right = saved, use saved’s current value—not the new value of left.
+elements:
+- type: parameter
+  location:
+    snippet: '2'
+  values:
+  - 2
+  - 0
+  - -4
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    9 2

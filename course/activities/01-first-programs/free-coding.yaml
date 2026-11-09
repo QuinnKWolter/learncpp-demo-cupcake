@@ -1,0 +1,100 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-free-coding
+title: Your first C++ programs · write code
+description: Practice your first c++ programs.
+pedagogy:
+  activity: free-coding
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int n{};
+        std::cin >> n;
+        std::cout << n * n << '\n';
+    }
+statement: |-
+  The supplied program reads one whole number n from −1000 to 1000. In the marked line, print its square: n multiplied by itself. Finish the output line with a newline. The reading code is already complete, so you do not need an input prompt.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Try the task by hand for n = 3 and n = −3. In both cases multiply the input by itself.
+- Use the existing n twice in one expression, send that result to std::cout, and finish the line. You do not
+  need to change the input code.
+elements:
+- type: editable
+  location:
+    snippet: '    std::cout << n * n << ''\n'';'
+  placeholder: '    // Calculate the square of n and print it, followed by a newline.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      int main() {
+          int n{};
+          std::cin >> n;
+- type: locked
+  location:
+    snippet: |2
+
+      }
+testcases:
+- title: Positive
+  visible: true
+  stdin:
+  - '7'
+  stdout: |
+    49
+  feedback:
+    on_pass:
+    - A positive input checks the basic multiplication.
+    on_fail:
+    - A positive input checks the basic multiplication. Try the task by hand for n = 3 and n = −3. In both
+      cases multiply the input by itself.
+- title: Zero
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - Zero checks that the result is calculated rather than replaced with a fixed positive answer.
+    on_fail:
+    - Zero checks that the result is calculated rather than replaced with a fixed positive answer. Try the
+      task by hand for n = 3 and n = −3. In both cases multiply the input by itself.
+- title: Negative
+  visible: true
+  stdin:
+  - '-4'
+  stdout: |
+    16
+  feedback:
+    on_pass:
+    - A negative input checks that both factors come from the same signed input.
+    on_fail:
+    - A negative input checks that both factors come from the same signed input. Try the task by hand for n
+      = 3 and n = −3. In both cases multiply the input by itself.
+- title: Largest magnitude
+  visible: true
+  stdin:
+  - '-1000'
+  stdout: |
+    1000000
+  feedback:
+    on_pass:
+    - The largest permitted magnitude checks the complete stated input range.
+    on_fail:
+    - The largest permitted magnitude checks the complete stated input range. Try the task by hand for n =
+      3 and n = −3. In both cases multiply the input by itself.

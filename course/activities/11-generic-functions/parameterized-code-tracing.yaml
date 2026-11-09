@@ -1,0 +1,52 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-parameterized-code-tracing
+title: Overloads, templates, and constexpr · predict output
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) { return a < b ? b : a; }
+    int main() {
+        int a{3};
+        int b{8};
+        std::cout << larger(a, b) << '\n';
+    }
+statement: |-
+  The first argument changes. Choose the larger returned value, including the equal-values case.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Give a and b the displayed argument values, then evaluate a < b once.
+- Only the selected branch becomes the returned value; the two values are not added together.
+elements:
+- type: parameter
+  location:
+    snippet: '3'
+  values:
+  - 3
+  - 12
+  - 8
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    8

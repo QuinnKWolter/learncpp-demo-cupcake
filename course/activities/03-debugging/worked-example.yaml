@@ -1,0 +1,62 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-worked-example
+title: Debug by tracing, then testing · worked example
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    9 2
+  console: |
+    9 2
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: int left{2}, right{9};
+  explanations:
+  - body: These are the two original values. We want them in opposite places at the end.
+- type: explanation
+  location:
+    snippet: int saved{left};
+  explanations:
+  - body: Keep a copy of the old left value before anything overwrites left.
+- type: explanation
+  location:
+    snippet: left = right;
+  explanations:
+  - body: Only left changes here. right still holds its original value.
+- type: explanation
+  location:
+    snippet: right = saved;
+  explanations:
+  - body: Recover the preserved old left value. Both originals now survive, in their new places.

@@ -1,0 +1,52 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-parameterized-code-tracing
+title: Choose the right arithmetic type · predict output
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int sum{15};
+        int count{4};
+        int whole{sum / count};
+        double average{static_cast<double>(sum) / count};
+        std::cout << whole << ' ' << average << '\n';
+    }
+statement: |-
+  The total changes. Predict the integer quotient followed by the fractional quotient, in that order.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- First work out which division uses two integers. Then find the division with a double operand.
+- Track both results separately and preserve the space between them in the output.
+elements:
+- type: parameter
+  location:
+    snippet: '15'
+  values:
+  - 15
+  - 16
+  - 3
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    3 3.75

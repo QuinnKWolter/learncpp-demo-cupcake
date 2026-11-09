@@ -1,0 +1,55 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-worked-example
+title: Choose the right arithmetic type · worked example
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int sum{15}, count{4};
+        double average{static_cast<double>(sum) / count};
+        std::cout << sum / count << ' ' << average << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    3 3.75
+  console: |
+    3 3.75
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: int sum{15}, count{4};
+  explanations:
+  - body: Both starting values are integers. Their types matter to the division.
+- type: explanation
+  location:
+    snippet: static_cast<double>(sum)
+  explanations:
+  - body: For this calculation, use a double version of sum. The original sum is still an int.
+- type: explanation
+  location:
+    snippet: sum / count
+  explanations:
+  - body: This second expression still has two int operands, so it drops the fractional part before printing.

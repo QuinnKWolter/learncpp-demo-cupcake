@@ -1,0 +1,56 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-08-control-flow-parameterized-code-tracing
+title: Branches and loops · predict output
+description: Practice branches and loops.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+  topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int limit{3};
+        int total{0};
+        for (int i{1}; i <= limit; ++i) {
+            total += i;
+        }
+        std::cout << total << '\n';
+    }
+statement: |-
+  The limit changes. Add the values reached by the loop, including the limit when it is visited.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Make columns for i and total. Update total inside the body, then update i before the next test.
+- For limit zero, the first condition already fails. For other limits, include the last value only if it still
+  passes <=.
+elements:
+- type: parameter
+  location:
+    snippet: '3'
+  values:
+  - 3
+  - 0
+  - 5
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    6

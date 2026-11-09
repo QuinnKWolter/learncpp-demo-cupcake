@@ -1,0 +1,53 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-10-conversions-parameterized-code-tracing
+title: Conversions and type deduction · predict output
+description: Practice conversions and type deduction.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+  topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int total{9};
+        int count{2};
+        auto average{static_cast<double>(total) / count};
+        std::cout << average << '\n';
+    }
+statement: |-
+  The total changes. Follow the operand conversion and predict the quotient printed with the stream’s default formatting.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Work out each division independently. One is entirely integer arithmetic; the other has a converted operand.
+- Write both results in output order with the separating space. Do not give the integer expression a fraction
+  just because the next expression has one.
+elements:
+- type: parameter
+  location:
+    snippet: '9'
+  values:
+  - 9
+  - 8
+  - 1
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    4.5

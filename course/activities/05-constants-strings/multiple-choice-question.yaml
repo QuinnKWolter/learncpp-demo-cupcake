@@ -1,0 +1,40 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-05-constants-strings-multiple-choice-question
+title: Constants and text with clear lifetimes · explain why
+description: Practice constants and text with clear lifetimes.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+  topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+question: Which statement about `std::string_view` is correct?
+include_choices: 3
+hints:
+- 'Ask who actually stores the characters: the string, or the view looking at it?'
+- A view does not make its own copy. Its usefulness depends on the original characters still being available.
+choices:
+- body: It must not outlive the characters it views.
+  role: solution
+  explanations:
+  - body: The view borrows access. It cannot safely use characters after the object storing those characters
+      is gone.
+- body: It always owns a separate copy of the text.
+  role: distractor
+  explanations:
+  - body: A view keeps access information rather than copying all characters. std::string supplies ownership
+      of its stored text.
+- body: Creating a view keeps every temporary string alive for as long as needed.
+  role: distractor
+  explanations:
+  - body: Borrowing a view does not extend a temporary string’s lifetime. The original storage still needs
+      to remain alive.

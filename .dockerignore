@@ -1,0 +1,20 @@
+# Only deployable sources enter the build context (never local compilers or research downloads).
+*
+!Dockerfile
+!requirements.lock
+!server.py
+!LICENSE
+!tools/
+!tools/**
+!content/
+!content/**
+!course/
+!course/**
+!schemas/
+!schemas/**
+!web/
+!web/**
+**/__pycache__/
+**/*.pyc
+**/.DS_Store
+**/Thumbs.db

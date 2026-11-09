@@ -1,0 +1,70 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-parsons-puzzles
+title: Choose the right arithmetic type · arrange code
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int sum{15}, count{4};
+        double average{static_cast<double>(sum) / count};
+        std::cout << sum / count << ' ' << average << '\n';
+    }
+statement: |-
+  Print the integer quotient and fractional quotient for a total of 15 shared among 4 items.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- The total and count must exist before they can be used in the quotient.
+- Make the fractional calculation before printing it; a display setting alone cannot fix integer division.
+elements:
+- type: block
+  location:
+    snippet: '    int sum{15}, count{4};'
+  choices:
+  - snippet: '    int sum{15}, count{4};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create the two integer inputs that the following division needs.
+- type: block
+  location:
+    snippet: '    double average{static_cast<double>(sum) / count};'
+  choices:
+  - snippet: '    double average{static_cast<double>(sum) / count};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Convert before division to keep the fractional part.
+- type: block
+  location:
+    snippet: '    std::cout << sum / count << '' '' << average << ''\n'';'
+  choices:
+  - snippet: '    std::cout << sum / count << '' '' << average << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Compare the integer quotient with the already calculated fractional average.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    3 3.75

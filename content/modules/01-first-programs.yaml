@@ -1,0 +1,208 @@
+slug: 01-first-programs
+title: Your first C++ programs
+chapters: 0–1
+readings:
+- title: Build a program
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-cpp-development/
+- title: Initialization
+  url: https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/
+topics:
+- program-structure
+- initialization
+- input-output
+- arithmetic
+objectives:
+- Read and initialize whole-number values.
+- Connect arithmetic with one line of output.
+- Use a small input example to test a calculation.
+lesson: |-
+  ### Start with a small program
+  A program is a list of instructions for the computer. C++ begins running your instructions inside `main`. The braces `{` and `}` surround the instructions that belong to it. A semicolon `;` ends a statement. `#include <iostream>` makes the standard input and output tools available; you do not need to write those tools yourself.
+
+  An `int` stores a whole number. `int boxes{4};` creates a variable named `boxes` and gives it the starting value 4. Empty braces, as in `int n{};`, give an integer the value zero. In this course we always give local numbers a starting value before using them.
+
+  ### Read a calculation, one line at a time
+  `*` multiplies two numbers. With four boxes and three items in each, `boxes * perBox` counts the items altogether. The result is stored in `total`; the two starting values stay the same.
+
+  ```cpp
+  int boxes{4};
+  int perBox{3};
+  int total{boxes * perBox};
+  std::cout << total << '\n';
+  ```
+
+  `std::cout` is the output stream: each `<<` sends the next value to it. The `std::` part says that this tool comes from the standard library. `'\n'` means “start a new line.” It is not part of the number being printed. The example prints one number on its own line.
+
+  ### When the starting value comes from input
+  `std::cin >> n;` reads a whole number into `n`. The Write code activity already includes that line. Your job is to calculate the square: a number multiplied by itself. For example, the square of 3 is 9; the square of −3 is also 9. You do not need a power function or a loop.
+
+  ### Your route through the activities
+  - Read the annotations in Worked example; Step through shows how the values change.
+  - Arrange code and Fill gaps focus on the box calculation. Use “items altogether” to choose the operation.
+  - Explain why asks about empty braces. Predict output changes the number of boxes; use the number shown in your program.
+  - Write code asks for a square instead. Only the marked line is yours to edit; the other lines read the input and start/end the program.
+
+  ### Check your reasoning
+  A compiler translates source code into a runnable program and checks its syntax. A successful build does not guarantee the calculation is right. Use a positive number, zero, and a negative number to check your square. Read a compiler error from its first line; one missing semicolon can cause several later messages.
+example: |
+  #include <iostream>
+  int main() {
+      int boxes{4};
+      int perBox{3};
+      int total{boxes * perBox};
+      std::cout << total << '\n';
+  }
+explanations:
+- - int boxes{4};
+  - 'Start here: boxes now holds 4. The braces give it that value before the calculation uses it.'
+- - int perBox{3};
+  - perBox means “items in one box.” It holds 3; it is a different quantity from the number of boxes.
+- - int total{boxes * perBox};
+  - Count equal groups by multiplying. The result is stored in total; boxes and perBox keep their values.
+- - std::cout << total << '\n';
+  - Read this as “print total, then start a new line.” It prints the stored answer rather than recalculating
+    or changing it.
+blank: boxes * perBox
+wrong:
+- - boxes + perBox
+  - Adding four and three counts the two labels once each. The goal is four equal groups, each containing three
+    items.
+- - boxes / perBox
+  - Division asks how many groups fit into something; it does not count all items in the supplied groups.
+question: What is the best description of `int n{};` inside a function?
+choices:
+- - It starts n at zero.
+  - Empty braces supply the integer’s starting zero. No input operation is needed.
+- - It leaves n without a starting value.
+  - This confuses empty braces with leaving initialization out entirely. The braces make the integer start
+    at zero.
+- - It waits for the user to enter n.
+  - A declaration creates the variable. Reading a later input is a separate std::cin operation.
+task: 'The supplied program reads one whole number n from −1000 to 1000. In the marked line, print its square:
+  n multiplied by itself. Finish the output line with a newline. The reading code is already complete, so you
+  do not need an input prompt.'
+solution: |
+  #include <iostream>
+  int main() {
+      int n{};
+      std::cin >> n;
+      std::cout << n * n << '\n';
+  }
+editable: '    std::cout << n * n << ''\n'';'
+cases:
+- - Positive
+  - |
+    7
+  - |
+    49
+- - Zero
+  - |
+    0
+  - |
+    0
+- - Negative
+  - |
+    -4
+  - |
+    16
+- - Largest magnitude
+  - |
+    -1000
+  - |
+    1000000
+region_prompts:
+- Calculate the square of n and print it, followed by a newline.
+hints_by_type:
+  code-completion:
+  - Ask what “four groups of three” means. Which operation combines equal-sized groups?
+  - Addition would count the two labels once each. Think about counting every item inside every box.
+  multiple-choice-question:
+  - Compare `int n{};` with a declaration that gives n an explicit starting number.
+  - 'Empty braces have a specific meaning for an integer: they provide a starting value even without input.'
+  free-coding:
+  - Try the task by hand for n = 3 and n = −3. In both cases multiply the input by itself.
+  - Use the existing n twice in one expression, send that result to std::cout, and finish the line. You do
+    not need to change the input code.
+  parsons-puzzles:
+  - A variable must exist before a calculation can use it. Find the two starting quantities first.
+  - The total needs both quantities. Printing needs the total. Which steps therefore have to come earlier?
+  parameterized-code-tracing:
+  - Write down the displayed boxes value and the fixed perBox value before doing arithmetic.
+  - There is only one output statement. Multiply the two current values and write that one number.
+completion_explanation: Multiplication counts every item in every box. Adding the quantities would count boxes
+  and items-per-box as though they were the same kind of thing.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int boxes{4};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+  blocks:
+  - snippet: '    int boxes{4};'
+    explanation: Choose the number of boxes before the total can use it.
+  - snippet: '    int perBox{3};'
+    explanation: Choose how many items each box holds. This can be prepared before or after boxes.
+  - snippet: '    int total{boxes * perBox};'
+    explanation: Once both counts exist, multiply them to get the total.
+  - snippet: '    std::cout << total << ''\n'';'
+    explanation: Display the total only after it has been calculated.
+  goal: Build a program that counts the items in four boxes with three items in each and prints that total.
+  stdin: ''
+  groups:
+    0: starting-counts
+    1: starting-counts
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int boxes{2};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+  token: '2'
+  values:
+  - 2
+  - 4
+  - 7
+  goal: The number of boxes changes between versions. Predict the single total printed for the values on your
+    screen.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int boxes{2};
+    note: Start with two boxes in this walkthrough.
+    state:
+      boxes: 2
+  - snippet: int perBox{3};
+    note: Each box holds three items; the number of boxes is unchanged.
+    state:
+      perBox: 3
+  - snippet: int total{boxes * perBox};
+    note: Two equal groups of three contain six items altogether.
+    state:
+      total: 6
+  - snippet: std::cout << total << '\n';
+    note: Print the stored total and then end the line.
+    state:
+      output: '6'
+  output: |
+    6
+  expected:
+  - |
+    6
+  - |
+    12
+  - |
+    21
+case_purposes:
+- A positive input checks the basic multiplication.
+- Zero checks that the result is calculated rather than replaced with a fixed positive answer.
+- A negative input checks that both factors come from the same signed input.
+- The largest permitted magnitude checks the complete stated input range.
+
+completion_goal: "Count all items in four boxes with three items in each, then print the total."

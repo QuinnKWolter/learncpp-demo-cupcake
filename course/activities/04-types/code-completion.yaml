@@ -1,0 +1,66 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-code-completion
+title: Choose the right arithmetic type · fill gaps
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int sum{15}, count{4};
+        double average{static_cast<double>(sum) / count};
+        std::cout << sum / count << ' ' << average << '\n';
+    }
+statement: |-
+  Print a whole-number quotient followed by a fractional quotient for 15 divided by 4. Keep the fractional part in the second calculation. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  3 3.75
+  ```
+hints:
+- Look at the operand types immediately before division. Are both still integers?
+- The conversion must happen before the fractional part is lost. Converting a finished integer quotient cannot
+  bring it back.
+elements:
+- type: blank
+  location:
+    snippet: static_cast<double>(sum)
+  choices:
+  - snippet: static_cast<double>(sum)
+    role: solution
+    explanations:
+    - body: The conversion supplies a double operand before division. Without it, the calculation discards
+        the fraction; the destination variable cannot recover it.
+  - snippet: sum
+    role: distractor
+    explanations:
+    - body: Without a double operand, both inputs to division stay integers. Their fractional remainder is
+        dropped before average receives anything.
+  - snippet: static_cast<int>(sum)
+    role: distractor
+    explanations:
+    - body: sum is already an int. Converting it to the same type does not make the division fractional.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    3 3.75

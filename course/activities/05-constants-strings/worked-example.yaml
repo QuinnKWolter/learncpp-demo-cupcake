@@ -1,0 +1,56 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-05-constants-strings-worked-example
+title: Constants and text with clear lifetimes · worked example
+description: Practice constants and text with clear lifetimes.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+  topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        const std::string word{"cupcake"};
+        std::cout << std::boolalpha << word.contains("cake") << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    true
+  console: |
+    true
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: const std::string word{"cupcake"};
+  explanations:
+  - body: word owns these seven characters. const tells us that this example will not change them.
+- type: explanation
+  location:
+    snippet: word.contains("cake")
+  explanations:
+  - body: Search anywhere in cupcake for the sequence cake. This is a C++23 string operation.
+- type: explanation
+  location:
+    snippet: std::boolalpha
+  explanations:
+  - body: Display a true/false answer as words so it is easier to read.

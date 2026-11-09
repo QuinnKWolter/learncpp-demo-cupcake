@@ -1,0 +1,64 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-worked-example
+title: Input validation and meaningful tests · worked example
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{};
+        if (!(std::cin >> score)) {
+            std::cout << "invalid\n";
+            return 0;
+        }
+        if (score >= 0 && score <= 100) {
+            std::cout << "valid\n";
+        } else {
+            std::cout << "invalid\n";
+        }
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin:
+  - '75'
+  stdout: |
+    valid
+  console: |
+    valid
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: '!(std::cin >> score)'
+  explanations:
+  - body: Try reading first. This condition becomes true if the input cannot be read as an integer.
+- type: explanation
+  location:
+    snippet: return 0;
+  explanations:
+  - body: After reporting the bad read, stop main so the program does not continue with an untrusted value.
+- type: explanation
+  location:
+    snippet: score >= 0 && score <= 100
+  explanations:
+  - body: A readable integer is acceptable only when it meets both bounds, including zero and 100.

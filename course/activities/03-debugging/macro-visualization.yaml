@@ -1,0 +1,123 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-macro-visualization
+title: Debug by tracing, then testing · step through
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: macro-visualization
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The original left value changes. Predict the two values printed after the complete swap.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - left
+  - - createVariable
+    - right
+  - - createVariable
+    - saved
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 3
+  - - _addValue
+    - '2'
+    - 0
+    - int
+  - - _assign
+    - left
+  - - _addValue
+    - '9'
+    - 0
+    - int
+  - - _assign
+    - right
+  - - showText
+    - Record both originals before changing either one.
+  - - _setLine
+    - 4
+  - - _addValue
+    - '2'
+    - 0
+    - int
+  - - _assign
+    - saved
+  - - showText
+    - Keep the original left in saved.
+  - - _setLine
+    - 5
+  - - _addValue
+    - '9'
+    - 0
+    - int
+  - - _assign
+    - left
+  - - showText
+    - Replace left with nine. saved still protects the old two.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '2'
+    - 0
+    - int
+  - - _assign
+    - right
+  - - showText
+    - Replace right with that preserved two.
+  - - _setLine
+    - 7
+  - - _addValue
+    - 9 2
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the final left and right separated by a space.
+  lines:
+  - '#include <iostream>'
+  - int main() {
+  - '    int left{2}, right{9};'
+  - '    int saved{left};'
+  - '    left = right;'
+  - '    right = saved;'
+  - '    std::cout << left << '' '' << right << ''\n'';'
+  - '}'

@@ -1,0 +1,62 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-07-scope-worked-example
+title: Scope, duration, and linkage · worked example
+description: Practice scope, duration, and linkage.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+  topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int nextTicket() {
+        static int ticket{0};
+        return ++ticket;
+    }
+    int main() {
+        std::cout << nextTicket() << ' ';
+        std::cout << nextTicket() << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    1 2
+  console: |
+    1 2
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: static int ticket{0};
+  explanations:
+  - body: Create this counter once. Later calls keep using the value it has reached.
+- type: explanation
+  location:
+    snippet: return ++ticket;
+  explanations:
+  - body: Increase the remembered count, then give that new number back to the caller.
+- type: explanation
+  location:
+    snippet: std::cout << nextTicket() << ' ';
+  explanations:
+  - body: This first call completes before the following output statement begins. Its space separates the two
+      printed tickets.

@@ -1,0 +1,67 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-05-constants-strings-code-completion
+title: Constants and text with clear lifetimes · fill gaps
+description: Practice constants and text with clear lifetimes.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+  topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        const std::string word{"cupcake"};
+        std::cout << std::boolalpha << word.contains("cake") << '\n';
+    }
+statement: |-
+  Ask whether the text cupcake contains the smaller text cake anywhere inside it, and print the Boolean answer as a word. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  true
+  ```
+hints:
+- “Contains” means anywhere in the text, not only at the beginning.
+- The word cupcake ends with cake. A beginning-only check and an empty-string check ask different questions.
+elements:
+- type: blank
+  location:
+    snippet: word.contains("cake")
+  choices:
+  - snippet: word.contains("cake")
+    role: solution
+    explanations:
+    - body: contains searches the whole string. A word can contain cake even though it begins with cup, so
+        starts_with would answer a different question.
+  - snippet: word.starts_with("cake")
+    role: distractor
+    explanations:
+    - body: This checks only the beginning. cupcake starts with cup, but cake appears later and should still
+        be found.
+  - snippet: word.empty()
+    role: distractor
+    explanations:
+    - body: This asks whether the text has no characters. It does not ask whether the letters cake occur inside
+        it.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    true

@@ -1,0 +1,58 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-parameterized-code-tracing
+title: Input validation and meaningful tests · predict output
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{60};
+        if (score < 0 || score > 100) {
+            std::cout << "invalid\n";
+        } else if (score >= 60) {
+            std::cout << "pass\n";
+        } else {
+            std::cout << "retry\n";
+        }
+    }
+statement: |-
+  The score changes. Choose the one branch reached after range validation, then predict its printed word.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- First decide whether the displayed score is inside the allowed range. If it is, choose the correct threshold
+  branch.
+- Only one output branch is taken. Preserve the exact word selected by that branch.
+elements:
+- type: parameter
+  location:
+    snippet: '60'
+    context: int score{60};
+  values:
+  - 60
+  - 59
+  - 101
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    pass

@@ -1,0 +1,223 @@
+slug: 12-references
+title: References, pointers, and optional results
+chapters: '12'
+readings:
+- title: References
+  url: https://www.learncpp.com/cpp-tutorial/lvalue-references/
+- title: Pointers
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-pointers/
+- title: Optional
+  url: https://www.learncpp.com/cpp-tutorial/stdoptional/
+topics:
+- references
+- pointers
+- nullability
+- optional
+- lifetime
+objectives:
+- Update a caller’s value through a reference.
+- Read through a valid pointer.
+- Explain why an address cannot extend a local object’s lifetime.
+lesson: |-
+  ### Two names can refer to one value
+  An ordinary int parameter receives its own copy of an argument. An `int&` parameter instead refers to the caller's existing integer. This is a **reference**: another way to name the same object. In `addBonus(int& score)`, changing score changes the integer supplied by the caller. `void` means the function performs an action without returning a separate result value.
+
+  ```cpp
+  void addBonus(int& score) {
+      score += 5;
+  }
+  ```
+
+  Do not draw a second independent score in your trace table. The caller and this parameter refer to one integer. A `const int&` permits reading through that reference but not changing the integer through it.
+
+  ### A pointer stores where an object is
+  `int* pointer{&score};` stores the address of score. Here `&score` means “the address of score,” whereas the & in the parameter declaration means a reference type. `*pointer` accesses the integer at that stored address. A pointer can be `nullptr`, meaning it does not point at an object; check before using `*pointer` when null is possible.
+
+  The example's pointer refers to the same score that addBonus changed. It does not create another score, and it does not take responsibility for keeping that object alive.
+
+  ### A name cannot keep a destroyed object alive
+  A local automatic integer normally exists only until its function call ends. Returning its address would leave the caller with a pointer to an object whose lifetime is over. Returning a reference has the same problem. Explain why asks about this lifetime issue, not whether an address can be copied.
+
+  The wider reading introduces `std::optional<T>` for a result that may be absent: check whether it contains a value before reading it. It is an alternative result design, not a requirement in these exercises.
+
+  ### Your action: replace negative values with zero
+  Write code supplies `clampToZero(int& value)`. If value is negative, assign zero; otherwise leave it alone. Do not add an output statement or return a number: main prints the caller's integer after your action. Step through, Arrange code, and Predict output make the effect of an alias visible so you can connect a changed parameter with a changed caller.
+example: |
+  #include <iostream>
+  void addBonus(int& score) {
+      score += 5;
+  }
+  int main() {
+      int score{10};
+      addBonus(score);
+      int* pointer{&score};
+      if (pointer != nullptr) {
+          std::cout << *pointer << '\n';
+      }
+  }
+explanations:
+- - int& score
+  - This parameter is an alias for the caller’s score, so a change here is visible there.
+- - score += 5;
+  - Increase the shared integer by five; no second return value is needed.
+- - int* pointer{&score};
+  - Keep the address of the live score. This is a pointer to it, not a copy of its value.
+- - '*pointer'
+  - After checking for a non-null pointer, read the current integer at that address.
+blank: int& score
+wrong:
+- - int score
+  - A value parameter would be a separate copy. Updating that copy would leave the caller’s original score
+    unchanged.
+- - const int& score
+  - A const reference permits reading the caller’s score but prohibits this update. The function is specifically
+    meant to change that score.
+question: Why is returning a pointer to a local automatic integer unsafe?
+choices:
+- - The local integer’s lifetime ends when its function returns.
+  - The copied address does not keep an object alive. Using it afterward would access an object whose lifetime
+    has ended.
+- - Pointers are unable to store local addresses at all.
+  - A pointer can hold a local address while that object is alive. The issue is keeping that address after
+    the object dies.
+- - Returning the pointer automatically makes the local integer live forever.
+  - Returning an address transfers information about a location, not ownership or an extension of the local
+    object’s lifetime.
+task: Complete the action `clampToZero(int& value)`. Set a negative value to zero, and leave zero or a positive
+  value unchanged. Input is one integer from −1000 to 1000. The caller passes its integer by reference and
+  prints it after your function returns. Change only the marked body; the function returns no separate result.
+solution: |
+  #include <iostream>
+  void clampToZero(int& value) {
+      if (value < 0) {
+          value = 0;
+      }
+  }
+  int main() {
+      int value{};
+      std::cin >> value;
+      clampToZero(value);
+      std::cout << value << '\n';
+  }
+editable: |2-
+      if (value < 0) {
+          value = 0;
+      }
+cases:
+- - Negative
+  - |
+    -7
+  - |
+    0
+- - Zero
+  - |
+    0
+  - |
+    0
+- - Positive
+  - |
+    8
+  - |
+    8
+- - Largest allowed positive input
+  - |
+    1000
+  - |
+    1000
+region_prompts:
+- Change value to zero only if it is negative.
+hints_by_type:
+  code-completion:
+  - Ask whether addBonus should change a private copy or the caller’s actual score.
+  - The body adds to score. A const reference would prevent that; a by-value parameter would change only a
+    copy.
+  multiple-choice-question:
+  - Follow the local integer’s lifetime through the end of its function call.
+  - Copying an address does not keep the addressed object alive. Ask whether there is still a valid object
+    to use after return.
+  free-coding:
+  - 'There are two cases: a negative value must change; zero or a positive value must stay as it is.'
+  - Use an if condition and assign through the supplied reference only in the negative case. The caller will
+    observe that same integer.
+  parsons-puzzles:
+  - Create a live integer before binding a reference to it.
+  - A change through the reference affects that integer. Print after the change so the effect is visible.
+  parameterized-code-tracing:
+  - Draw one box for the integer and connect both the original name and its reference to it.
+  - An assignment through the alias changes that one box. Read the original name from the updated box when
+    printing.
+completion_explanation: The reference lets the function update the caller’s score. A value parameter would
+  update only a copy; a const reference would prohibit this update.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int score{10};
+        int& alias{score};
+        alias += 5;
+        std::cout << score << '\n';
+    }
+  blocks:
+  - snippet: '    int score{10};'
+    explanation: The actual integer must exist before a reference can name it.
+  - snippet: '    int& alias{score};'
+    explanation: Bind another name to that same integer; do not create a separate copy.
+  - snippet: '    alias += 5;'
+    explanation: Modify the shared integer through its reference.
+  - snippet: '    std::cout << score << ''\n'';'
+    explanation: Read the updated object through its original name.
+  goal: Create score, bind an alias to it, increase the shared value by five, then print score.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int score{10};
+        int& alias{score};
+        alias += 5;
+        std::cout << score << '\n';
+    }
+  token: '10'
+  values:
+  - 10
+  - 0
+  - -3
+  goal: The original score changes. Follow the update through its alias and predict the value printed through
+    the original name.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int score{10};
+    note: Create one integer holding ten.
+    state:
+      score: 10
+  - snippet: int& alias{score};
+    note: Bind an alias to that same object, rather than copying ten into another integer.
+    state:
+      alias: refers to score
+  - snippet: alias += 5;
+    note: Update the one shared integer through its alias.
+    state:
+      score: 15
+  - snippet: std::cout << score << '\n';
+    note: The original name reads the updated shared value.
+    state:
+      output: '15'
+  output: |
+    15
+  expected:
+  - |
+    15
+  - |
+    5
+  - |
+    2
+case_purposes:
+- A negative input must be changed to zero.
+- Zero is already valid and should remain unchanged.
+- A positive input must not be reset.
+- A larger positive input should also remain exactly as supplied.
+
+completion_goal: "Make addBonus change the caller's score by five through its parameter; main then reads the changed score through a valid pointer."

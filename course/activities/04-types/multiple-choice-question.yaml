@@ -1,0 +1,39 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-04-types-multiple-choice-question
+title: Choose the right arithmetic type · explain why
+description: Practice choose the right arithmetic type.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - debugging
+  - semantic-errors
+  - tracing
+  topics:
+  - integers
+  - floating-point
+  - integer-division
+  - type-conversion
+question: What value does `double x{7 / 2};` initialize x with?
+include_choices: 3
+hints:
+- Evaluate the expression inside the braces first, using the types of 7 and 2.
+- Only after that expression finishes is its result used to initialize the double. Which information has already
+  been discarded?
+choices:
+- body: '3.0'
+  role: solution
+  explanations:
+  - body: The integer operands divide first, producing three; that result then becomes a double.
+- body: '3.5'
+  role: distractor
+  explanations:
+  - body: This assumes the destination type changes an earlier operation. Both operands were still integers
+      when division happened.
+- body: The declaration is rejected because an integer result can never initialize a double.
+  role: distractor
+  explanations:
+  - body: The constant integer result three can be represented exactly as a double, so this declaration is
+      allowed.

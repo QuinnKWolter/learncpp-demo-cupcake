@@ -1,0 +1,126 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-macro-visualization
+title: Dynamic lifetime, recursion, and lambdas · step through
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: macro-visualization
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The bonus at capture time changes. Predict the later lambda call using its saved copy, not the changed original.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - original bonus
+  - - createVariable
+    - captured bonus
+  - - createVariable
+    - call value
+  - - createVariable
+    - returned value
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 3
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - original bonus
+  - - showText
+    - The original starts at three.
+  - - _setLine
+    - 4
+  - - _addValue
+    - '3'
+    - 0
+    - int
+  - - _assign
+    - captured bonus
+  - - showText
+    - Create the lambda now and save a copy of three.
+  - - _setLine
+    - 5
+  - - _addValue
+    - '9'
+    - 0
+    - int
+  - - _assign
+    - original bonus
+  - - showText
+    - Only the original variable changes to nine.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '4'
+    - 0
+    - int
+  - - _assign
+    - call value
+  - - _addValue
+    - '7'
+    - 0
+    - int
+  - - _assign
+    - returned value
+  - - showText
+    - The call argument four is added to the saved three.
+  - - _setLine
+    - 6
+  - - _addValue
+    - '7'
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the returned seven. The captured copy was not changed by the assignment.
+  lines:
+  - '#include <iostream>'
+  - int main() {
+  - '    int bonus{3};'
+  - '    auto addBonus{[bonus](int value) { return value + bonus; }};'
+  - '    bonus = 9;'
+  - '    std::cout << addBonus(4) << ''\n'';'
+  - '}'

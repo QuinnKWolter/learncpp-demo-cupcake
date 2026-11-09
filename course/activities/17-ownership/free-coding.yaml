@@ -1,0 +1,116 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-17-ownership-free-coding
+title: Value operators, ownership, and relationships · write code
+description: Practice value operators, ownership, and relationships.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+  topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Score { int points{}; };
+    Score operator+(const Score& a, const Score& b) {
+        return Score{a.points + b.points};
+    }
+    int main() {
+        Score a{}, b{};
+        std::cin >> a.points >> b.points;
+        Score total{a + b};
+        std::cout << total.points << ' ' << a.points << ' ' << b.points << '\n';
+    }
+statement: |-
+  Complete the supplied `operator+` function for Score. Return a new Score whose points equal a.points + b.points, without changing a or b. The caller reads two point values from 0 to 1000, adds the Scores, and prints the total followed by both original values. Use the named points members; output is already supplied.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- The function should produce a new value while leaving both inputs alone. Read their points members and combine
+  those numbers.
+- Use Score{...} to create the returned record. Do not update either const-reference operand; the caller prints
+  them to check this promise.
+elements:
+- type: editable
+  location:
+    snippet: '    return Score{a.points + b.points};'
+  placeholder: '    // Return a new Score containing the sum; keep both input records unchanged.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      struct Score { int points{}; };
+      Score operator+(const Score& a, const Score& b) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          Score a{}, b{};
+          std::cin >> a.points >> b.points;
+          Score total{a + b};
+          std::cout << total.points << ' ' << a.points << ' ' << b.points << '\n';
+      }
+testcases:
+- title: Normal
+  visible: true
+  stdin:
+  - 7 8
+  stdout: |
+    15 7 8
+  feedback:
+    on_pass:
+    - The total is new, while both original operands must retain their values.
+    on_fail:
+    - The total is new, while both original operands must retain their values. The function should produce
+      a new value while leaving both inputs alone. Read their points members and combine those numbers.
+- title: Zero
+  visible: true
+  stdin:
+  - 0 0
+  stdout: |
+    0 0 0
+  feedback:
+    on_pass:
+    - Two zero values remain valid value objects.
+    on_fail:
+    - Two zero values remain valid value objects. The function should produce a new value while leaving both
+      inputs alone. Read their points members and combine those numbers.
+- title: Different
+  visible: true
+  stdin:
+  - 12 3
+  stdout: |
+    15 12 3
+  feedback:
+    on_pass:
+    - Unequal operands help catch a function that accidentally reuses only one member.
+    on_fail:
+    - Unequal operands help catch a function that accidentally reuses only one member. The function should
+      produce a new value while leaving both inputs alone. Read their points members and combine those numbers.
+- title: Large operands stay unchanged
+  visible: true
+  stdin:
+  - 1000 1000
+  stdout: |
+    2000 1000 1000
+  feedback:
+    on_pass:
+    - Large values must be added without mutating either original.
+    on_fail:
+    - Large values must be added without mutating either original. The function should produce a new value
+      while leaving both inputs alone. Read their points members and combine those numbers.

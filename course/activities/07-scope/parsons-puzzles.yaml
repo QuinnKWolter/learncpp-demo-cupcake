@@ -1,0 +1,78 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-07-scope-parsons-puzzles
+title: Scope, duration, and linkage · arrange code
+description: Practice scope, duration, and linkage.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+  topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int nextTicket() {
+        static int ticket{0};
+        return ++ticket;
+    }
+    int main() {
+        int first{nextTicket()};
+        int second{nextTicket()};
+        std::cout << first << ' ' << second << '\n';
+    }
+statement: |-
+  Request the first ticket, then the second, and print them in that order. nextTicket and its persistent counter are already supplied.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Create the call sequence in the same order that tickets should be issued.
+- The static counter belongs inside nextTicket. In main, each call should finish before the following result
+  is printed.
+elements:
+- type: block
+  location:
+    snippet: '    int first{nextTicket()};'
+  choices:
+  - snippet: '    int first{nextTicket()};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Issue and retain the first ticket before requesting the second one.
+- type: block
+  location:
+    snippet: '    int second{nextTicket()};'
+  choices:
+  - snippet: '    int second{nextTicket()};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: The same static counter continues from the first call, giving the next ticket.
+- type: block
+  location:
+    snippet: '    std::cout << first << '' '' << second << ''\n'';'
+  choices:
+  - snippet: '    std::cout << first << '' '' << second << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Print the first and second results in their issue order.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    1 2

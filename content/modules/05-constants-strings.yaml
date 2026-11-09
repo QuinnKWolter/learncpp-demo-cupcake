@@ -1,0 +1,192 @@
+slug: 05-constants-strings
+title: Constants and text with clear lifetimes
+chapters: '5'
+readings:
+- title: Constants
+  url: https://www.learncpp.com/cpp-tutorial/constant-variables-named-constants/
+- title: Strings
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring/
+- title: String views
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring_view/
+topics:
+- const
+- constexpr
+- strings
+- string-lifetimes
+objectives:
+- Read, measure, and query stored text.
+- Use C++23 string contains.
+- Distinguish owning a string from viewing someone else’s characters.
+lesson: |-
+  ### Keep text in a string
+  `std::string` stores text and owns its characters. Add `<string>` when using it. A string can contain spaces; `.size()` reports how many characters are stored. We use ASCII input in these activities so “characters” has the simple meaning you expect.
+
+  `const` means the object cannot be changed after its initial value is supplied. The example's word stays fixed while we ask a question about it.
+
+  ### A C++23 question about text
+  ```cpp
+  const std::string word{"cupcake"};
+  std::cout << std::boolalpha << word.contains("cake") << '\n';
+  ```
+
+  `.contains("cake")` asks whether that sequence of letters appears anywhere in word. It returns a `bool`, a true/false value. `std::boolalpha` tells the output stream to display the words true and false rather than 1 and 0. `contains` became a standard string operation in C++23. It differs from `starts_with`, which only checks the beginning, and `empty`, which asks whether the string has zero characters.
+
+  ### Read a whole line
+  For the Write code task, `std::getline(std::cin, text)` reads a whole line, including spaces, into text. It does not store the ending newline. The input code has no earlier numeric read, so there is no leftover newline to handle. Call `.size()` on the resulting string and print that number. An empty input line is valid and has length zero.
+
+  ### Owning text and viewing text
+  Explain why compares a string with `std::string_view`. A view is a way to look at characters stored somewhere else; it does not keep its own copy. If that other storage disappears, the view cannot safely be used. Imagine borrowing a book: the borrowing slip does not create a second book. The examples keep their text alive for every use; you do not need to construct a dangling view.
+
+  The walkthrough follows the contains question. The puzzle builds a small text question, and Predict output changes text before checking its length. In every activity, check whether the operation asks about length, contents, or ownership—these are different questions.
+example: |
+  #include <iostream>
+  #include <string>
+  int main() {
+      const std::string word{"cupcake"};
+      std::cout << std::boolalpha << word.contains("cake") << '\n';
+  }
+explanations:
+- - const std::string word{"cupcake"};
+  - word owns these seven characters. const tells us that this example will not change them.
+- - word.contains("cake")
+  - Search anywhere in cupcake for the sequence cake. This is a C++23 string operation.
+- - std::boolalpha
+  - Display a true/false answer as words so it is easier to read.
+blank: word.contains("cake")
+wrong:
+- - word.starts_with("cake")
+  - This checks only the beginning. cupcake starts with cup, but cake appears later and should still be found.
+- - word.empty()
+  - This asks whether the text has no characters. It does not ask whether the letters cake occur inside it.
+question: Which statement about `std::string_view` is correct?
+choices:
+- - It must not outlive the characters it views.
+  - The view borrows access. It cannot safely use characters after the object storing those characters is gone.
+- - It always owns a separate copy of the text.
+  - A view keeps access information rather than copying all characters. std::string supplies ownership of its
+    stored text.
+- - Creating a view keeps every temporary string alive for as long as needed.
+  - Borrowing a view does not extend a temporary string’s lifetime. The original storage still needs to remain
+    alive.
+task: Read the complete input line into the supplied std::string text using std::getline. Then print its character
+  count and a newline. Spaces count; the line-ending newline does not. Inputs have at most 200 ASCII characters,
+  and an empty line is allowed.
+solution: |
+  #include <iostream>
+  #include <string>
+  int main() {
+      std::string text;
+      std::getline(std::cin, text);
+      std::cout << text.size() << '\n';
+  }
+editable: |2-
+      std::getline(std::cin, text);
+      std::cout << text.size() << '\n';
+cases:
+- - Spaces
+  - |
+    Ada Lovelace
+  - |
+    12
+- - Empty
+  - |2+
+
+  - |
+    0
+- - Word
+  - |
+    C++
+  - |
+    3
+- - Spaces are stored characters
+  - "   \n"
+  - |
+    3
+region_prompts:
+- Read the whole input line, then print its character count.
+hints_by_type:
+  code-completion:
+  - “Contains” means anywhere in the text, not only at the beginning.
+  - The word cupcake ends with cake. A beginning-only check and an empty-string check ask different questions.
+  multiple-choice-question:
+  - 'Ask who actually stores the characters: the string, or the view looking at it?'
+  - A view does not make its own copy. Its usefulness depends on the original characters still being available.
+  free-coding:
+  - Read the entire line before measuring it. An input like Ada Lovelace contains a space that should count.
+  - getline leaves the ending newline out of the string. Its size therefore already matches the requested character
+    count.
+  parsons-puzzles:
+  - Create the text before asking a question about its characters.
+  - The printed result comes from the text operation, so the question must be evaluated before its result is
+    sent to output.
+  parameterized-code-tracing:
+  - Use the text shown in your version of the program. Count its letters and spaces, not its quote marks.
+  - The ending newline is an output instruction, not another character inside the stored word.
+completion_explanation: contains searches the whole string. A word can contain cake even though it begins with
+  cup, so starts_with would answer a different question.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        const std::string word{"cupcake"};
+        bool found{word.contains("cake")};
+        std::cout << std::boolalpha << found << '\n';
+    }
+  blocks:
+  - snippet: '    const std::string word{"cupcake"};'
+    explanation: Create the owning text before searching it.
+  - snippet: '    bool found{word.contains("cake")};'
+    explanation: Ask the C++23 contains question and store its true/false answer.
+  - snippet: '    std::cout << std::boolalpha << found << ''\n'';'
+    explanation: Display the stored answer as a word, not a numeric flag.
+  goal: Create the word cupcake, ask whether it contains cake, and print the Boolean answer as a word.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    #include <string>
+    int main() {
+        const std::string word{"cat"};
+        std::cout << word.size() << '\n';
+    }
+  token: '"cat"'
+  values:
+  - '"cat"'
+  - '"ice cream"'
+  - '""'
+  goal: The stored text changes. Count its ASCII characters, including any spaces, and predict the printed
+    length.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: const std::string word{"cat"};
+    note: Store the three letters c, a, and t. The quote marks delimit the text; they are not stored characters.
+    state:
+      word: cat
+  - snippet: word.size()
+    note: Ask how many characters are stored. No newline was stored in this literal.
+    state:
+      length: 3
+  - snippet: std::cout << word.size() << '\n';
+    note: Print the length, then add an output newline.
+    state:
+      output: '3'
+  output: |
+    3
+  expected:
+  - |
+    3
+  - |
+    9
+  - |
+    0
+case_purposes:
+- A space inside a name must be read and counted.
+- An empty line is a real input with zero characters.
+- Punctuation inside an ASCII word counts as characters too.
+- A whitespace-only line must not be trimmed before measuring.
+
+completion_goal: "Ask whether the text cupcake contains the smaller text cake anywhere inside it, and print the Boolean answer as a word."

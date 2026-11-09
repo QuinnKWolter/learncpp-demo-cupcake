@@ -1,0 +1,134 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-14-classes-free-coding
+title: Classes protect their invariants · write code
+description: Practice classes protect their invariants.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void add(int amount) {
+            if (amount > 0) {
+                value_ += amount;
+            }
+        }
+        int value() const { return value_; }
+    };
+    int main() {
+        int start{}, amount{};
+        std::cin >> start >> amount;
+        Counter counter{start};
+        counter.add(amount);
+        const Counter& observed{counter};
+        std::cout << observed.value() << '\n';
+    }
+statement: |-
+  Complete the marked Counter::add body. Add amount to the stored value_ only when amount is positive; ignore zero and negative requests. Input is a starting count from 0 to 1000 and an amount from −1000 to 1000. The caller constructs the object, requests the update, and prints through the const observer.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Decide whether the requested amount is allowed before changing value_.
+- A rejected zero or negative amount should leave the stored value exactly as it was. Update only in the positive
+  branch.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+              if (amount > 0) {
+                  value_ += amount;
+              }
+  placeholder: '        // Accept a positive amount and update value_; leave it unchanged otherwise.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      class Counter {
+          int value_{};
+      public:
+          explicit Counter(int start) : value_{start} {}
+          void add(int amount) {
+- type: locked
+  location:
+    snippet: |2
+
+          }
+          int value() const { return value_; }
+      };
+      int main() {
+          int start{}, amount{};
+          std::cin >> start >> amount;
+          Counter counter{start};
+          counter.add(amount);
+          const Counter& observed{counter};
+          std::cout << observed.value() << '\n';
+      }
+testcases:
+- title: Positive
+  visible: true
+  stdin:
+  - 10 5
+  stdout: |
+    15
+  feedback:
+    on_pass:
+    - A positive request increases the stored count once.
+    on_fail:
+    - A positive request increases the stored count once. Decide whether the requested amount is allowed before
+      changing value_.
+- title: Negative
+  visible: true
+  stdin:
+  - 10 -5
+  stdout: |
+    10
+  feedback:
+    on_pass:
+    - A rejected negative request must preserve the old value.
+    on_fail:
+    - A rejected negative request must preserve the old value. Decide whether the requested amount is allowed
+      before changing value_.
+- title: Zero
+  visible: true
+  stdin:
+  - 0 0
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - A zero request should not introduce any change.
+    on_fail:
+    - A zero request should not introduce any change. Decide whether the requested amount is allowed before
+      changing value_.
+- title: Largest allowed positive addition
+  visible: true
+  stdin:
+  - 0 1000
+  stdout: |
+    1000
+  feedback:
+    on_pass:
+    - A large accepted request still follows the same guarded update.
+    on_fail:
+    - A large accepted request still follows the same guarded update. Decide whether the requested amount is
+      allowed before changing value_.

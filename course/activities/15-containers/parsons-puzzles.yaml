@@ -1,0 +1,86 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-parsons-puzzles
+title: Vectors, arrays, iterators, and algorithms · arrange code
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <algorithm>
+    #include <iostream>
+    #include <vector>
+    int main() {
+        std::vector<int> values{5, 1, 3};
+        std::sort(values.begin(), values.end());
+        for (int value : values) {
+            std::cout << value << ' ';
+        }
+        std::cout << '\n';
+    }
+statement: |-
+  Create the three-element vector, sort all of it, then print its elements in increasing order.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Create the vector before using begin and end to describe it.
+- The range loop prints the current order. Put sorting before it if the required display is sorted.
+elements:
+- type: block
+  location:
+    snippet: '    std::vector<int> values{5, 1, 3};'
+  choices:
+  - snippet: '    std::vector<int> values{5, 1, 3};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create the existing elements before describing their range.
+- type: block
+  location:
+    snippet: '    std::sort(values.begin(), values.end());'
+  choices:
+  - snippet: '    std::sort(values.begin(), values.end());'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Sort the complete vector before visiting it for output.
+- type: block
+  location:
+    snippet: |2-
+          for (int value : values) {
+              std::cout << value << ' ';
+          }
+          std::cout << '\n';
+  choices:
+  - snippet: |2-
+          for (int value : values) {
+              std::cout << value << ' ';
+          }
+          std::cout << '\n';
+    role: solution
+    indent: 4
+    explanations:
+    - body: Visit the sorted elements and finish their display with a newline.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: "1 3 5 \n"

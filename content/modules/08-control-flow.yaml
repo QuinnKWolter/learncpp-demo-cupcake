@@ -1,0 +1,250 @@
+slug: 08-control-flow
+title: Branches and loops
+chapters: '8'
+readings:
+- title: For loops
+  url: https://www.learncpp.com/cpp-tutorial/for-statements/
+- title: Switch
+  url: https://www.learncpp.com/cpp-tutorial/switch-statement-basics/
+topics:
+- control-flow
+- loops
+- conditionals
+- accumulators
+objectives:
+- Trace a counting loop and running total.
+- Choose inclusive bounds.
+- Sum a sequence that may be empty.
+lesson: |-
+  ### Repeat a small step with a loop
+  A loop lets a program repeat instructions. A counting `for` loop has three parts in its parentheses: a starting step, a question checked before each repetition, and an update performed after each repetition.
+
+  ```cpp
+  for (int i{1}; i <= limit; ++i) {
+      total += i;
+  }
+  ```
+
+  Start i at 1. If i is no larger than limit, run the body. `total += i` means the same as `total = total + i`. Next, `++i` increases i by one. Check the condition again. When the condition is false, continue after the loop.
+
+  ### A running total starts before the loop
+  The example sets `total` to zero before adding anything. A value that collects contributions is often called an accumulator. If you set it to zero inside the loop, earlier contributions would be lost. For limit 3, the totals after the three visits are 1, 3, and 6. Step through shows each visit separately.
+
+  `<=` includes the limit; `<` leaves it out. For an empty range the body need not run at all. Predict output varies the limit, so test the condition before assuming there will be a first repetition. Explain why uses a loop starting at zero: count the values that pass its condition, not just the endpoint printed in the source.
+
+  ### Your new sequence: positive even numbers
+  Write code adds 2, 4, 6, and so on, stopping when the next number is greater than n. You can start at 2 and update by two (`value += 2`). Keep the total outside the loop and print once after it finishes. If n is zero or one, there are no positive even numbers to add, so the answer is zero.
+
+  Arrange code focuses on the same ordering: initialize the total, add the contributions, then display the finished answer. The wider reading also introduces `if` for choosing a path and `switch` for choosing a named case. Neither is required for this particular even-number loop.
+example: |
+  #include <iostream>
+  int main() {
+      int limit{4};
+      int total{0};
+      for (int i{1}; i <= limit; ++i) {
+          total += i;
+      }
+      std::cout << total << '\n';
+  }
+explanations:
+- - int total{0};
+  - Before any values are added, the sum is zero. This line runs once, outside the loop.
+- - for (int i{1}; i <= limit; ++i) {
+  - Begin at one, include limit, and advance by one after each visit.
+- - total += i;
+  - Add the current i to everything collected so far; do not reset the total.
+- - std::cout << total << '\n';
+  - Print once, after all loop visits have finished.
+blank: i <= limit
+wrong:
+- - i < limit
+  - Using < instead of <= stops before the final allowed value can be added. Try a limit of one to see the
+    missing visit.
+- - i == limit
+  - Starting at one and asking whether it equals the supplied limit usually fails immediately. A loop condition
+    should accept the whole intended sequence.
+question: How many times does `for (int i{0}; i < 3; ++i)` execute its body?
+choices:
+- - Three times, with i equal to 0, 1, and 2.
+  - The body runs for those three values. After the update reaches three, the next condition is false.
+- - Four times, with i equal to 0 through 3.
+  - This counts the upper endpoint, but the strict less-than condition does not permit i equal to three.
+- - Two times, with i equal to 1 and 2.
+  - This forgets the declared starting zero. The condition is checked before the first body, and zero passes
+    it.
+task: 'The supplied code reads a limit n from 0 to 1000. In the marked block, use a loop to calculate total:
+  the sum of the positive even numbers no larger than n. For n = 7, the contributions are 2, 4, and 6. The
+  existing output line prints total once after your block.'
+solution: |
+  #include <iostream>
+  int main() {
+      int n{};
+      std::cin >> n;
+      int total{0};
+      for (int value{2}; value <= n; value += 2) {
+          total += value;
+      }
+      std::cout << total << '\n';
+  }
+editable: |2-
+      int total{0};
+      for (int value{2}; value <= n; value += 2) {
+          total += value;
+      }
+cases:
+- - Even
+  - |
+    6
+  - |
+    12
+- - Odd
+  - |
+    7
+  - |
+    12
+- - Empty
+  - |
+    0
+  - |
+    0
+- - One
+  - |
+    1
+  - |
+    0
+- - Large
+  - |
+    1000
+  - |
+    250500
+- - First even contribution
+  - |
+    2
+  - |
+    2
+region_prompts:
+- Use a loop to add the positive even values up to n into total.
+hints_by_type:
+  code-completion:
+  - The goal includes the limit itself. Check what the condition does when i equals limit.
+  - Compare the totals for limit 1. The loop should still add that one allowed value.
+  multiple-choice-question:
+  - List the i values that satisfy the condition, starting with the declared initial value.
+  - The condition is tested before each body execution. Stop listing as soon as i is no longer less than three.
+  free-coding:
+  - Start with a running total of zero. What is the first positive even number you could add?
+  - Advance the candidate by two each time and include n when it is even. Keep printing outside the loop so
+    there is only one output line.
+  parsons-puzzles:
+  - A running total needs its starting value before the loop begins.
+  - The final output uses the completed total, so it belongs after the whole loop block.
+  parameterized-code-tracing:
+  - Make columns for i and total. Update total inside the body, then update i before the next test.
+  - For limit zero, the first condition already fails. For other limits, include the last value only if it
+    still passes <=.
+completion_explanation: The inclusive condition allows the final value to contribute. A strict less-than test
+  would miss that last contribution.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int limit{4};
+        int total{0};
+        for (int i{1}; i <= limit; ++i) {
+            total += i;
+        }
+        std::cout << total << '\n';
+    }
+  blocks:
+  - snippet: '    int total{0};'
+    explanation: Start the sum once, before any loop visit.
+  - snippet: |2-
+          for (int i{1}; i <= limit; ++i) {
+              total += i;
+          }
+    explanation: Add every integer from one through the supplied limit. Keep the loop as one block.
+  - snippet: '    std::cout << total << ''\n'';'
+    explanation: Display the completed total after the loop finishes.
+  goal: Use the supplied limit to add 1 through limit, then print one final total.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int limit{3};
+        int total{0};
+        for (int i{1}; i <= limit; ++i) {
+            total += i;
+        }
+        std::cout << total << '\n';
+    }
+  token: '3'
+  values:
+  - 3
+  - 0
+  - 5
+  goal: The limit changes. Add the values reached by the loop, including the limit when it is visited.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int limit{3};
+    note: The walkthrough includes one through three.
+    state:
+      limit: 3
+  - snippet: int total{0};
+    note: Before any loop visits, the running total is zero.
+    state:
+      total: 0
+  - snippet: for (int i{1}; i <= limit; ++i) {
+    note: Start i at one. One passes the inclusive limit check.
+    state:
+      i: 1
+  - snippet: total += i;
+    note: The first contribution changes zero to one.
+    state:
+      total: 1
+  - snippet: for (int i{1}; i <= limit; ++i) {
+    note: Advance i to two. It still passes the condition.
+    state:
+      i: 2
+  - snippet: total += i;
+    note: Add two to the previous one.
+    state:
+      total: 3
+  - snippet: for (int i{1}; i <= limit; ++i) {
+    note: Advance i to three. Equality is allowed by <=.
+    state:
+      i: 3
+  - snippet: total += i;
+    note: Add three to the previous three.
+    state:
+      total: 6
+  - snippet: for (int i{1}; i <= limit; ++i) {
+    note: The next candidate is four, which fails the test. The body does not run again.
+    state:
+      i: 4
+  - snippet: std::cout << total << '\n';
+    note: The loop has ended; its local i is no longer in scope. Print the completed total.
+    state:
+      i: out of scope
+      output: '6'
+  output: |
+    6
+  expected:
+  - |
+    6
+  - |
+    0
+  - |
+    15
+case_purposes:
+- An even limit includes the limit as a contribution.
+- An odd limit stops at the preceding even number.
+- Zero allows no positive even contribution.
+- A limit of one also allows no positive even contribution.
+- The upper input bound checks that the entire loop range is included.
+- The first positive even value should contribute exactly once.
+
+completion_goal: "Add every integer from 1 through limit, including limit itself, then print the total once."

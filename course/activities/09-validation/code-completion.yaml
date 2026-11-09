@@ -1,0 +1,140 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-code-completion
+title: Input validation and meaningful tests · fill gaps
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{};
+        if (!(std::cin >> score)) {
+            std::cout << "invalid\n";
+            return 0;
+        }
+        if (score >= 0 && score <= 100) {
+            std::cout << "valid\n";
+        } else {
+            std::cout << "invalid\n";
+        }
+    }
+statement: |-
+  Read one integer and print valid only for scores from 0 through 100. Print invalid if reading fails or the number is outside the range. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Input:
+  ```text
+  75
+  ```
+  Output:
+  ```text
+  valid
+  ```
+  The same rule must also handle the range endpoints and other inputs checked by the tests.
+hints:
+- A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+- The range test must include equality and must require both bounds, not just either one.
+elements:
+- type: blank
+  location:
+    snippet: score >= 0 && score <= 100
+  choices:
+  - snippet: score >= 0 && score <= 100
+    role: solution
+    explanations:
+    - body: Both endpoints are valid, and both bounds must hold. Parsing an integer does not by itself establish
+        that it is a permitted score.
+  - snippet: score > 0 && score < 100
+    role: distractor
+    explanations:
+    - body: The open comparisons reject zero and one hundred. These are explicitly valid endpoints, so both
+        comparisons need to permit equality.
+  - snippet: score >= 0 || score <= 100
+    role: distractor
+    explanations:
+    - body: OR treats either bound as sufficient. A score above one hundred still meets the lower bound and
+        would incorrectly be accepted.
+testcases:
+- title: Inside
+  visible: true
+  stdin:
+  - '75'
+  stdout: |
+    valid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+- title: Lower
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    valid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+- title: Upper
+  visible: true
+  stdin:
+  - '100'
+  stdout: |
+    valid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+- title: Below
+  visible: true
+  stdin:
+  - '-1'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+- title: Above
+  visible: true
+  stdin:
+  - '101'
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+- title: Text
+  visible: true
+  stdin:
+  - oops
+  stdout: |
+    invalid
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.

@@ -1,0 +1,55 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-parameterized-code-tracing
+title: Dynamic lifetime, recursion, and lambdas · predict output
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+statement: |-
+  The bonus at capture time changes. Predict the later lambda call using its saved copy, not the changed original.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Make separate rows for the original bonus and the copy kept by the lambda.
+- The later assignment changes only the original row. Add the call argument to the captured row when predicting
+  output.
+elements:
+- type: parameter
+  location:
+    snippet: '3'
+  values:
+  - 3
+  - 0
+  - 7
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    7

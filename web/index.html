@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>C++23 Studio · Cupcake course</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/studio.css">
+</head>
+<body>
+  <a class="skip" href="#lesson">Skip to lesson</a>
+  <aside class="sidebar">
+    <a class="brand" href="/">c<span>++</span><small>STUDIO</small></a>
+    <p class="eyebrow">THE CUPCAKE PRACTICE COURSE</p>
+    <h2>Build understanding.<br>Then build programs.</h2>
+    <div class="progress-label"><span id="progressText">Loading course…</span><span id="progressPercent"></span></div>
+    <progress id="progress" max="100" value="0" aria-label="Course progress"></progress>
+    <label class="search-label" for="search">Find a module</label>
+    <input id="search" type="search" placeholder="Pointers, loops, classes…">
+    <nav id="modules" aria-label="Course modules"></nav>
+    <footer><a href="https://www.learncpp.com/" target="_blank" rel="noopener">Reading curriculum ↗ LearnCpp</a><p>Guided practice · C++23 · 20 modules</p></footer>
+  </aside>
+  <main id="lesson" tabindex="-1">
+    <header class="topbar"><span>LEARN / INSPECT / PRACTICE</span><div><button id="protocolToggle" aria-expanded="false">SPLICE inspector <span id="messageCount">0</span></button><button id="export">Export progress</button></div></header>
+    <section class="intro">
+      <p class="eyebrow" id="chapter"></p>
+      <div class="title-row"><h1 id="title">C++23 Studio</h1><span class="pill">C++23</span></div>
+      <p id="subtitle">A course of original smart learning activities, aligned with LearnCpp.</p>
+      <div class="objectives" id="objectives"></div>
+    </section>
+    <section class="reading-card">
+      <details id="reading" open><summary><span>01 / Read & connect</span><small>Start here: ideas, notation, and your next steps</small></summary><div id="notes"></div><h3 class="reading-links-title">Read a little further</h3><p class="reading-links-note">The notes above prepare you for this module’s activities. These LearnCpp pages offer more examples and optional depth.</p><div id="readings"></div></details>
+      <label class="read-label"><input type="checkbox" id="readDone"> I have read the notes and linked readings</label>
+    </section>
+    <section class="practice">
+      <div class="section-heading"><h2>02 / Try the ideas</h2><span id="activityCount"></span></div>
+      <p class="practice-route">Start with the example and step-through guide. Then arrange, choose, explain, predict, and write. You can revisit any stage.</p>
+      <nav id="activities" aria-label="Activities in this module"></nav>
+      <div class="activity-tools"><span id="activityKind"></span><div><a id="yamlLink" download>YAML ↓</a><a id="standalone" target="_blank" rel="noopener">Open activity ↗</a><button id="copyEmbed">Copy iframe</button></div></div>
+      <p id="saveStatus" class="save-status" role="status">Your progress stays in this browser. Each activity explains its controls and offers hints before you check an answer.</p>
+      <iframe id="activity" title="Cupcake learning activity" src="about:blank"></iframe>
+      <div class="practice-bottom"><button id="markReviewed" hidden>Mark walkthrough reviewed</button><span id="resultStatus" role="status"></span><button id="nextActivity">Next activity →</button></div>
+    </section>
+    <section class="inspector" id="inspector" hidden>
+      <div class="section-heading"><h2>SPLICE / live message inspector</h2><button id="exportEvents">Export events</button></div>
+      <p>This host checks the iframe source and origin, answers <code>getState</code>, stores score/state, and handles resize. Events stay in browser storage (latest 500). The schema inside <code>state</code> is application-specific.</p>
+      <div class="protocol-stats" id="protocolStats"></div>
+      <pre id="messages" tabindex="0" aria-label="SPLICE messages">Launch an activity to see protocol traffic.</pre>
+      <a href="https://cssplice.org/slcp/iframe-protocol-specification.html" target="_blank" rel="noopener">Read the SPLICE specification ↗</a>
+    </section>
+    <footer class="main-footer">Powered by the actual Cupcake 0.1.4 activity viewer. This is a local learning demo; its native compiler runs as your user.<br>All checks are formative practice. Browser-held scores and answers are not a secure examination gradebook.</footer>
+  </main>
+  <script type="module" src="/studio.js"></script>
+</body>
+</html>

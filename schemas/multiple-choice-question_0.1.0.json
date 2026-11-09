@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Multiple Choice Question Schema",
+  "type": "object",
+  "required": [
+    "$schema"
+  ],
+  "properties": {
+    "$schema": { "type": "string", "enum": ["https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0"] },
+    "license": { "type": "string" },
+    "locale": { 
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[a-zA-Z]{2,4})?$"
+    },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "authors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["first", "last", "email", "affiliation"],
+        "properties": {
+          "first": { "type": "string" },
+          "last": { "type": "string" },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+          },
+          "affiliation": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pedagogy": {
+      "type": "object",
+      "required": ["activity", "difficulty", "prereq_topics", "topics"],
+      "properties": {
+        "activity": { "type": "string", "enum": ["multiple-choice-question"] },
+        "difficulty": { 
+          "type": "string",
+          "enum": ["novice", "intermediate", "advanced"]
+        },
+        "prereq_topics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "topics": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "include_choices": { "type": "integer", "minimum": 1 },
+    "question": { "type": "string" },
+    "hints": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["body"],
+            "properties": { "body": { "type": "string" } },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["body", "role"],
+        "properties": {
+          "body": { "type": "string" },
+          "role": { "type": "string", "enum": ["solution", "distractor"] },
+          "include": { "type": "string", "enum": ["always"] },
+          "order": { "type": "integer" },
+          "explanations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["body"],
+              "properties": {
+                "body": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "extends": { "type": "string" }
+  },
+  "additionalProperties": false
+}

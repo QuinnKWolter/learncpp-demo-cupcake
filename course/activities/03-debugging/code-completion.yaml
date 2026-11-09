@@ -1,0 +1,68 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-03-debugging-code-completion
+title: Debug by tracing, then testing · fill gaps
+description: Practice debug by tracing, then testing.
+pedagogy:
+  activity: code-completion
+  difficulty: novice
+  prereq_topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+  topics:
+  - debugging
+  - semantic-errors
+  - tracing
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+statement: |-
+  Exchange left and right while preserving both original values. Use the temporary value saved before either original changes. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  9 2
+  ```
+hints:
+- At the final assignment, left already holds the old right value. Which name still keeps the old left value?
+- 'Think about the purpose of saved: it protects a value that the next assignment would otherwise overwrite.'
+elements:
+- type: blank
+  location:
+    snippet: right = saved;
+  choices:
+  - snippet: right = saved;
+    role: solution
+    explanations:
+    - body: The saved value is the original left value. Using left here would copy the already changed value
+        and lose one of the two originals.
+  - snippet: right = left;
+    role: distractor
+    explanations:
+    - body: left already contains the original right value at this point. Reading it again cannot recover the
+        old left; saved is what preserves that original.
+  - snippet: saved = right;
+    role: distractor
+    explanations:
+    - body: This changes saved, not right. The final position would still be waiting for the original left
+        value.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    9 2

@@ -1,0 +1,38 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-13-records-multiple-choice-question
+title: Enums, structs, and aggregate values · explain why
+description: Practice enums, structs, and aggregate values.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - references
+  - pointers
+  - nullability
+  - optional
+  - lifetime
+  topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+question: Which expression names the ready enumerator of `enum class Status { waiting, ready };`?
+include_choices: 3
+hints:
+- Status names a type that owns the enumerator names, rather than an object with data members.
+- Use the same scope-separator idea as units::toMinutes. No call is needed to obtain a named enum value.
+choices:
+- body: Status::ready
+  role: solution
+  explanations:
+  - body: Use the scope separator to name the ready value belonging to the enum type Status.
+- body: Status.ready
+  role: distractor
+  explanations:
+  - body: Dot selects a member of an object. Status is a type scope, so this is the wrong kind of selection.
+- body: ready()
+  role: distractor
+  explanations:
+  - body: The parentheses would make a function call. Here ready is a named value, not a function to run.

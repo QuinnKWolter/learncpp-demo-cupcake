@@ -1,0 +1,114 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/macro-visualization/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-09-validation-macro-visualization
+title: Input validation and meaningful tests · step through
+description: Practice input validation and meaningful tests.
+pedagogy:
+  activity: macro-visualization
+  difficulty: novice
+  prereq_topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+  topics:
+  - testing
+  - input-validation
+  - boundaries
+  - stream-state
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int score{60};
+        if (score < 0 || score > 100) {
+            std::cout << "invalid\n";
+        } else if (score >= 60) {
+            std::cout << "pass\n";
+        } else {
+            std::cout << "retry\n";
+        }
+    }
+statement: |-
+  Follow one fixed version of this module’s program. The score changes. Choose the one branch reached after range validation, then predict its printed word.
+
+  Use Step to advance one explained state at a time. The highlighted line is the one just explained. These state labels are a teaching diagram, not the compiler’s physical memory layout. Predict output later gives you a changing version to solve yourself.
+elements:
+- settings:
+    code: top
+    heapHeight: 10
+    stackHeight: 220
+    width: 900
+  init:
+  - - createFrame
+    - 0
+    - Guided C++23 state
+  - - createVariable
+    - score
+  - - createVariable
+    - out of range
+  - - createVariable
+    - reaches pass threshold
+  - - createVariable
+    - output
+  - - setLine
+    - 2
+  - - showText
+    - Choose Step to begin. Follow the highlighted line, state labels, and explanation together.
+  steps:
+  - - _setLine
+    - 3
+  - - _addValue
+    - '60'
+    - 0
+    - int
+  - - _assign
+    - score
+  - - showText
+    - The fixed walkthrough starts at the first passing score.
+  - - _setLine
+    - 4
+  - - _addValue
+    - 'false'
+    - 0
+    - std::string
+  - - _assign
+    - out of range
+  - - showText
+    - Sixty is neither below zero nor above one hundred, so the invalid branch is skipped.
+  - - _setLine
+    - 6
+  - - _addValue
+    - 'true'
+    - 0
+    - std::string
+  - - _assign
+    - reaches pass threshold
+  - - showText
+    - The valid score meets the pass threshold, including equality.
+  - - _setLine
+    - 7
+  - - _addValue
+    - pass
+    - 0
+    - std::string
+  - - _assign
+    - output
+  - - showText
+    - Print the passing word. The retry branch is not also executed.
+  lines:
+  - '#include <iostream>'
+  - int main() {
+  - '    int score{60};'
+  - '    if (score < 0 || score > 100) {'
+  - '        std::cout << "invalid\n";'
+  - '    } else if (score >= 60) {'
+  - '        std::cout << "pass\n";'
+  - '    } else {'
+  - '        std::cout << "retry\n";'
+  - '    }'
+  - '}'

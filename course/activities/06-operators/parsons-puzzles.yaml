@@ -1,0 +1,133 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-06-operators-parsons-puzzles
+title: Operators, conditions, and bit flags · arrange code
+description: Practice operators, conditions, and bit flags.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+  topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int age{16};
+        std::cin >> age;
+        bool eligible{age >= 12 && age <= 17};
+        std::cout << std::boolalpha << eligible << '\n';
+    }
+statement: |-
+  Read an integer age and print true only for ages 12 through 17, including both endpoints.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Read the starting value, calculate the decision, then print that decision.
+- Use the Boolean variable after the declaration that creates it. The output line should not come before its
+  value has been decided.
+elements:
+- type: block
+  location:
+    snippet: '    int age{16};'
+  choices:
+  - snippet: '    int age{16};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Create the input variable before reading into it.
+- type: block
+  location:
+    snippet: '    std::cin >> age;'
+  choices:
+  - snippet: '    std::cin >> age;'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Read the actual test age before calculating eligibility.
+- type: block
+  location:
+    snippet: '    bool eligible{age >= 12 && age <= 17};'
+  choices:
+  - snippet: '    bool eligible{age >= 12 && age <= 17};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Require both inclusive age limits after the read succeeds for these integer inputs.
+- type: block
+  location:
+    snippet: '    std::cout << std::boolalpha << eligible << ''\n'';'
+  choices:
+  - snippet: '    std::cout << std::boolalpha << eligible << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Print the calculated eligibility, with boolalpha making it a word.
+testcases:
+- title: Inside
+  visible: true
+  stdin:
+  - '16'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Read the starting value, calculate the decision, then print that decision.
+- title: Lower
+  visible: true
+  stdin:
+  - '12'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Read the starting value, calculate the decision, then print that decision.
+- title: Upper
+  visible: true
+  stdin:
+  - '17'
+  stdout: |
+    true
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Read the starting value, calculate the decision, then print that decision.
+- title: Below
+  visible: true
+  stdin:
+  - '11'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Read the starting value, calculate the decision, then print that decision.
+- title: Above
+  visible: true
+  stdin:
+  - '18'
+  stdout: |
+    false
+  feedback:
+    on_pass:
+    - This run matches the requested result.
+    on_fail:
+    - Read the starting value, calculate the decision, then print that decision.

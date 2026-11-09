@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-20-exceptions-streams-multiple-choice-question
+title: Exceptions and stream-based I/O · explain why
+description: Practice exceptions and stream-based i/o.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - class-templates
+  - non-type-parameters
+  - specialization
+  topics:
+  - exceptions
+  - stack-unwinding
+  - streams
+  - parsing
+  - file-io
+question: During exception stack unwinding, what happens to fully constructed automatic objects in scopes being
+  exited?
+include_choices: 3
+hints:
+- Think about a local owner whose scope is left when a calculation throws.
+- Stack unwinding performs the cleanup of fully constructed local objects; it does not limit cleanup only to
+  the exception object.
+choices:
+- body: Their destructors run.
+  role: solution
+  explanations:
+  - body: Fully constructed local owners are cleaned up as their scopes are left, so resources do not need
+      a separate manual cleanup path here.
+- body: Their destructors are skipped, so every thrown exception requires manual deletion.
+  role: distractor
+  explanations:
+  - body: 'This overlooks stack unwinding: automatic local owners are specifically useful because their destructors
+      still run.'
+- body: Only the thrown exception object is destroyed; other local owners remain alive forever.
+  role: distractor
+  explanations:
+  - body: Cleanup follows the exited scopes too. It is not restricted to the exception object.

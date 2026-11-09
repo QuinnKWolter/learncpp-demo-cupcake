@@ -1,0 +1,286 @@
+slug: 09-validation
+title: Input validation and meaningful tests
+chapters: '9'
+readings:
+- title: Testing
+  url: https://www.learncpp.com/cpp-tutorial/introduction-to-testing-your-code/
+- title: Invalid input
+  url: https://www.learncpp.com/cpp-tutorial/stdcin-and-handling-invalid-input/
+topics:
+- testing
+- input-validation
+- boundaries
+- stream-state
+objectives:
+- Separate reading success from allowed values.
+- Check threshold and range boundaries.
+- Handle invalid input with a clear result.
+lesson: |-
+  ### Parsing a value is not the same as accepting it
+  Input has two questions: “can I read an integer?” and “is that integer allowed?” The word oops fails the first question. The number 101 can be read as an integer but is outside the allowed score range. Both deserve a clear response.
+
+  ```cpp
+  if (!(std::cin >> score)) {
+      std::cout << "invalid\n";
+      return 0;
+  }
+  ```
+
+  `if` runs its block only when the condition is true. Here the read can report failure; `!` reverses that result so the error block runs when reading fails. `return 0;` in main stops this run normally after printing its message. It avoids using the initial zero as though the user had entered a valid score.
+
+  After a successful read, the example checks that the score is between 0 and 100, including both endpoints. An `else` block provides the alternative action when an if condition is false.
+
+  ### Divide valid scores into two groups
+  The coding task prints pass for 60 through 100 and retry for 0 through 59. It prints invalid for malformed input or an out-of-range integer. Check reading and range first. Then, among valid scores, compare with the pass threshold. `else if` tests the next condition only when the earlier one did not choose a block.
+
+  The supplied tests each have a job: 60 tests the first passing score; 59 tests the neighboring retry score; zero and 100 test the valid endpoints; text and out-of-range values test rejection. A good repair follows one general rule for all of them.
+
+  ### What an assertion is for
+  An assertion (`assert`) checks a programmer's assumption, such as “this internal count should never be negative.” It can be disabled in a release build. It is not a reliable way to tell a user that their input is unacceptable. Explain why asks about this distinction; the coding task uses ordinary if/else handling instead.
+
+  Step through follows one valid score, and Predict output varies that score. The puzzle puts validation before success output. None of these tasks asks you to keep retrying after a failed read: report the required result once and finish.
+example: |
+  #include <iostream>
+  int main() {
+      int score{};
+      if (!(std::cin >> score)) {
+          std::cout << "invalid\n";
+          return 0;
+      }
+      if (score >= 0 && score <= 100) {
+          std::cout << "valid\n";
+      } else {
+          std::cout << "invalid\n";
+      }
+  }
+explanations:
+- - '!(std::cin >> score)'
+  - Try reading first. This condition becomes true if the input cannot be read as an integer.
+- - return 0;
+  - After reporting the bad read, stop main so the program does not continue with an untrusted value.
+- - score >= 0 && score <= 100
+  - A readable integer is acceptable only when it meets both bounds, including zero and 100.
+blank: score >= 0 && score <= 100
+wrong:
+- - score > 0 && score < 100
+  - The open comparisons reject zero and one hundred. These are explicitly valid endpoints, so both comparisons
+    need to permit equality.
+- - score >= 0 || score <= 100
+  - OR treats either bound as sufficient. A score above one hundred still meets the lower bound and would incorrectly
+    be accepted.
+question: Why should a program validate external input instead of relying only on `assert`?
+choices:
+- - Input validation must still work when assertions are disabled.
+  - Assertions check developer assumptions and may be absent in a release build. Normal invalid input needs
+    ordinary program logic.
+- - An assertion that passed during development must remain active in every release build.
+  - Build settings can disable assertions. Passing an earlier test does not guarantee later input handling.
+- - Initializing score to zero means a failed read is already a valid input.
+  - A fallback initial value does not mean the user supplied that value. Check whether the read succeeded before
+    accepting it.
+task: Write the marked decision block to read and classify one score. Print pass for an integer from 60 through
+  100, retry for an integer from 0 through 59, and invalid for a failed read or an integer outside 0–100. Input
+  is one integer token or one nonnumeric word. Print exactly one result line.
+solution: |
+  #include <iostream>
+  int main() {
+      int score{};
+      if (!(std::cin >> score) || score < 0 || score > 100) {
+          std::cout << "invalid\n";
+      } else if (score >= 60) {
+          std::cout << "pass\n";
+      } else {
+          std::cout << "retry\n";
+      }
+  }
+editable: |2-
+      if (!(std::cin >> score) || score < 0 || score > 100) {
+          std::cout << "invalid\n";
+      } else if (score >= 60) {
+          std::cout << "pass\n";
+      } else {
+          std::cout << "retry\n";
+      }
+cases:
+- - Threshold
+  - |
+    60
+  - |
+    pass
+- - Below
+  - |
+    59
+  - |
+    retry
+- - Upper
+  - |
+    100
+  - |
+    pass
+- - Out of range
+  - |
+    101
+  - |
+    invalid
+- &id001
+  - Text
+  - |
+    oops
+  - |
+    invalid
+- - Zero
+  - |
+    0
+  - |
+    retry
+- - Negative score
+  - |
+    -1
+  - |
+    invalid
+example_input: |
+  75
+completion_cases: &id002
+- - Inside
+  - |
+    75
+  - |
+    valid
+- - Lower
+  - |
+    0
+  - |
+    valid
+- - Upper
+  - |
+    100
+  - |
+    valid
+- - Below
+  - |
+    -1
+  - |
+    invalid
+- - Above
+  - |
+    101
+  - |
+    invalid
+- *id001
+region_prompts:
+- Read and validate score, then print exactly one of pass, retry, or invalid.
+hints_by_type:
+  code-completion:
+  - A parsed score of zero and a parsed score of 100 are both valid. Check both endpoints.
+  - The range test must include equality and must require both bounds, not just either one.
+  multiple-choice-question:
+  - User input can be wrong during normal use. Its error handling must still work in a release build.
+  - Assertions can be turned off. Use regular validation to decide what message a user should receive.
+  free-coding:
+  - 'Sort the situations into three groups before writing code: invalid input, valid passing score, valid retry
+    score.'
+  - Handle a failed read or bad range first. Only then test whether the valid score reaches 60; the final else
+    covers the remaining valid scores.
+  parsons-puzzles:
+  - Reject invalid values before any branch can call them valid.
+  - A successful conversion to int is only the first check. The allowed range is a separate decision.
+  parameterized-code-tracing:
+  - First decide whether the displayed score is inside the allowed range. If it is, choose the correct threshold
+    branch.
+  - Only one output branch is taken. Preserve the exact word selected by that branch.
+completion_explanation: Both endpoints are valid, and both bounds must hold. Parsing an integer does not by
+  itself establish that it is a permitted score.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int score{};
+        if (!(std::cin >> score)) {
+            std::cout << "invalid\n";
+            return 0;
+        }
+        if (score >= 0 && score <= 100) {
+            std::cout << "valid\n";
+        } else {
+            std::cout << "invalid\n";
+        }
+    }
+  blocks:
+  - snippet: '    int score{};'
+    explanation: Create score before trying to read it.
+  - snippet: |2-
+          if (!(std::cin >> score)) {
+              std::cout << "invalid\n";
+              return 0;
+          }
+    explanation: Reject a failed read and stop before testing the numeric range.
+  - snippet: |2-
+          if (score >= 0 && score <= 100) {
+              std::cout << "valid\n";
+          } else {
+              std::cout << "invalid\n";
+          }
+    explanation: After successful parsing, choose a result from the allowed inclusive range.
+  goal: Read a score, reject a failed read, and then print valid for 0–100 or invalid for other integers.
+  stdin: |
+    75
+  groups: {}
+  cases: *id002
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int score{60};
+        if (score < 0 || score > 100) {
+            std::cout << "invalid\n";
+        } else if (score >= 60) {
+            std::cout << "pass\n";
+        } else {
+            std::cout << "retry\n";
+        }
+    }
+  token: '60'
+  values:
+  - 60
+  - 59
+  - 101
+  goal: The score changes. Choose the one branch reached after range validation, then predict its printed word.
+  stdin: ''
+  context: int score{60};
+  walkthrough:
+  - snippet: int score{60};
+    note: The fixed walkthrough starts at the first passing score.
+    state:
+      score: 60
+  - snippet: if (score < 0 || score > 100) {
+    note: Sixty is neither below zero nor above one hundred, so the invalid branch is skipped.
+    state:
+      out of range: 'false'
+  - snippet: '} else if (score >= 60) {'
+    note: The valid score meets the pass threshold, including equality.
+    state:
+      reaches pass threshold: 'true'
+  - snippet: std::cout << "pass\n";
+    note: Print the passing word. The retry branch is not also executed.
+    state:
+      output: pass
+  output: |
+    pass
+  expected:
+  - |
+    pass
+  - |
+    retry
+  - |
+    invalid
+case_purposes:
+- Sixty is the first passing score, not a retry.
+- Fifty-nine is the neighboring retry boundary.
+- One hundred remains a valid passing score.
+- A readable integer above the range is still invalid.
+- A nonnumeric word must not silently become the initialized zero.
+- Zero is the first valid retry score.
+- A negative integer is outside the valid score range.
+
+completion_goal: "Read one integer and print valid only for scores from 0 through 100. Print invalid if reading fails or the number is outside the range."

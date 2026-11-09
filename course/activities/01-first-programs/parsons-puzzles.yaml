@@ -1,0 +1,79 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-parsons-puzzles
+title: Your first C++ programs · arrange code
+description: Practice your first c++ programs.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int boxes{4};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+statement: |-
+  Build a program that counts the items in four boxes with three items in each and prints that total.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- A variable must exist before a calculation can use it. Find the two starting quantities first.
+- The total needs both quantities. Printing needs the total. Which steps therefore have to come earlier?
+elements:
+- type: block
+  location:
+    snippet: '    int boxes{4};'
+  choices:
+  - snippet: '    int boxes{4};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Choose the number of boxes before the total can use it.
+  group: starting-counts
+- type: block
+  location:
+    snippet: '    int perBox{3};'
+  choices:
+  - snippet: '    int perBox{3};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Choose how many items each box holds. This can be prepared before or after boxes.
+  group: starting-counts
+- type: block
+  location:
+    snippet: '    int total{boxes * perBox};'
+  choices:
+  - snippet: '    int total{boxes * perBox};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Once both counts exist, multiply them to get the total.
+- type: block
+  location:
+    snippet: '    std::cout << total << ''\n'';'
+  choices:
+  - snippet: '    std::cout << total << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Display the total only after it has been calculated.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    12

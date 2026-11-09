@@ -1,0 +1,55 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parameterized-code-tracing/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-02-functions-files-parameterized-code-tracing
+title: Functions, declarations, and files · predict output
+description: Practice functions, declarations, and files.
+pedagogy:
+  activity: parameterized-code-tracing
+  difficulty: novice
+  prereq_topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+  topics:
+  - functions
+  - parameters
+  - return-values
+  - headers
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int rectanglePerimeter(int width, int height) {
+        return 2 * (width + height);
+    }
+    int main() {
+        int width{3};
+        int height{5};
+        std::cout << rectanglePerimeter(width, height) << '\n';
+    }
+statement: |-
+  The width changes. Follow the call into the visible perimeter function and predict its returned result on the one output line.
+
+  Type the program’s output, not source code. Values may change between attempts, so start with the values actually displayed. Keep any spaces between printed values and any separate output lines.
+hints:
+- Copy the displayed width and the fixed height into the function parameters for this call.
+- Calculate inside the function first. Then put its returned number into the output line; return itself does
+  not create another output line.
+elements:
+- type: parameter
+  location:
+    snippet: '3'
+  values:
+  - 3
+  - 1
+  - 5
+testcases:
+- title: First-variant author reference
+  visible: false
+  stdin: []
+  stdout: |
+    16

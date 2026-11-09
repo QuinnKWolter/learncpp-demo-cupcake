@@ -1,0 +1,280 @@
+slug: 20-exceptions-streams
+title: Exceptions and stream-based I/O
+chapters: 27–28
+readings:
+- title: Exceptions
+  url: https://www.learncpp.com/cpp-tutorial/basic-exception-handling/
+- title: String streams
+  url: https://www.learncpp.com/cpp-tutorial/stream-classes-for-strings/
+- title: File I/O
+  url: https://www.learncpp.com/cpp-tutorial/basic-file-io/
+topics:
+- exceptions
+- stack-unwinding
+- streams
+- parsing
+- file-io
+objectives:
+- Follow a thrown error to its handler.
+- Explain cleanup during stack unwinding.
+- Validate a complete line of two input fields.
+lesson: |-
+  ### Report a failure without inventing a normal result
+  An exception signals that an operation could not complete normally. The example's checkedDivide returns an integer quotient for a nonzero denominator. If the denominator is zero, it throws an `std::invalid_argument` exception instead of attempting invalid division. `<stdexcept>` supplies this standard error type.
+
+  ```cpp
+  try {
+      std::cout << checkedDivide(12, 0) << '\n';
+  } catch (const std::exception& error) {
+      std::cout << error.what() << '\n';
+  }
+  ```
+
+  `try` surrounds work that may fail. A matching `catch` handles a thrown exception. The const reference observes the actual exception without copying it. `what()` supplies its message. When a call throws, execution does not continue at the next instruction inside that try block; control goes to the handler.
+
+  As control leaves scopes while searching for a handler, fully constructed local objects are destroyed. This cleanup is called stack unwinding. It is why the automatic owners from the earlier module help even when a calculation fails. Explain why asks about cleanup; the visualization and prediction follow the chosen exception path.
+
+  ### Apply the input-stream tools to a stored line
+  The coding task uses `std::istringstream`, supplied by `<sstream>`, to read fields from an existing string rather than directly from the keyboard. `std::getline` first obtains the line. `std::istringstream input{line};` gives a small stream the line to examine. The usual `input >> a >> b` then tries to read two integers in order.
+
+  Two successful reads are necessary but not sufficient. The task permits exactly two integer fields, so a third non-whitespace token is invalid. Try reading one more token into the supplied string extra. If that succeeds, reject the line. If it fails after both integers were read, only trailing whitespace remains and the record is complete. This also rejects `1 2x`: the leftover x is an extra token.
+
+  ### Your validation order
+  First obtain both required fields. Only after that succeeds should you look for unwanted extra input. Logical AND short-circuits, so it can express that dependency. Print the sum for a complete valid record; otherwise print invalid. The supplied examples include a missing field and a trailing token to distinguish those situations.
+
+  File streams use a similar reading interface for files; their owners close files automatically. The linked file-I/O reading is a follow-up, not a hidden dependency on a file on your machine. These activities need only the text or values shown in the program.
+example: |
+  #include <iostream>
+  #include <stdexcept>
+  int checkedDivide(int numerator, int denominator) {
+      if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+      return numerator / denominator;
+  }
+  int main() {
+      try {
+          std::cout << checkedDivide(12, 3) << '\n';
+          std::cout << checkedDivide(0, 3) << '\n';
+          std::cout << checkedDivide(12, 0) << '\n';
+      } catch (const std::exception& error) {
+          std::cout << error.what() << '\n';
+      }
+  }
+explanations:
+- - denominator == 0
+  - Check the divisor, because a zero divisor makes division invalid. A zero numerator is allowed.
+- - throw std::invalid_argument{"zero"};
+  - Signal the failure with a standard error object whose message is zero; do not compute a quotient on this
+    path.
+- - try {
+  - Begin the normal path that may transfer control to a handler if a call throws.
+- - catch (const std::exception& error)
+  - Catch and observe a standard exception. Its what() message can explain the failure.
+blank: denominator == 0
+wrong:
+- - denominator != 0
+  - 'This reverses the guard: it rejects usable nonzero divisors and allows the invalid zero divisor to reach
+    division.'
+- - numerator == 0
+  - A zero numerator is valid and gives a zero result for a nonzero divisor. It is the denominator that must
+    not be zero.
+question: During exception stack unwinding, what happens to fully constructed automatic objects in scopes being
+  exited?
+choices:
+- - Their destructors run.
+  - Fully constructed local owners are cleaned up as their scopes are left, so resources do not need a separate
+    manual cleanup path here.
+- - Their destructors are skipped, so every thrown exception requires manual deletion.
+  - 'This overlooks stack unwinding: automatic local owners are specifically useful because their destructors
+    still run.'
+- - Only the thrown exception object is destroyed; other local owners remain alive forever.
+  - Cleanup follows the exited scopes too. It is not restricted to the exception object.
+task: The supplied code reads one line and creates an istringstream named input. In the marked block, accept
+  exactly two integers with no extra non-whitespace token. Print their sum when valid, or invalid otherwise.
+  Integer values lie between −1000 and 1000. Missing fields, words in place of a required integer, and trailing
+  tokens should be rejected; surrounding whitespace is allowed.
+solution: |
+  #include <iostream>
+  #include <sstream>
+  #include <string>
+  int main() {
+      std::string line;
+      std::getline(std::cin, line);
+      std::istringstream input{line};
+      int a{}, b{};
+      std::string extra;
+      if ((input >> a >> b) && !(input >> extra)) {
+          std::cout << a + b << '\n';
+      } else {
+          std::cout << "invalid\n";
+      }
+  }
+editable: |2-
+      if ((input >> a >> b) && !(input >> extra)) {
+          std::cout << a + b << '\n';
+      } else {
+          std::cout << "invalid\n";
+      }
+cases:
+- - Valid
+  - |
+    3 7
+  - |
+    10
+- - Whitespace
+  - "  -2 8  \n"
+  - |
+    6
+- - Missing
+  - |
+    5
+  - |
+    invalid
+- - Extra
+  - |
+    1 2 3
+  - |
+    invalid
+- - Bad token
+  - |
+    abc 4
+  - |
+    invalid
+- - Partial token
+  - |
+    1 2x
+  - |
+    invalid
+- - Empty line
+  - |2+
+
+  - |
+    invalid
+- - Two negative values
+  - |
+    -3 -7
+  - |
+    -10
+region_prompts:
+- Accept exactly two integers with no extra token; print their sum or invalid.
+hints_by_type:
+  code-completion:
+  - Division fails when the divisor is zero, not when the dividend is zero.
+  - Try the valid calculation zero divided by three. Rejecting a zero numerator would incorrectly reject that
+    case.
+  multiple-choice-question:
+  - Think about a local owner whose scope is left when a calculation throws.
+  - Stack unwinding performs the cleanup of fully constructed local objects; it does not limit cleanup only
+    to the exception object.
+  free-coding:
+  - First try to read both required integers. A successful first read alone is not enough.
+  - Then look for one extra non-whitespace token. Accept only when the required reads succeeded and that extra
+    read did not.
+  parsons-puzzles:
+  - The try block contains the operation that can fail; the matching handler deals with its thrown exception.
+  - The output after a successful call belongs on the normal path. The handler’s output belongs only on the
+    failure path.
+  parameterized-code-tracing:
+  - Check the denominator before doing any arithmetic. If it is zero, follow the throw into the handler.
+  - A throw stops the rest of that try path. Predict only the output statements actually reached.
+completion_explanation: Only a zero denominator makes this integer division invalid. Checking the numerator
+  would reject a valid zero result and miss the actual error.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    #include <stdexcept>
+    int checkedDivide(int numerator, int denominator) {
+        if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+        return numerator / denominator;
+    }
+    int main() {
+        int numerator{12};
+        int denominator{0};
+        try {
+            std::cout << checkedDivide(numerator, denominator) << '\n';
+        } catch (const std::exception& error) {
+            std::cout << error.what() << '\n';
+        }
+    }
+  blocks:
+  - snippet: '    int numerator{12};'
+    explanation: Prepare the number being divided. It is independent of the divisor declaration.
+  - snippet: '    int denominator{0};'
+    explanation: Prepare the zero divisor that will cause the supplied function to throw.
+  - snippet: |2-
+          try {
+              std::cout << checkedDivide(numerator, denominator) << '\n';
+          } catch (const std::exception& error) {
+              std::cout << error.what() << '\n';
+          }
+    explanation: Run the risky operation with both arguments available and handle the thrown error with its
+      matching catch.
+  goal: Prepare 12 and a zero divisor, then use the supplied checkedDivide inside a try/catch so its error
+    message is printed.
+  stdin: ''
+  groups:
+    0: arguments
+    1: arguments
+tracing:
+  source: |
+    #include <iostream>
+    #include <stdexcept>
+    int checkedDivide(int numerator, int denominator) {
+        if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+        return numerator / denominator;
+    }
+    int main() {
+        int denominator{0};
+        try {
+            std::cout << checkedDivide(12, denominator) << '\n';
+        } catch (const std::exception& error) {
+            std::cout << error.what() << '\n';
+        }
+    }
+  token: '0'
+  values:
+  - 0
+  - 3
+  - 4
+  goal: The denominator changes. Decide whether the function returns normally or throws, then predict the one
+    printed line.
+  stdin: ''
+  context: int denominator{0};
+  walkthrough:
+  - snippet: int denominator{0};
+    note: Use a zero divisor for this fixed walkthrough.
+    state:
+      denominator: 0
+  - snippet: if (denominator == 0) { throw std::invalid_argument{"zero"}; }
+    note: The guard detects invalid division and throws instead of calculating a quotient.
+    state:
+      path: throw
+      message: zero
+  - snippet: '} catch (const std::exception& error) {'
+    note: Control reaches the handler; it does not continue with a normal quotient in try.
+    state:
+      path: handler
+  - snippet: std::cout << error.what() << '\n';
+    note: Print the exception message on the error path.
+    state:
+      output: zero
+  output: |
+    zero
+  expected:
+  - |
+    zero
+  - |
+    4
+  - |
+    3
+case_purposes:
+- Exactly two readable integer fields are a valid record.
+- Surrounding whitespace is allowed and a negative value still parses.
+- One field is not a complete two-field record.
+- A third integer is an unwanted extra token.
+- A word in a required integer position must be rejected.
+- A readable integer prefix followed by letters is not a complete clean record.
+- An empty line contains neither required field.
+- Two signed integers still use ordinary addition.
+
+completion_goal: "Make checkedDivide reject a zero denominator with an exception while allowing division by a nonzero denominator, including a zero numerator."

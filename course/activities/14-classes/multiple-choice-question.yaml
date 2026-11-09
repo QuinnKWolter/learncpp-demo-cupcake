@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-14-classes-multiple-choice-question
+title: Classes protect their invariants · explain why
+description: Practice classes protect their invariants.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+question: Why make a counter data member private?
+include_choices: 3
+hints:
+- If a caller could assign any value directly, could the class enforce its accepted-update rule?
+- Private storage makes callers request an operation. The method can check the request before changing that
+  storage.
+choices:
+- body: So public operations can preserve the class’s rules for valid state.
+  role: solution
+  explanations:
+  - body: Outside callers request changes through methods that can check them before changing the stored count.
+- body: So even Counter’s own methods are unable to change the stored value.
+  role: distractor
+  explanations:
+  - body: Private restricts outside access; the class’s own methods still have the access needed to enforce
+      their rules.
+- body: Because private means the stored value is automatically const.
+  role: distractor
+  explanations:
+  - body: Access control and constness are separate ideas. A private member can still change through a permitted
+      class operation.

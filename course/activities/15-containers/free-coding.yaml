@@ -1,0 +1,144 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/free-coding/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-free-coding
+title: Vectors, arrays, iterators, and algorithms · write code
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: free-coding
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    #include <vector>
+    int countPositive(const std::vector<int>& values) {
+        int count{0};
+        for (int value : values) {
+            if (value > 0) { ++count; }
+        }
+        return count;
+    }
+    int main() {
+        int n{};
+        std::cin >> n;
+        std::vector<int> values(n);
+        for (int& value : values) { std::cin >> value; }
+        std::cout << countPositive(values) << '\n';
+    }
+statement: |-
+  Complete `countPositive(const std::vector<int>& values)` by returning how many elements are greater than zero. The supplied caller reads n (0–100), then n integers (−100 to 100), and prints your returned count. Do not change the vector. Zero is not positive, and an empty vector should give a count of zero.
+
+  Edit only the marked region. The other code is supplied for you to read and use. Check Answer tries the listed inputs; use their feedback to find which part of the rule needs another look.
+hints:
+- Start count at zero and inspect each stored integer. Zero itself should not count as positive.
+- Increase count only in the value > 0 case, then return once the loop has finished. An empty list should naturally
+  return the starting zero.
+elements:
+- type: editable
+  location:
+    snippet: |2-
+          int count{0};
+          for (int value : values) {
+              if (value > 0) { ++count; }
+          }
+          return count;
+  placeholder: '    // Count the elements greater than zero, then return the count.'
+- type: locked
+  location:
+    snippet: |
+      #include <iostream>
+      #include <vector>
+      int countPositive(const std::vector<int>& values) {
+- type: locked
+  location:
+    snippet: |2
+
+      }
+      int main() {
+          int n{};
+          std::cin >> n;
+          std::vector<int> values(n);
+          for (int& value : values) { std::cin >> value; }
+          std::cout << countPositive(values) << '\n';
+      }
+testcases:
+- title: Mixed
+  visible: true
+  stdin:
+  - '5'
+  - -2 0 3 4 -1
+  stdout: |
+    2
+  feedback:
+    on_pass:
+    - The count must ignore negatives and zero while including both positives.
+    on_fail:
+    - The count must ignore negatives and zero while including both positives. Start count at zero and inspect
+      each stored integer. Zero itself should not count as positive.
+- title: Empty
+  visible: true
+  stdin:
+  - '0'
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - An empty vector has no qualifying elements and needs no indexing.
+    on_fail:
+    - An empty vector has no qualifying elements and needs no indexing. Start count at zero and inspect each
+      stored integer. Zero itself should not count as positive.
+- title: All negative
+  visible: true
+  stdin:
+  - '3'
+  - -3 -2 -1
+  stdout: |
+    0
+  feedback:
+    on_pass:
+    - An all-negative vector should not produce a positive count.
+    on_fail:
+    - An all-negative vector should not produce a positive count. Start count at zero and inspect each stored
+      integer. Zero itself should not count as positive.
+- title: One
+  visible: true
+  stdin:
+  - '1'
+  - '5'
+  stdout: |
+    1
+  feedback:
+    on_pass:
+    - A one-element positive vector should count that element exactly once.
+    on_fail:
+    - A one-element positive vector should count that element exactly once. Start count at zero and inspect
+      each stored integer. Zero itself should not count as positive.
+- title: Every element qualifies
+  visible: true
+  stdin:
+  - '4'
+  - 1 2 3 4
+  stdout: |
+    4
+  feedback:
+    on_pass:
+    - Every positive element contributes one, regardless of its numeric value.
+    on_fail:
+    - Every positive element contributes one, regardless of its numeric value. Start count at zero and inspect
+      each stored integer. Zero itself should not count as positive.

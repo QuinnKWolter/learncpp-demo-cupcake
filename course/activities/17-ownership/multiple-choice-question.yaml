@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-17-ownership-multiple-choice-question
+title: Value operators, ownership, and relationships · explain why
+description: Practice value operators, ownership, and relationships.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: intermediate
+  prereq_topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+  topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+question: After moving one std::unique_ptr into another, which pointer owns the original object?
+include_choices: 3
+hints:
+- Follow the ownership transfer, not just the address or stored number.
+- After a unique_ptr move, the source is empty and the destination is responsible for the original object.
+choices:
+- body: The destination unique_ptr owns the original object.
+  role: solution
+  explanations:
+  - body: Ownership transfers to the destination. For unique_ptr the moved-from source becomes empty, so only
+      one owner remains.
+- body: Both pointers independently own the same original object.
+  role: distractor
+  explanations:
+  - body: That would contradict unique ownership. A move changes which object is responsible rather than duplicating
+      responsibility.
+- body: Neither owns it because transferring ownership immediately deletes the integer.
+  role: distractor
+  explanations:
+  - body: The integer stays alive during this transfer. The destination takes responsibility for releasing
+      it later.

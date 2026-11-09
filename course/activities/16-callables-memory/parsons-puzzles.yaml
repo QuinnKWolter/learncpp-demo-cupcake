@@ -1,0 +1,84 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-parsons-puzzles
+title: Dynamic lifetime, recursion, and lambdas · arrange code
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+statement: |-
+  Capture the original bonus, change the original afterward, and print addBonus(4) using the saved copy.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- Capture a value before changing the original if you want the function to retain the earlier value.
+- The later call uses whichever value was captured at creation. Put the final print after the original has
+  changed so the difference is observable.
+elements:
+- type: block
+  location:
+    snippet: '    int bonus{3};'
+  choices:
+  - snippet: '    int bonus{3};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: The original value must exist before a lambda can capture it.
+- type: block
+  location:
+    snippet: '    auto addBonus{[bonus](int value) { return value + bonus; }};'
+  choices:
+  - snippet: '    auto addBonus{[bonus](int value) { return value + bonus; }};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Capture the earlier bonus before the later assignment changes the original.
+- type: block
+  location:
+    snippet: '    bonus = 9;'
+  choices:
+  - snippet: '    bonus = 9;'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Change only the original variable after the captured copy has been created.
+- type: block
+  location:
+    snippet: '    std::cout << addBonus(4) << ''\n'';'
+  choices:
+  - snippet: '    std::cout << addBonus(4) << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Call the lambda and display the sum using its earlier captured copy.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    7

@@ -1,0 +1,70 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-18-polymorphism-worked-example
+title: Inheritance and virtual dispatch · worked example
+description: Practice inheritance and virtual dispatch.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - operator-overloading
+  - unique-ptr
+  - move-semantics
+  - composition
+  - ownership
+  topics:
+  - inheritance
+  - virtual-functions
+  - override
+  - slicing
+  - polymorphism
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    struct Base {
+        virtual int value() const { return 1; }
+        virtual ~Base() = default;
+    };
+    struct Derived : Base {
+        int value() const override { return 2; }
+    };
+    int main() {
+        Derived derived;
+        const Base& base{derived};
+        std::cout << base.value() << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    2
+  console: |
+    2
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: virtual int value() const
+  explanations:
+  - body: The base permits selection according to the actual object when called through a base reference.
+- type: explanation
+  location:
+    snippet: int value() const override
+  explanations:
+  - body: This is Derived’s replacement body; override checks that its signature matches.
+- type: explanation
+  location:
+    snippet: const Base& base{derived};
+  explanations:
+  - body: Refer to the existing Derived without copying away its more specific part.
+- type: explanation
+  location:
+    snippet: base.value()
+  explanations:
+  - body: Select the Derived implementation because this is a virtual call on the actual Derived object.

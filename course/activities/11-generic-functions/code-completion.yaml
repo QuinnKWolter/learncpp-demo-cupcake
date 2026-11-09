@@ -1,0 +1,70 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/code-completion/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-code-completion
+title: Overloads, templates, and constexpr · fill gaps
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: code-completion
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) {
+        return a < b ? b : a;
+    }
+    int main() {
+        constexpr int best{larger(3, 8)};
+        std::cout << best << ' ' << larger(2.5, 1.5) << '\n';
+    }
+statement: |-
+  Make the supplied larger template return the larger of its two arguments, using their chosen type. Choose the code for the marked gap that follows this rule.
+
+  ### Sample run
+  Output:
+  ```text
+  8 2.5
+  ```
+hints:
+- 'Read the expression as an if/else: when a < b, which variable is larger?'
+- The true and false positions have different jobs. Test them with a small pair in increasing order, then with
+  the order reversed.
+elements:
+- type: blank
+  location:
+    snippet: 'a < b ? b : a'
+  choices:
+  - snippet: 'a < b ? b : a'
+    role: solution
+    explanations:
+    - body: When a < b, b is the larger value. Reversing the two result positions would correctly implement
+        a smaller-value function, but not this larger-value function.
+  - snippet: 'a < b ? a : b'
+    role: distractor
+    explanations:
+    - body: These result branches select the smaller value. Use the same comparison with the opposite result
+        positions to implement the requested larger value.
+  - snippet: a + b
+    role: distractor
+    explanations:
+    - body: Adding the arguments combines them into a different number. This function must choose and return
+        one of the existing arguments.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    8 2.5

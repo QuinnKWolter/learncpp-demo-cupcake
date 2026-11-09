@@ -1,0 +1,41 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/multiple-choice-question/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-06-operators-multiple-choice-question
+title: Operators, conditions, and bit flags · explain why
+description: Practice operators, conditions, and bit flags.
+pedagogy:
+  activity: multiple-choice-question
+  difficulty: novice
+  prereq_topics:
+  - const
+  - constexpr
+  - strings
+  - string-lifetimes
+  topics:
+  - operators
+  - precedence
+  - remainder
+  - boolean-logic
+  - bit-flags
+question: For an integer `n`, why is `0 <= n <= 10` an incorrect way to test the interval [0,10]?
+include_choices: 3
+hints:
+- Follow C++ evaluation from left to right for the first comparison. What kind of value does a comparison produce?
+- The second comparison receives true or false, not the original n. Write two separate comparisons joined by
+  AND instead.
+choices:
+- body: The first comparison produces a bool, and that result is then compared with 10.
+  role: solution
+  explanations:
+  - body: C++ does not read this as two comparisons of n. Write both comparisons explicitly and join them with
+      &&.
+- body: It automatically checks both bounds of n, just as a mathematical chained inequality does.
+  role: distractor
+  explanations:
+  - body: The mathematical notation is tempting, but C++ evaluates a comparison result before the next comparison.
+- body: The chain is the same as n <= 10 because its lower bound is discarded.
+  role: distractor
+  explanations:
+  - body: The lower comparison is evaluated, but its true/false result—not n—is what the second comparison
+      receives.

@@ -1,0 +1,206 @@
+slug: 03-debugging
+title: Debug by tracing, then testing
+chapters: '3'
+readings:
+- title: Debugging strategy
+  url: https://www.learncpp.com/cpp-tutorial/a-strategy-for-debugging/
+- title: Watching values
+  url: https://www.learncpp.com/cpp-tutorial/using-an-integrated-debugger-watching-variables/
+topics:
+- debugging
+- semantic-errors
+- tracing
+objectives:
+- Trace assignments without losing an original value.
+- Choose an input that exposes a faulty swap.
+- Repair and test a small block of code.
+lesson: |-
+  ### When a program runs but gives the wrong answer
+  A compiler catches many spelling and structure mistakes. A program can still build and do the wrong calculation. To debug means to find why the actual behavior differs from what we intended. Start with a small example and say what the result should be before changing code.
+
+  This module swaps two values. If left starts at 2 and right starts at 9, the intended final pair is 9 and 2. Read assignment as “calculate the right side now, then store it in the name on the left.” An assignment does not preserve the old value for later.
+
+  ### Keep a value before replacing it
+  ```cpp
+  int saved{left};
+  left = right;
+  right = saved;
+  ```
+
+  First, saved keeps the original left value. Next, left receives right's value. Finally, right receives the saved original value. In `left = right; right = left;`, the second line sees the already changed left, so both variables end up with the same value. The temporary variable is there to prevent that loss.
+
+  ### How to trace the example
+  Make three columns headed left, right, and saved. After each line, change only the value that line assigns. Step through makes that little table visible. Predict output changes a starting value, so always begin with the values on your own screen.
+
+  Arrange code and Fill gaps ask you to preserve the old value before it is overwritten. Explain why asks which input would expose a faulty swap. Two equal numbers are a weak test: even broken code can appear to swap them correctly. Two different numbers make the error visible.
+
+  ### Your coding task
+  The supplied input lines read a and b; the output line prints them after your marked block. Use a third variable to preserve the original a before replacing it. Try unequal inputs, equal inputs, and a negative input. A failed case is a clue about your reasoning, not a reason to make a special rule for that one input.
+
+  In a desktop debugger, a breakpoint pauses a program and stepping runs one instruction at a time. You can use that tool later. Here the table, highlighted lines, and test results support the same habit: find the first line where a value stops matching your prediction.
+example: |
+  #include <iostream>
+  int main() {
+      int left{2}, right{9};
+      int saved{left};
+      left = right;
+      right = saved;
+      std::cout << left << ' ' << right << '\n';
+  }
+explanations:
+- - int left{2}, right{9};
+  - These are the two original values. We want them in opposite places at the end.
+- - int saved{left};
+  - Keep a copy of the old left value before anything overwrites left.
+- - left = right;
+  - Only left changes here. right still holds its original value.
+- - right = saved;
+  - Recover the preserved old left value. Both originals now survive, in their new places.
+blank: right = saved;
+wrong:
+- - right = left;
+  - left already contains the original right value at this point. Reading it again cannot recover the old left;
+    saved is what preserves that original.
+- - saved = right;
+  - This changes saved, not right. The final position would still be waiting for the original left value.
+question: A supposed swap prints the same value twice. Which input is most useful for exposing the bug?
+choices:
+- - Two distinct values, such as 2 and 9.
+  - The displayed result can show whether both different originals survived in opposite positions.
+- - Two equal values, such as 5 and 5.
+  - A broken swap that copies one side twice can still display the expected pair when both originals are equal.
+- - Every pair is equally useful for exposing a lost original.
+  - Equal inputs can hide this bug. Choose distinguishable values when testing whether both originals were
+    preserved.
+task: The supplied code reads two whole numbers a and b, each from −1000 to 1000. In the marked block, swap
+  their values using a temporary integer. The supplied output line then prints a followed by b. Preserve both
+  original values; do not change the input or output lines.
+solution: |
+  #include <iostream>
+  int main() {
+      int a{}, b{};
+      std::cin >> a >> b;
+      int saved{a};
+      a = b;
+      b = saved;
+      std::cout << a << ' ' << b << '\n';
+  }
+editable: |2-
+      int saved{a};
+      a = b;
+      b = saved;
+cases:
+- - Unequal
+  - |
+    2 9
+  - |
+    9 2
+- - Equal
+  - |
+    5 5
+  - |
+    5 5
+- - Signed
+  - |
+    -7 3
+  - |
+    3 -7
+region_prompts:
+- Swap a and b, preserving the original a in a temporary integer.
+hints_by_type:
+  code-completion:
+  - At the final assignment, left already holds the old right value. Which name still keeps the old left value?
+  - 'Think about the purpose of saved: it protects a value that the next assignment would otherwise overwrite.'
+  multiple-choice-question:
+  - A useful test must make it possible to tell the two original values apart.
+  - Imagine swapping two identical labels. Would the final display reveal whether either label really moved?
+  free-coding:
+  - Write down what must survive before your first assignment. Store the old a value in a separate integer.
+  - Use that saved original value for the final assignment, after a has received b. The supplied output line
+    shows whether both originals survived.
+  parsons-puzzles:
+  - Find the block that preserves the original left value. It must happen before left changes.
+  - Printing belongs after both assignments; otherwise you would display a partly finished swap.
+  parameterized-code-tracing:
+  - Use a small table with a column for each variable. Change only one column at each assignment.
+  - When you read right = saved, use saved’s current value—not the new value of left.
+completion_explanation: The saved value is the original left value. Using left here would copy the already
+  changed value and lose one of the two originals.
+review_note: Reviewed for prerequisites, plain-language guidance, feedback, boundary cases, and C++23.
+puzzle:
+  source: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+  blocks:
+  - snippet: '    int saved{left};'
+    explanation: Save the original left value before overwriting it.
+  - snippet: '    left = right;'
+    explanation: Move the original right value into left while saved protects the other original.
+  - snippet: '    right = saved;'
+    explanation: Finish by recovering the original left value from saved.
+  - snippet: '    std::cout << left << '' '' << right << ''\n'';'
+    explanation: Print after the whole swap is complete, so both positions show their final values.
+  goal: Swap the supplied left and right values without losing either original, then print the swapped pair.
+  stdin: ''
+  groups: {}
+tracing:
+  source: |
+    #include <iostream>
+    int main() {
+        int left{2}, right{9};
+        int saved{left};
+        left = right;
+        right = saved;
+        std::cout << left << ' ' << right << '\n';
+    }
+  token: '2'
+  values:
+  - 2
+  - 0
+  - -4
+  goal: The original left value changes. Predict the two values printed after the complete swap.
+  stdin: ''
+  context: null
+  walkthrough:
+  - snippet: int left{2}, right{9};
+    note: Record both originals before changing either one.
+    state:
+      left: 2
+      right: 9
+  - snippet: int saved{left};
+    note: Keep the original left in saved.
+    state:
+      saved: 2
+  - snippet: left = right;
+    note: Replace left with nine. saved still protects the old two.
+    state:
+      left: 9
+  - snippet: right = saved;
+    note: Replace right with that preserved two.
+    state:
+      right: 2
+  - snippet: std::cout << left << ' ' << right << '\n';
+    note: Print the final left and right separated by a space.
+    state:
+      output: 9 2
+  output: |
+    9 2
+  expected:
+  - |
+    9 2
+  - |
+    9 0
+  - |
+    9 -4
+case_purposes:
+- Different inputs show whether both original values survived.
+- Equal inputs should still be accepted, even though they cannot expose every swap bug.
+- A negative value checks that swapping preserves signs as well as positions.
+
+completion_goal: "Exchange left and right while preserving both original values. Use the temporary value saved before either original changes."

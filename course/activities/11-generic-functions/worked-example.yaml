@@ -1,0 +1,64 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-11-generic-functions-worked-example
+title: Overloads, templates, and constexpr · worked example
+description: Practice overloads, templates, and constexpr.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - conversions
+  - narrowing
+  - auto
+  - type-aliases
+  topics:
+  - overloading
+  - function-templates
+  - constexpr
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    template <typename T>
+    constexpr T larger(T a, T b) {
+        return a < b ? b : a;
+    }
+    int main() {
+        constexpr int best{larger(3, 8)};
+        std::cout << best << ' ' << larger(2.5, 1.5) << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    8 2.5
+  console: |
+    8 2.5
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: template <typename T>
+  explanations:
+  - body: This function is a pattern. The call chooses the type represented by T.
+- type: explanation
+  location:
+    snippet: 'a < b ? b : a'
+  explanations:
+  - body: If a is smaller, choose b; otherwise choose a. This returns the larger value without changing either
+      argument.
+- type: explanation
+  location:
+    snippet: constexpr int best{larger(3, 8)};
+  explanations:
+  - body: This variable requires its initial value during the build, so this call is evaluated then.
+- type: explanation
+  location:
+    snippet: larger(2.5, 1.5)
+  explanations:
+  - body: This call uses double for T. The function pattern also works without throwing away fractional information.

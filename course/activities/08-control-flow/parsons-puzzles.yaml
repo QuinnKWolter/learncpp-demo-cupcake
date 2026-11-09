@@ -1,0 +1,81 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/parsons-puzzles/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-08-control-flow-parsons-puzzles
+title: Branches and loops · arrange code
+description: Practice branches and loops.
+pedagogy:
+  activity: parsons-puzzles
+  difficulty: novice
+  prereq_topics:
+  - scope
+  - namespaces
+  - shadowing
+  - static-duration
+  - linkage
+  topics:
+  - control-flow
+  - loops
+  - conditionals
+  - accumulators
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int limit{4};
+        int total{0};
+        for (int i{1}; i <= limit; ++i) {
+            total += i;
+        }
+        std::cout << total << '\n';
+    }
+statement: |-
+  Use the supplied limit to add 1 through limit, then print one final total.
+
+  Move whole blocks into the highlighted slots. You do not need to edit their text. Prepare values before using them and print the requested final state.
+hints:
+- A running total needs its starting value before the loop begins.
+- The final output uses the completed total, so it belongs after the whole loop block.
+elements:
+- type: block
+  location:
+    snippet: '    int total{0};'
+  choices:
+  - snippet: '    int total{0};'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Start the sum once, before any loop visit.
+- type: block
+  location:
+    snippet: |2-
+          for (int i{1}; i <= limit; ++i) {
+              total += i;
+          }
+  choices:
+  - snippet: |2-
+          for (int i{1}; i <= limit; ++i) {
+              total += i;
+          }
+    role: solution
+    indent: 4
+    explanations:
+    - body: Add every integer from one through the supplied limit. Keep the loop as one block.
+- type: block
+  location:
+    snippet: '    std::cout << total << ''\n'';'
+  choices:
+  - snippet: '    std::cout << total << ''\n'';'
+    role: solution
+    indent: 4
+    explanations:
+    - body: Display the completed total after the loop finishes.
+testcases:
+- title: Requested result
+  visible: true
+  stdin: []
+  stdout: |
+    10

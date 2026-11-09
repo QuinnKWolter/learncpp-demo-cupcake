@@ -1,0 +1,67 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-15-containers-worked-example
+title: Vectors, arrays, iterators, and algorithms · worked example
+description: Practice vectors, arrays, iterators, and algorithms.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+  topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <algorithm>
+    #include <iostream>
+    #include <vector>
+    int main() {
+        std::vector<int> values{5, 1, 3};
+        std::sort(values.begin(), values.end());
+        for (int value : values) {
+            std::cout << value << ' ';
+        }
+        std::cout << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: "1 3 5 \n"
+  console: "1 3 5 \n"
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: std::vector<int> values{5, 1, 3};
+  explanations:
+  - body: Create an owning list containing these three integers, in this order.
+- type: explanation
+  location:
+    snippet: std::sort(values.begin(), values.end());
+  explanations:
+  - body: Sort every existing element. The end marker is just beyond the final element.
+- type: explanation
+  location:
+    snippet: 'for (int value : values)'
+  explanations:
+  - body: Read one element per loop visit; this loop does not change the vector.
+- type: explanation
+  location:
+    snippet: std::cout << value << ' ';
+  explanations:
+  - body: Print each visited value followed by a space. The later output line adds the ending newline.

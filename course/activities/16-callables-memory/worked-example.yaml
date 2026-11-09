@@ -1,0 +1,64 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-16-callables-memory-worked-example
+title: Dynamic lifetime, recursion, and lambdas · worked example
+description: Practice dynamic lifetime, recursion, and lambdas.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - vector
+  - array
+  - range-for
+  - algorithms
+  - iterators
+  - bounds
+  topics:
+  - dynamic-allocation
+  - recursion
+  - lambdas
+  - captures
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int bonus{3};
+        auto addBonus{[bonus](int value) { return value + bonus; }};
+        bonus = 9;
+        std::cout << addBonus(4) << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    7
+  console: |
+    7
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: '[bonus]'
+  explanations:
+  - body: Capture a copy now. This is when the lambda stores the bonus it will use on later calls.
+- type: explanation
+  location:
+    snippet: (int value) { return value + bonus; }
+  explanations:
+  - body: Each call supplies value; the body adds the separately captured bonus and returns the total.
+- type: explanation
+  location:
+    snippet: bonus = 9;
+  explanations:
+  - body: Change the original variable. The earlier copy inside the lambda stays as it was.
+- type: explanation
+  location:
+    snippet: addBonus(4)
+  explanations:
+  - body: Use four as the parameter and the captured bonus as the other operand.

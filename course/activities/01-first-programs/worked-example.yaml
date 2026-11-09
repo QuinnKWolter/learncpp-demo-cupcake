@@ -1,0 +1,59 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-01-first-programs-worked-example
+title: Your first C++ programs · worked example
+description: Practice your first c++ programs.
+pedagogy:
+  activity: worked-example
+  difficulty: novice
+  prereq_topics: []
+  topics:
+  - program-structure
+  - initialization
+  - input-output
+  - arithmetic
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    int main() {
+        int boxes{4};
+        int perBox{3};
+        int total{boxes * perBox};
+        std::cout << total << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    12
+  console: |
+    12
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: int boxes{4};
+  explanations:
+  - body: 'Start here: boxes now holds 4. The braces give it that value before the calculation uses it.'
+- type: explanation
+  location:
+    snippet: int perBox{3};
+  explanations:
+  - body: perBox means “items in one box.” It holds 3; it is a different quantity from the number of boxes.
+- type: explanation
+  location:
+    snippet: int total{boxes * perBox};
+  explanations:
+  - body: Count equal groups by multiplying. The result is stored in total; boxes and perBox keep their values.
+- type: explanation
+  location:
+    snippet: std::cout << total << '\n';
+  explanations:
+  - body: Read this as “print total, then start a new line.” It prints the stored answer rather than recalculating
+      or changing it.

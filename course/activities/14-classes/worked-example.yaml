@@ -1,0 +1,69 @@
+$schema: https://adapt2.sis.pitt.edu/cupcake/schemas/worked-example/0.1.0
+license: MIT
+locale: en-US
+id: cpp23-v2-14-classes-worked-example
+title: Classes protect their invariants · worked example
+description: Practice classes protect their invariants.
+pedagogy:
+  activity: worked-example
+  difficulty: intermediate
+  prereq_topics:
+  - structs
+  - enum-classes
+  - aggregates
+  - members
+  topics:
+  - classes
+  - constructors
+  - const-members
+  - invariants
+  - destructors
+runtime:
+  language: cpp
+  version: '23'
+source:
+  main.cpp: |
+    #include <iostream>
+    class Counter {
+        int value_{};
+    public:
+        explicit Counter(int start) : value_{start} {}
+        void increment() { ++value_; }
+        int value() const { return value_; }
+    };
+    int main() {
+        Counter counter{3};
+        counter.increment();
+        std::cout << counter.value() << '\n';
+    }
+statement: Read the small program and predict its result. Click the underlined pieces of code to see what each
+  one contributes. Then compare your prediction with the sample run.
+executions:
+- title: Sample run
+  stdin: []
+  stdout: |
+    4
+  console: |
+    4
+  status: pass
+elements:
+- type: explanation
+  location:
+    snippet: int value_{};
+  explanations:
+  - body: The stored count is private. The underscore is just a helpful naming convention.
+- type: explanation
+  location:
+    snippet: 'explicit Counter(int start) : value_{start} {}'
+  explanations:
+  - body: Construct a new counter by initializing its member from start; the body has no extra work.
+- type: explanation
+  location:
+    snippet: void increment() { ++value_; }
+  explanations:
+  - body: An action on this object increases its stored count by one.
+- type: explanation
+  location:
+    snippet: int value() const { return value_; }
+  explanations:
+  - body: Read the count without changing it. const describes the observer’s behavior on the object.

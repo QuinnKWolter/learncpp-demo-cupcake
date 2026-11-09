@@ -12,9 +12,9 @@ manager frontend build, external grading API, or login service is required.
 | --- | --- |
 | Local startup and compiler setup assumed Windows | Added a Linux Docker image containing Python 3.12 and Debian GCC 14, with actual C++23 probes and full course validation during the build. |
 | Dependency ranges allowed silent changes | Added a complete version/hash lock for direct and transitive Python dependencies; local and Docker installs use the same lock. |
-| Existing server assumed local origins and root paths | A deployment-only handler rebases served shell URLs under `/cupcake-lab/` and accepts the configured HTTPS proxy origin. Original application/course files remain unchanged. |
+| Existing server assumed local origins and root paths | A deployment-only handler rebases served shell URLs under `/learncpp-demo-cupcake/` and accepts the configured HTTPS proxy origin. Original application/course files remain unchanged. |
 | Target uses Docker 18.09 and standalone Compose v1 | Use `docker-compose.yml` schema 2.2, a classic-builder Dockerfile, one image/build selector, and shell health polling. File validation passed with Compose 1.23.2. |
-| Target naming and hosting conventions differ | Service/container `cupcake-lab__webapp`, binding `127.0.0.1:20700:5173`, directory `/home/qkw3/cupcake-lab/`, host Apache public URL with Basic auth. |
+| Target naming and hosting conventions differ | Service/container `learncpp-demo-cupcake__webapp`, binding `127.0.0.1:20700:5173`, directory `/home/qkw3/learncpp-demo-cupcake/`, host Apache public URL with Basic auth. |
 | Linux timeout cleanup killed only the immediate child | Run children in their own process group and clean up descendants even when their parent exits normally. Added Linux CPU/address-space/file-size limits through a separate launcher. |
 | A program that ignored stdin could block the watchdog | Use a file for child stdin instead of a potentially blocking pipe write. |
 | A fast process could exceed the output cap and exit before polling detected it | Check output size after exit as well; do not execute compiler output after an output-limit failure. |

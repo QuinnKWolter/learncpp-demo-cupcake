@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import server
 
-BASE_PATH = os.environ.get('CUPCAKE_BASE_PATH', '/cupcake-lab').rstrip('/')
+BASE_PATH = os.environ.get('CUPCAKE_BASE_PATH', '/learncpp-demo-cupcake').rstrip('/')
 PUBLIC_ORIGIN = os.environ.get('CUPCAKE_PUBLIC_ORIGIN', 'https://adapt2.sis.pitt.edu')
 public = urlsplit(PUBLIC_ORIGIN)
 if not re.fullmatch(r'(?:/[A-Za-z0-9_-]+)+', BASE_PATH):
@@ -58,7 +58,7 @@ class DeploymentHandler(server.Handler):
         return super().origin()
 
     def normalize_path(self):
-        # Apache can preserve /cupcake-lab/ or strip it from the upstream request.
+        # Apache can preserve /learncpp-demo-cupcake/ or strip it from the upstream request.
         if self.path.startswith(BASE_PATH + '/'):
             self.path = self.path[len(BASE_PATH):]
         self.asset_path = urlsplit(self.path).path

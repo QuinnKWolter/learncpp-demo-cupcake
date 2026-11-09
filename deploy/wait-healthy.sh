@@ -1,7 +1,7 @@
 #!/bin/bash
 # Docker 18.09 / standalone Compose v1 equivalent of waiting for health.
 set -eu
-container="${1:-cupcake-lab__webapp}"
+container="${1:-learncpp-demo-cupcake__webapp}"
 attempt=0
 while [ "$attempt" -lt 60 ]; do
     status=$(docker inspect --format '{{.State.Health.Status}}' "$container" 2>/dev/null) || {

@@ -1,6 +1,6 @@
 # C++ Studio with Cupcake
 
-**Lab deployment:** [https://adapt2.sis.pitt.edu/cupcake-lab/](https://adapt2.sis.pitt.edu/cupcake-lab/)
+**Lab deployment:** [https://adapt2.sis.pitt.edu/learncpp-demo-cupcake/](https://adapt2.sis.pitt.edu/learncpp-demo-cupcake/)
 is the intended Apache HTTPS route. See [the deployment guide](docs/DEPLOYMENT.md)
 for CentOS 7, Docker 18.09.1 and standalone docker-compose v1. The public route is
 configured by the server administrator; this repository does not provision Apache.
@@ -11,23 +11,23 @@ The container includes Python, GCC, dependencies, course content and the viewer.
 As `qkw3` on the server:
 
 ```bash
-git clone https://github.com/QuinnKWolter/learncpp-demo-cupcake.git /home/qkw3/cupcake-lab
-cd /home/qkw3/cupcake-lab
+git clone https://github.com/QuinnKWolter/learncpp-demo-cupcake.git /home/qkw3/learncpp-demo-cupcake
+cd /home/qkw3/learncpp-demo-cupcake
 git checkout v0.1.0
 ```
 
 Expected layout is one repository with `docker-compose.yml`, `Dockerfile`,
 `server.py`, `requirements.lock`, `web/`, `course/`, `content/`, `schemas/`,
 `tools/`, `deploy/`, and `docs/` at its root. The service/container is
-`cupcake-lab__webapp`, bound as `127.0.0.1:20700:5173` for host Apache.
+`learncpp-demo-cupcake__webapp`, bound as `127.0.0.1:20700:5173` for host Apache.
 
 The roughly 397 MB **prebuilt image is not stored in Git**. When available, obtain
-`cupcake-lab-image.tar` and its checksum from [release v0.1.0](https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/tag/v0.1.0) or a
+`learncpp-demo-cupcake-image.tar` and its checksum from [release v0.1.0](https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/tag/v0.1.0) or a
 separate scp transfer, then use the default `image:` mode:
 
 ```bash
-sha256sum -c cupcake-lab-image.tar.sha256
-docker load -i cupcake-lab-image.tar
+sha256sum -c learncpp-demo-cupcake-image.tar.sha256
+docker load -i learncpp-demo-cupcake-image.tar
 docker-compose up -d
 bash deploy/wait-healthy.sh
 ```
@@ -42,8 +42,8 @@ bash deploy/wait-healthy.sh
 ```
 
 Do not keep both selectors active. The guide covers host/runtime verification,
-the `/cupcake-lab/` adapter, state, updates, rollback and the alternative
-`exports/cupcake-lab-deploy.tar.gz` transfer. Modern Debian on the legacy host still
+the `/learncpp-demo-cupcake/` adapter, state, updates, rollback and the alternative
+`exports/learncpp-demo-cupcake-deploy.tar.gz` transfer. Modern Debian on the legacy host still
 requires the documented real-server runtime checks before deployment sign-off.
 
 ## Local authoring
@@ -114,7 +114,7 @@ The bundled viewer comes from the installed **Cupcake Activity Authoring for VS 
 
 ## Execution boundary
 
-Direct `python server.py` use is a **trusted local demo**, bound to `127.0.0.1` by default. Compiled programs run with your user's permissions. The [Docker deployment](docs/DEPLOYMENT.md) serves trusted collaborators through host Apache Basic auth at `/cupcake-lab/`, using a non-root container and resource limits. Port 20700 binds only to host loopback; the guide records the additional filtering verification needed on Docker 18.09. The app does not use the Authorization header. Timeouts, output limits, and a shared container are **not an adversarial-code security sandbox**. Untrusted learners need a separate sandboxed execution service. Progress remains browser-local; there are no shared server-held assessment records. The original YAML remains usable with Cupcake's own execution infrastructure.
+Direct `python server.py` use is a **trusted local demo**, bound to `127.0.0.1` by default. Compiled programs run with your user's permissions. The [Docker deployment](docs/DEPLOYMENT.md) serves trusted collaborators through host Apache Basic auth at `/learncpp-demo-cupcake/`, using a non-root container and resource limits. Port 20700 binds only to host loopback; the guide records the additional filtering verification needed on Docker 18.09. The app does not use the Authorization header. Timeouts, output limits, and a shared container are **not an adversarial-code security sandbox**. Untrusted learners need a separate sandboxed execution service. Progress remains browser-local; there are no shared server-held assessment records. The original YAML remains usable with Cupcake's own execution infrastructure.
 
 No course content was uploaded to or registered in the lab's Cupcake/catalog installations. No lab credentials are copied into this project. The demo blocks remote execution and telemetry calls; LearnCpp links open external readings only when visited.
 

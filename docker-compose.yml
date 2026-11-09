@@ -2,15 +2,15 @@
 # Version 2.x also enforces these local resource limits without Swarm.
 version: "2.2"
 services:
-  cupcake-lab__webapp:
+  learncpp-demo-cupcake__webapp:
     # MODE SWITCH: replace the next line with `build: .` for a source build.
-    image: ${CUPCAKE_IMAGE:-cupcake-lab:latest}
-    container_name: cupcake-lab__webapp
+    image: ${CUPCAKE_IMAGE:-learncpp-demo-cupcake:latest}
+    container_name: learncpp-demo-cupcake__webapp
     ports:
       # Apache on this host is the authentication/access-control boundary.
       - "127.0.0.1:20700:5173"
     environment:
-      CUPCAKE_BASE_PATH: /cupcake-lab
+      CUPCAKE_BASE_PATH: /learncpp-demo-cupcake
       CUPCAKE_PUBLIC_ORIGIN: https://adapt2.sis.pitt.edu
     init: true
     restart: unless-stopped

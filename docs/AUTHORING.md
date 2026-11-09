@@ -58,7 +58,7 @@ The course manifest is **not** a validated Cupcake Journey definition. To use th
 
 For SLC catalog registration, create records through the normal authorized catalog workflow with activity titles, language/domain, topics, activity type, license, and the verified launch URLs. Catalog registration and hosting are distinct steps. The original task authorized creating a testable course, and no remote catalog writes have been made.
 
-For an untrusted learner installation, use the lab's sandboxed execution backend or another isolated service. The trusted-collaborator Docker deployment binds `127.0.0.1:20700:5173` for host Apache and serves `/cupcake-lab/` through a deployment adapter. The administrator manages Apache Basic auth and verifies the legacy host's external port restrictions as described in the deployment guide. Do not deploy server.py directly on a public interface. Local time/output limits, token checks, and an execution mutex do not prevent C++ code from calling OS APIs with the runner user's permissions.
+For an untrusted learner installation, use the lab's sandboxed execution backend or another isolated service. The trusted-collaborator Docker deployment binds `127.0.0.1:20700:5173` for host Apache and serves `/learncpp-demo-cupcake/` through a deployment adapter. The administrator manages Apache Basic auth and verifies the legacy host's external port restrictions as described in the deployment guide. Do not deploy server.py directly on a public interface. Local time/output limits, token checks, and an execution mutex do not prevent C++ code from calling OS APIs with the runner user's permissions.
 
 ## Content provenance
 

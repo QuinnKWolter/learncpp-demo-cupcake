@@ -20,11 +20,11 @@ def main():
     paths = sorted(paths)
     destination = ROOT / 'exports'
     destination.mkdir(exist_ok=True)
-    archive = destination / 'cupcake-lab-deploy.tar.gz'
+    archive = destination / 'learncpp-demo-cupcake-deploy.tar.gz'
     # Explicit file list; no hidden runtime, Windows compiler, or research downloads.
     with tarfile.open(archive, 'w:gz', format=tarfile.PAX_FORMAT) as tar:
         for path in paths:
-            info = tar.gettarinfo(str(path), 'cupcake-lab/' + path.relative_to(ROOT).as_posix())
+            info = tar.gettarinfo(str(path), 'learncpp-demo-cupcake/' + path.relative_to(ROOT).as_posix())
             info.uid = info.gid = 0
             info.uname = info.gname = ''
             info.mode = 0o644

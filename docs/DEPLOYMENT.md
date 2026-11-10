@@ -38,14 +38,15 @@ does not include Apache configuration. See the legacy-Docker loopback caveat bel
 ## 1. Clone the repository (primary transfer route)
 
 Repository: [QuinnKWolter/learncpp-demo-cupcake](https://github.com/QuinnKWolter/learncpp-demo-cupcake).
-Initial deployment release: [v0.1.0](https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/tag/v0.1.0).
+Current deployment release: [v0.1.1](https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/tag/v0.1.1),
+including the [JSVEE vendor-loader fix](JSVEE-FIX.md).
 As **qkw3** on the server:
 
 ```bash
 cd /home/qkw3
 git clone https://github.com/QuinnKWolter/learncpp-demo-cupcake.git /home/qkw3/learncpp-demo-cupcake
 cd /home/qkw3/learncpp-demo-cupcake
-git checkout v0.1.0
+git checkout v0.1.1
 docker version
 docker-compose version
 uname -m
@@ -53,7 +54,7 @@ docker-compose config --quiet
 ```
 
 The file uses schema **2.2**, supported by standalone docker-compose **1.13+** and
-Docker 18.09. This local-service schema enforces memory/CPU/PID limits without
+Docker 18.09. This local-service schema configures memory/CPU/PID limits without
 Swarm. It has no top-level project name, profiles, plugin-only syntax, or startup
 wait flags. Standalone Compose **1.23.2** was used to validate it. If the installed
 v1 binary predates 1.13, the administrator must provide a compatible v1 version.
@@ -110,8 +111,8 @@ Do not leave both selectors active. All other settings remain the same.
 
 ```bash
 cd /home/qkw3/learncpp-demo-cupcake
-wget https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.0/learncpp-demo-cupcake-image.tar
-wget https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.0/learncpp-demo-cupcake-image.tar.sha256
+wget https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.1/learncpp-demo-cupcake-image.tar
+wget https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.1/learncpp-demo-cupcake-image.tar.sha256
 sha256sum -c learncpp-demo-cupcake-image.tar.sha256
 docker load -i learncpp-demo-cupcake-image.tar
 docker image inspect learncpp-demo-cupcake:latest --format '{{.Os}}/{{.Architecture}} {{.Id}}'
@@ -142,6 +143,11 @@ build. Allow several minutes, about 2 GiB available RAM and at least 3 GiB free
 disk; retain more space if keeping multiple image versions.
 
 ## 3. Start and verify (both modes)
+
+Commands below assume the invoking account can use Docker. If it is not in the
+Docker group, use `sudo docker ...`, `sudo docker-compose ...`, and specifically
+**`sudo bash deploy/wait-healthy.sh`**. The helper invokes `docker inspect` directly;
+running only Compose with sudo does not give the helper Docker access.
 
 ```bash
 cd /home/qkw3/learncpp-demo-cupcake
@@ -174,6 +180,13 @@ Then open **https://adapt2.sis.pitt.edu/learncpp-demo-cupcake/** in a browser, a
 Apache, open a module
 and a free-coding exercise, submit code, and reopen it to verify saved progress.
 Internal HTTP and public HTTPS checks test different parts of the deployment.
+For the v0.1.1 fix, hard-refresh the browser and reopen a step-through activity.
+Confirm that its controls advance the visualization. This asset probe should
+return HTTP 200 and `Content-Type: text/css`:
+
+```bash
+curl --fail --head --user '<shared-username>' https://adapt2.sis.pitt.edu/learncpp-demo-cupcake/vendor/cupcake/lib/jsvee/jsvee.css
+```
 
 Port 20700 binds only to host IPv4 loopback. Direct external access to it is
 intentionally unavailable; Apache Basic auth protects the entire `/learncpp-demo-cupcake/`
@@ -190,18 +203,33 @@ filtering boundary and verify that 20700 cannot be reached externally, including
 from the same network segment. See [Docker's port-publishing note](https://docs.docker.com/engine/network/port-publishing/).
 
 The pinned Python 3.12 slim **Debian trixie** base and GCC 14 are unchanged. The
-image builds/runs locally; runtime probes also passed with the upstream Docker
-18.09 seccomp allowlist applied on a modern host. That is **not** an emulation of
-CentOS 7's kernel, old runc, or old libseccomp. The actual server has not been tested
-from this workspace.
+administrator has confirmed that the target deployment is live: Apache Basic auth,
+the main UI, APIs, C++ compilation/execution, loopback binding and health checks
+work with the host-side accommodations below. These are administrator-reported
+results, not remote tests performed from this workspace.
 
-Modern Debian can encounter syscall/seccomp incompatibilities on old Docker hosts;
-see the [Docker Official Images compatibility reference](https://github.com/docker-library/official-images/issues/16829).
-If the target reports thread-creation failures, `Operation not permitted`, package
-signature errors, or similar problems, retain the logs and have the administrator
-check Docker/runc/libseccomp compatibility. Loading a prebuilt image bypasses build
-failures, but cannot correct a runtime/kernel incompatibility. A failed target probe
-means the deployment is not ready. No relaxed security profile is shipped as a workaround.
+- **Host-selected seccomp exception:** Docker 18.09's default filter blocks the
+  modern glibc thread-creation path (`clone3`), producing
+  `RuntimeError: can't start new thread` on requests. The administrator added
+  `- seccomp:unconfined` to the service's `security_opt` on that host. This disables
+  seccomp filtering there; non-root UID 10001, dropped capabilities,
+  no-new-privileges, read-only filesystem and other resource controls remain.
+  The exception is a host-side decision: the shipped Compose file is unchanged
+  and does not enable it. Preserve that local edit during upgrades.
+- **PID controller unavailable:** the reported CentOS 7 kernel/cgroup setup lacks
+  the pids controller. Docker warns and discards `pids_limit: 64`; it is not an
+  enforced process cap on this host. Memory and CPU quota limits still apply.
+- **Directory and project:** the live directory is
+  `/home/qkw3/learncpp-demo-cupcake/`, with network
+  `learncpp-demo-cupcake_default`. Run Compose from that directory.
+- **Docker access:** accounts without Docker-group access run the health helper
+  with `sudo bash deploy/wait-healthy.sh`, alongside sudo Docker/Compose commands.
+
+The administrator also verified that port 20700 cannot be reached through the
+host's external IP. Retain the external-access boundary verification above.
+See the [Docker Official Images compatibility reference](https://github.com/docker-library/official-images/issues/16829)
+for the old-engine/modern-userspace syscall issue. Loading a prebuilt image avoids
+build problems but does not itself fix this runtime incompatibility.
 
 ## Persistence, disk and resources
 
@@ -216,8 +244,9 @@ means the deployment is not ready. No relaxed security profile is shipped as a w
 | Logs | Docker JSON logs rotate at 10 MB/file, three files (about 30 MB plus overhead). Restarts retain them; container recreation/removal can discard them. |
 
 Runtime is non-root UID/GID 10001, read-only root filesystem, dropped capabilities,
-no-new-privileges, an init process, and 1 GiB RAM/two CPU/64 PID limits. Tmpfs use
-counts toward memory. Actual enforcement depends on the target kernel/cgroups.
+no-new-privileges, an init process, 1 GiB RAM/two CPU limits, and a configured
+64-PID limit. The reported target ignores that PID limit because its controller is
+unavailable; see the host accommodations above. Tmpfs use counts toward memory.
 The configured policy is **`restart: unless-stopped`**: the service restarts after
 host/Docker restarts when Docker starts on boot, while intentional stops remain
 stopped until explicitly started again. An
@@ -226,6 +255,34 @@ time; simultaneous requests receive HTTP 429 and can retry. Compiled code shares
 the web container and can access the network; use trusted collaborators only.
 
 ## Updates
+
+### Upgrade the live host to v0.1.1
+
+Save the host-modified Compose file outside the repository first. This release
+does not change the shipped Compose file, so the host's seccomp edit can remain
+in the working tree during checkout. If Git reports a conflict, retain the saved
+copy and reconcile the local settings instead of discarding them.
+
+```bash
+cd /home/qkw3/learncpp-demo-cupcake
+cp docker-compose.yml /home/qkw3/learncpp-demo-cupcake-compose.host-backup.yml
+git fetch origin --tags
+git checkout v0.1.1
+wget -O learncpp-demo-cupcake-image.tar https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.1/learncpp-demo-cupcake-image.tar
+wget -O learncpp-demo-cupcake-image.tar.sha256 https://github.com/QuinnKWolter/learncpp-demo-cupcake/releases/download/v0.1.1/learncpp-demo-cupcake-image.tar.sha256
+sha256sum -c learncpp-demo-cupcake-image.tar.sha256
+sudo docker load -i learncpp-demo-cupcake-image.tar
+sudo env CUPCAKE_IMAGE=learncpp-demo-cupcake:v0.1.1 docker-compose up -d
+sudo bash deploy/wait-healthy.sh
+```
+
+The saved image contains both `latest` and `v0.1.1` tags. The explicit version in
+the command selects the fixed image even if `.env` or the shell selected an older
+tag. Update that selection for later Compose commands as appropriate. Checking
+out source alone does not replace a running prebuilt image. Hard-refresh the
+browser after recreating the container and check a step-through activity.
+
+### Routine release updates
 
 Save both the code revision and actual image before updating:
 

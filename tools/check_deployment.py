@@ -4,6 +4,10 @@ These are HTTP deployment tests, separate from the unchanged 142-activity suite.
 """
 import json
 import re
+import os
+from pathlib import Path
+import shutil
+import subprocess
 import threading
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -56,8 +60,22 @@ def main():
         assert f"originalFetch('{BASE_PATH}/api/run'".encode() in activity
         assert b"endsWith('/api/v1/log')" in activity  # Keep telemetry suppression intact.
         loader = read(BASE_PATH + '/vendor/cupcake/chunk-PE6JJOUT.js')[2]
-        assert f'"{BASE_PATH}/lib/jsvee/'.encode() in loader
-        assert b'"/lib/jsvee/' not in loader
+        # JSVEE joins these arguments to <base>, rather than using root URL
+        # resolution. Preserve the arguments and exercise the resulting routes.
+        original = Path(__file__).resolve().parents[1] / 'web/vendor/cupcake/chunk-PE6JJOUT.js'
+        assert loader == original.read_bytes()
+        assert b'"/lib/jsvee/' in loader
+        assert f'"{BASE_PATH}/lib/jsvee/'.encode() not in loader
+        for name in ('jsvee.css', 'jsvee-python.css', 'jquery.min.js', 'JSVEE-min.js', 'JSVEE-python-min.js'):
+            status, headers, data = read(BASE_PATH + '/vendor/cupcake/lib/jsvee/' + name)
+            assert status == 200 and len(data) > 100
+            expected_type = 'text/css' if name.endswith('.css') else 'text/javascript'
+            assert headers.get_content_type() == expected_type, (name, headers)
+        # Node is a development-only extra, never a runtime requirement. When
+        # available, execute the pinned vendor functions and fetch their outputs.
+        if shutil.which('node'):
+            subprocess.run(['node', str(Path(__file__).with_name('check_jsvee_loader.mjs')), origin],
+                           env={**os.environ, 'CUPCAKE_BASE_PATH': BASE_PATH}, check=True)
         manifest = json.loads(read(BASE_PATH + '/course.json')[2])
         entry = manifest['modules'][0]['activities'][0]
         assert read(BASE_PATH + '/content/' + entry['path'])[0] == 200

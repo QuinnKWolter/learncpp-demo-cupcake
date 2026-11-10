@@ -45,6 +45,8 @@ set, require or inspect Authorization headers; Basic auth is entirely in Apache.
 Deployment HTTP tests also
 exercise prefix-preserving/stripping mappings, proxy Host variants, configured
 HTTPS origins, rebased iframe/download/asset URLs, JSVEE and HEAD requests.
+The v0.1.1 regression executes the actual served JSVEE URL-loader functions and
+fetches their five dependencies plus CSS images; see [JSVEE-FIX.md](JSVEE-FIX.md).
 
 Browser UI validation remains incomplete: Computer Use could not verify the
 browser's current URL confidently and ended the browser check. The deployment
@@ -59,9 +61,11 @@ checks are not represented as a browser test.
   for untrusted learners.
 - Apache routing, TLS, access control and port restrictions are provided by the
   lab administrator. No actual target-server configuration is changed here.
-- The real CentOS 7 / Docker 18.09 runtime is not accessible from this workspace.
-  Modern Debian syscall compatibility depends on its kernel/runc/libseccomp;
-  target runtime probes in the deployment guide must pass before sign-off.
+- The administrator reports the target is live with a local `seccomp:unconfined`
+  exception, absent PID-controller enforcement, the matching directory/network
+  name, and sudo health-helper invocation where required. These host decisions
+  are documented in the deployment guide and do not change the shipped Compose
+  settings. The target is not operated directly from this workspace.
 - Progress and event records remain in each browser. There is no central gradebook,
   shared learner identity, or assessment-record service. Compilation is serialized;
   a simultaneous submission receives HTTP 429 and should be retried.

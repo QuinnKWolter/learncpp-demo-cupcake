@@ -38,9 +38,9 @@ def hosted_asset(path, data):
                             b'${location.origin}' + prefix + b'/activity.html')
         data = data.replace(b'The local server must be running on the viewing machine.',
                             b'The lab server must be available to the viewer.')
-    elif path.startswith('/vendor/cupcake/') and path.endswith('.js'):
-        # The upstream visualization loader creates root-relative script/style URLs.
-        data = re.sub(rb'''(["'])/lib/''', lambda m: m[1] + prefix + b'/lib/', data)
+    # Do not rewrite vendor JavaScript's /lib/ arguments. Its JSVEE loaders
+    # concatenate them with the activity page's already-prefixed <base href>.
+    # Prefixing those arguments again embeds a second prefix inside the URL.
     return data
 
 
